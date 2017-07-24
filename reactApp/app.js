@@ -6,6 +6,7 @@ import DocPortalComponent from './components/DocPortalComponent';
 import DocComponent from './components/DocComponent';
 import App from './containers/AppContainer'
 import Root from './containers/Root';
+// import styles from css folder:
 import './css/draft.css';
 import './css/main.css';
 import './css/richEditor.css';
