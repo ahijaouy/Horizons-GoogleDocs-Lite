@@ -1,8 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-<<<<<<< HEAD
-import docPortalComponent from './components/DocPortalComponent';
-import docComponent from './components/DocComponent';
+// import docPortalComponent from './components/DocPortalComponent';
+// import docComponent from './components/DocComponent';
 
 import DocPortalComponent from './components/DocPortalComponent';
 import RichEditorExample from './components/DocComponent';
