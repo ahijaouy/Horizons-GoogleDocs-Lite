@@ -4,15 +4,15 @@ import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios'
 
 class DocPortalComponent extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-
-    }
-  }
-  componentDidMount(){
-
-  }
+  // constructor() {
+  //   super()
+  //   this.state = {
+  //
+  //   }
+  // }
+  // componentDidMount(){
+  //
+  // }
 
   render() {
 
