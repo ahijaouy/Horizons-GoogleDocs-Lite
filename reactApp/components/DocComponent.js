@@ -12,7 +12,6 @@ import  {
   INLINE_STYLES,
   InlineStyleControls
 } from './DocComponentStyles';
-import axios from 'axios';
 
 class RichEditorExample extends React.Component {
   constructor(props) {
@@ -25,7 +24,7 @@ class RichEditorExample extends React.Component {
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
   }
-  
+
   _handleKeyCommand(command) {
     const {editorState} = this.state;
     const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -56,7 +55,7 @@ class RichEditorExample extends React.Component {
     );
   }
   componentDidMount() {
-    console.log('doc_id', this.props.match.params.doc_id);
+    // console.log('doc_id', this.props.match.params.doc_id);
     // if(DBName.id === this.props.params.doc_id)
     // this.setState({name: DBname})
   }
