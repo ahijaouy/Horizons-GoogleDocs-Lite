@@ -15,12 +15,9 @@ class DocPortalComponent extends React.Component {
   }
 
   render() {
-
     return (
-      <div 
-        id="headerComponent"
-        style={{width: '100%', height: '15px', backgroundColor:'blue'}}>
-        this is header
+      <div id="headerComponent" >
+        <h2>this is header</h2>
       </div>
     );
   }

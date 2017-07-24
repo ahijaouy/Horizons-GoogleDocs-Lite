@@ -43,7 +43,7 @@ class DocPortalComponent extends React.Component {
         </form>
         <div style={{height: '200px', width: '100%', border: '2px solid black'}}>
           <ul>
-            {this.state.currentDocs.map((doc) => (<li><Link to={`/doc/${doc.id}`}>{doc.name}</Link></li>)
+            {this.state.currentDocs.map((doc, i) => (<li key={i}><Link to={`/doc/${doc.id}`}>{doc.name}</Link></li>)
             )}
           </ul>
         </div>
