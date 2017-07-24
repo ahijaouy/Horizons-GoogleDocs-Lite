@@ -1,11 +1,19 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios'
+<<<<<<< HEAD
 import Routes from '../routes';
 import { Editor, EditorState, RichUtils } from 'draft-js';
 import toolbar from './ToolbarComponents';
 
+=======
+
+class DocComponent extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+>>>>>>> dev
 
 // class DocComponent extends React.Component {
 //   constructor() {

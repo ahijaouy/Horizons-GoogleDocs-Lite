@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {Provider} from 'react-redux';
-import {Route, BrowserRouter as Router} from 'react-router-dom';
+import {Route, Router as Router} from 'react-router-dom';
 import AppContainer from './AppContainer.js';
 import DevTools from './DevTools';
 import createHistory from 'history/createBrowserHistory';
