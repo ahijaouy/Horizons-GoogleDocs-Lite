@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import DocPortalComponent from './components/DocPortalComponent';
 import DocComponent from './components/DocComponent';
 import App from './containers/AppContainer'
+import Root from './containers/Root';
 
 
 /* WHEN YOU ACTUALLY WRITE YOUR REDUCER, FIX THE 2 LINES BELOW */
@@ -14,7 +15,7 @@ const store = createStore(mainReducer);
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Root />
   </Provider>,
   document.getElementById('root')
 );

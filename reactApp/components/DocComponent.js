@@ -1,32 +1,27 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios'
-import Routes from '../routes';
 
-class HeaderComponent extends React.Component {
+class DocComponent extends React.Component {
   constructor() {
     super()
     this.state = {
 
     }
   }
-  componentDidMount(){
 
-  }
 
   render() {
-
     return (
       <div>
-        <h1 style ={{textAlign: 'center'}}> Dom Docs - 'doc.id' </h1>
-        <div style={{width: '100%', height: '30px', border: '3px solid black'}}>
-          toolbar here
+        <h1 style ={{textAlign: 'center'}}> Dom Docs Portal </h1>
+        <div style={{height: '20px', width: '100%', border: '2px solid black', textAlign:'center'}}>
+          TOOL BAR HERE
         </div>
-    </div>
-    )
-
+      </div>
+    );
   }
 };
 
-export default HeaderComponent;
+export default DocComponent;

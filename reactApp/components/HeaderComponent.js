@@ -17,7 +17,7 @@ class DocPortalComponent extends React.Component {
   render() {
 
     return (
-      <div style={{width: '100%', height: '15px', backgroundColor:'blue'}}>abc</div>
+      <div style={{width: '100%', height: '15px', backgroundColor:'blue'}}></div>
     );
   }
 };
