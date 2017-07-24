@@ -33,7 +33,16 @@
     "eslint-plugin-react": "^5.2.2"
   },
   "dependencies": {
+    "axios": "^0.16.2",
+    "bcrypt": "^1.0.2",
+    "body-parser": "^1.17.2",
     "express": "^4.15.3",
+    "express-session": "^1.15.4",
+    "material-components-web": "^0.16.0",
+    "mongoose": "^4.11.4",
+    "morgan": "^1.8.2",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1"
   }
