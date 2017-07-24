@@ -8,13 +8,15 @@ import { Link, Route } from 'react-router-dom';
 // import HomeComponent from '../components/HomeComponent';
 import Routes from '../routes';
 import HeaderComponent from '../components/HeaderComponent';
+import RichEditorExample from '../components/DocComponent';
 
 const AppContainer = (props) => {
   return (
     <div>
-      <HeaderComponent/>
-    { Routes }
-  </div>
+      <HeaderComponent /> 
+      { Routes }
+      {/* <RichEditorExample /> */}
+    </div>
   );
 }
 
