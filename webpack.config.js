@@ -1,7 +1,7 @@
 //const webpack = require('webpack');
 
 module.exports = {
-  entry: './frontend/app.js',
+  entry: './reactApp/app.js',
   output: {
     path: __dirname + '/build',
     filename: 'app.bundle.js'
@@ -9,7 +9,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /frontend\/(.)*\.js$/,
+        test: /reactApp\/(.)*\.js$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',

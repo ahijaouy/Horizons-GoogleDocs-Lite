@@ -33,7 +33,6 @@ class Login extends React.Component {
       name: this.name
 
     }).then((resp) => {
-      console.log('post register: ', resp);
       alert(`Account Registered: ${this.username} : ${this.password} `);
       this.name = '';
       this.username = '';

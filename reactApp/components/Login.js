@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import {
   Navbar,
   NavItem,
@@ -26,7 +27,18 @@ class Login extends React.Component {
     this.password = text;
   }
   handleLogin(event) {
-    alert(`Login Attempt by: ${this.username} : ${this.password} `);
+    axios.post('http://localhost:3000/login', {
+      username: this.username,
+      password: this.password
+    }).then((resp) => {
+      if (resp.authenitcated) {
+        alert(`Successfully Logged in as $(resp.username)`);
+      } else {
+        alert('Log In Failed.');
+      }
+      this.username = '';
+      this.password = '';
+    });
   }
 
   render() {
