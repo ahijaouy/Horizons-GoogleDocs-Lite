@@ -9,7 +9,7 @@ import axios from 'axios';
 
 class DocPortalComponent extends React.Component {
   constructor() {
-    super()
+    super();
     this.state = {
       currentDocs: [{name: 'doc1', id: 1}, {name: 'doc2', id: 2}, {name: 'doc3', id: 3}],
       newDoc: '',
@@ -114,6 +114,6 @@ class DocPortalComponent extends React.Component {
       </div>
     );
   }
-};
+}
 
 export default DocPortalComponent;
