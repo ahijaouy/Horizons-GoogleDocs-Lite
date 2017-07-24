@@ -19,7 +19,7 @@ import { Editor, EditorState, RichUtils } from 'draft-js';
 //     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
 //   }
 //   componentDidMount(){
-    
+
 //   }
 
 //   _handleKeyCommand(command) {
@@ -51,7 +51,7 @@ import { Editor, EditorState, RichUtils } from 'draft-js';
 //       )
 //     );
 //   }
-//   render() {    
+//   render() {
 //     const {editorState} = this.state;
 //     // If the user changes block type before entering any text, we can
 //     // either style the placeholder or hide it. Let's just hide it now.
@@ -71,12 +71,12 @@ import { Editor, EditorState, RichUtils } from 'draft-js';
 //             editorState={editorState}
 //             onToggle={this.toggleBlockType}
 //           />
-//           hello2          
+//           hello2
 //           <InlineStyleControls
 //             editorState={editorState}
 //             onToggle={this.toggleInlineStyle}
 //           />
-//           hello3          
+//           hello3
 //           <div className={className} onClick={this.focus}>
 //             <Editor
 //               blockStyleFn={toolbar.getBlockStyle}
@@ -93,7 +93,7 @@ import { Editor, EditorState, RichUtils } from 'draft-js';
 //         </div>
 //       </div>
 //     )
-    
+
 //   }
 // };
 
@@ -193,8 +193,8 @@ const styleMap = {
 };
 function getBlockStyle(block) {
   switch (block.getType()) {
-    case 'blockquote': return 'RichEditor-blockquote';
-    default: return null;
+  case 'blockquote': return 'RichEditor-blockquote';
+  default: return null;
   }
 }
 class StyleButton extends React.Component {

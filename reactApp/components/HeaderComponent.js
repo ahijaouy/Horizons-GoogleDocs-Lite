@@ -1,14 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
-import axios from 'axios'
+import axios from 'axios';
 
 class DocPortalComponent extends React.Component {
   constructor() {
-    super()
+    super();
     this.state = {
-
-    }
+    };
   }
   componentDidMount(){
 
@@ -21,6 +20,6 @@ class DocPortalComponent extends React.Component {
       </div>
     );
   }
-};
+}
 
 export default DocPortalComponent;
