@@ -1,25 +1,25 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import { Redirect, Link } from 'react-router-dom';
-import axios from 'axios'
+// import PropTypes from 'prop-types';
+// import React from 'react';
+// import { Redirect, Link } from 'react-router-dom';
+// import axios from 'axios'
 
-class DocPortalComponent extends React.Component {
-  constructor() {
-    super()
-    this.state = {
+// class DocPortalComponent extends React.Component {
+//   constructor() {
+//     super()
+//     this.state = {
 
-    }
-  }
-  componentDidMount(){
+//     }
+//   }
+//   componentDidMount(){
 
-  }
+//   }
 
-  render() {
+//   render() {
 
-    return (
-      <div style={{width: '100%', height: '15px', backgroundColor:'blue'}}>abc</div>
-    );
-  }
-};
+//     return (
+//       <div style={{width: '100%', height: '15px', backgroundColor:'blue'}}>abc</div>
+//     );
+//   }
+// };
 
-export default DocPortalComponent;
+// export default DocPortalComponent;

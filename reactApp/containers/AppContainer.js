@@ -8,11 +8,14 @@ import { Link, Route } from 'react-router-dom';
 // import HomeComponent from '../components/HomeComponent';
 import Routes from '../routes';
 import HeaderComponent from '../components/HeaderComponent';
+import DocComponent from '../components/DocComponent';
 
 const AppContainer = (props) => {
   return (
     <div>
-      <HeaderComponent/>
+      {/* <HeaderComponent/> */}
+      <p>hi in here 2</p>
+      <DocComponent />
     { Routes }
   </div>
   );
