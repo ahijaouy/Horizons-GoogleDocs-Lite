@@ -1,11 +1,20 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import DocPortalComponent from './components/DocPortalComponent';
+import DocComponent from './components/DocComponent';
+import App from './containers/AppContainer'
 
-/* This can check if your electron app can communicate with your backend */
-// fetch('http://localhost:3000')
-// .then(resp => resp.text())
-// .then(text => console.log(text))
-// .catch(err => {throw err})
 
-ReactDOM.render(<p>React lives!</p>,
-   document.getElementById('root'));
+/* WHEN YOU ACTUALLY WRITE YOUR REDUCER, FIX THE 2 LINES BELOW */
+import mainReducer from './reducers/index'; /*UNCOMMENT*/
+
+const store = createStore(mainReducer);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);

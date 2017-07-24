@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios'
 
-class HeaderComponent extends React.Component {
+class DocPortalComponent extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -16,9 +16,10 @@ class HeaderComponent extends React.Component {
 
   render() {
 
-    return ()
-
+    return (
+      <div style={{width: '100%', height: '15px', backgroundColor:'blue'}}>abc</div>
+    );
   }
 };
 
-export default HeaderComponent;
+export default DocPortalComponent;

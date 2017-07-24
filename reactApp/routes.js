@@ -1,12 +1,15 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import docPortalComponent from './components/DocPortalComponent';
+import docComponent from './components/DocComponent';
 
-const socket = io();
+
 
 export default (
 	<Switch>
-		<Route exact path="/portal" component={docPortalComponent} />
-		<Route exact path="/" component={HeaderComponent} />
+		<BrowserRouter>
+			<Route exact path="/" component={docPortalComponent} />
+			<Route path="/doc/:doc_id" component={docComponent} />
+		</BrowserRouter>
 	</Switch>
 );
