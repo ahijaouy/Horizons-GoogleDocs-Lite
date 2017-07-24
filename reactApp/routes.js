@@ -6,6 +6,7 @@ const socket = io();
 
 export default (
 	<Switch>
-		<Route exact path="/" component={docPortalComponent} />
+		<Route exact path="/portal" component={docPortalComponent} />
+		<Route exact path="/" component={HeaderComponent} />
 	</Switch>
 );
