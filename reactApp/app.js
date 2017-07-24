@@ -7,7 +7,6 @@ import DocComponent from './components/DocComponent';
 import App from './containers/AppContainer'
 import Root from './containers/Root';
 
-
 /* WHEN YOU ACTUALLY WRITE YOUR REDUCER, FIX THE 2 LINES BELOW */
 import mainReducer from './reducers/index'; /*UNCOMMENT*/
 

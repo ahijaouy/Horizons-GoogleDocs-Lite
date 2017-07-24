@@ -2,18 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios'
-<<<<<<< HEAD
 import Routes from '../routes';
 import { Editor, EditorState, RichUtils } from 'draft-js';
-import toolbar from './ToolbarComponents';
-
-=======
-
-class DocComponent extends React.Component {
-  constructor() {
-    super()
-    this.state = {
->>>>>>> dev
+// import toolbar from './ToolbarComponents';
 
 // class DocComponent extends React.Component {
 //   constructor() {
@@ -112,7 +103,7 @@ class DocComponent extends React.Component {
 
 /* ************************************************************************** */
 
-const {Editor, EditorState, RichUtils} = Draft;
+// const {Editor, EditorState, RichUtils} = Draft;
 class RichEditorExample extends React.Component {
   constructor(props) {
     super(props);
@@ -281,7 +272,5 @@ const InlineStyleControls = (props) => {
     </div>
   );
 };
-ReactDOM.render(
-  <RichEditorExample />,
-  document.getElementById('target')
-);
+
+export default RichEditorExample;
