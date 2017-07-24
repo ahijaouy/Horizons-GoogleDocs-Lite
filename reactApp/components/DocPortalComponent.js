@@ -5,26 +5,26 @@ import axios from 'axios'
 
 class DocPortalComponent extends React.Component {
   constructor() {
-    super()
+    super();
     this.state = {
       currentDocs: [{name: 'doc1', id: 1}, {name: 'doc2', id: 2}, {name: 'doc3', id: 3}],
       newDoc: ''
-    }
-    this.handleChangeName = this.handleChangeName.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
+    };
+    this.handleChangeName = this.handleChangeName.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
 
   }
 
   handleChangeName(e){
-    console.log('a', e.target.value)
-    this.setState({newDoc: e.target.value})
+    console.log('a', e.target.value);
+    this.setState({newDoc: e.target.value});
   }
 
   handleSubmit(e){
     e.preventDefault();
     const newState = this.state.currentDocs;
-    const newDocsState = newState.concat({name: this.state.newDoc, id: this.state.currentDocs.length + 1})
-    this.setState({currentDocs: newDocsState})
+    const newDocsState = newState.concat({name: this.state.newDoc, id: this.state.currentDocs.length + 1});
+    this.setState({currentDocs: newDocsState});
     /***** also update databse **/
   }
 
@@ -50,6 +50,6 @@ class DocPortalComponent extends React.Component {
       </div>
     );
   }
-};
+}
 
 export default DocPortalComponent;
