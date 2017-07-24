@@ -1,21 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
 import DocPortalComponent from './components/DocPortalComponent';
 import DocComponent from './components/DocComponent';
-import App from './containers/AppContainer'
-import Root from './containers/Root';
+import AppContainer from './components/AppContainer'
+// import Root from './containers/Root';
+import {Route, Router as Router} from 'react-router-dom';
+import createHistory from 'history/createBrowserHistory';
+
+export const history = createHistory();
 
 
-/* WHEN YOU ACTUALLY WRITE YOUR REDUCER, FIX THE 2 LINES BELOW */
-import mainReducer from './reducers/index'; /*UNCOMMENT*/
 
-const store = createStore(mainReducer);
+// /* WHEN YOU ACTUALLY WRITE YOUR REDUCER, FIX THE 2 LINES BELOW */
+// import mainReducer from './reducers/index'; /*UNCOMMENT*/
+//
+// const store = createStore(mainReducer);
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Root />
-  </Provider>,
+  <Router history={history}>
+    <Route path="/" component={AppContainer}/>
+  </Router>,
+
   document.getElementById('root')
 );
