@@ -23,6 +23,7 @@ class RichEditorExample extends React.Component {
     this.onTab = (e) => this._onTab(e);
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
+    
   }
 
   _handleKeyCommand(command) {

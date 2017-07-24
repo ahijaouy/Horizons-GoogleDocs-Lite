@@ -1,8 +1,7 @@
 import React from 'react';
 import StyleButton from './StyleButtonComponent';
 
-// METHODS AND OBJECTS FOR BLOCK STYLES:
-// Custom overrides for "code" style.
+// CUSTOM STYLE MAP
 const styleMap = {
   CODE: {
     backgroundColor: 'rgba(0, 0, 0, 0.05)',
@@ -11,6 +10,8 @@ const styleMap = {
     padding: 2,
   },
 };
+
+// METHODS AND OBJECTS FOR BLOCK STYLES:
 function getBlockStyle(block) {
   switch (block.getType()) {
   case 'blockquote': return 'RichEditor-blockquote';
@@ -51,6 +52,8 @@ const BlockStyleControls = (props) => {
     </div>
   );
 };
+
+// METHODS AND OBJECTS FOR INLINE STYLES:
 var INLINE_STYLES = [
   {label: 'Bold', style: 'BOLD'},
   {label: 'Italic', style: 'ITALIC'},
@@ -74,6 +77,7 @@ const InlineStyleControls = (props) => {
   );
 };
 
+// EXPORT ALL
 module.exports = {
   styleMap,
   getBlockStyle,
