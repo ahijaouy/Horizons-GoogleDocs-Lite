@@ -14,31 +14,31 @@ router.post('/register', function (req, res) {
 });
 
 router.post('/document', function (req, res) {
-  console.log('user', req.user)
+  console.log('user', req.user);
   const newDocument = new Document({
     name: req.body.name,
     body: req.body.body,
     owner: req.user
-  })
+  });
   newDocument.save((err) => {
-    console.log('Error creating Document', err)
-  })
-  res.send('Added new Document')
-})
+    console.log('Error creating Document', err);
+  });
+  res.send('Added new Document');
+});
 
 router.get('/document', function (req, res) {
   Document.find({},function(err, result){
-    res.send(result)
-  })
-})
+    res.send(result);
+  });
+});
 
 router.post('/document/update', function (req, res) {
-  console.log('find me here', req.body.body)
+  console.log('find me here', req.body.body);
   Document.findOneAndUpdate({_id: req.body.id},{ body: req.body.body },function(err, result){
-    console.log('in here now ifnally', result)
-    res.send(result)
-  })
-})
+    console.log('in here now ifnally', result);
+    res.send(result);
+  });
+});
 
 router.get('/success', function(req, res) {
   res.json({authenticated: true, user: req.user});

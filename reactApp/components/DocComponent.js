@@ -156,7 +156,7 @@ class RichEditorExample extends React.Component {
     }
     return (
       <div className="RichEditor-root">
-        <Link to={'/'}><button>Back to Portal</button></Link>
+        <Link to={'/dashboard'}><button>Back to Portal</button></Link>
         <h4>Name: {this.state.docName}</h4>
         <h5>ID: {this.state.currentDocument}</h5>
         <BlockStyleControls
