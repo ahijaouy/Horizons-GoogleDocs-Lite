@@ -13,10 +13,16 @@ const dbconfig = require('./config/database');
 const router = require('./routes');
 // Global Variables
 const app = express();
+const server = require('http').Server(app)
+const io = require('socket.io')(server);
+
+console.log('SOCKETS SHOULD BE STARTING HERE');
+const socketConfig = require('./sockets.js');
+socketConfig(io);
 
 // Setup Database Connection
 mongoose.connect(dbconfig);
-
+ 
 // Middleware
 app.use(morgan('dev'));
 app.use(bodyParser.json());
@@ -51,7 +57,6 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-
 // Login Route
 app.post('/login',
   passport.authenticate('local', { successRedirect: '/success',
@@ -61,6 +66,6 @@ app.post('/login',
 app.use('/', router);
 
 
-app.listen(3000, function () {
+server.listen(3000, function () {
   console.log('Backend server for Electron App running on port 3000!');
 });

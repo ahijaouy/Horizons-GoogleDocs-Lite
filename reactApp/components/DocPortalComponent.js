@@ -31,10 +31,14 @@ class DocPortalComponent extends React.Component {
   }
 
   componentDidMount(){
+    // socket.on('hi', () => {
+    //   console.log('RECEIVED HI')
+    // });
+
     axios.get('http://localhost:3000/document')
       .then(response => {
         this.setState({currentDocs: response.data})
-      })
+      });
   }
 
   handleNewDoc(e){

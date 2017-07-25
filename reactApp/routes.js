@@ -7,11 +7,15 @@ import DocPortalComponent from './components/DocPortalComponent';
 import RichEditorExample from './components/DocComponent';
 import Login from './components/Login';
 import Register from './components/Register';
+
+// const socket = require('socket.io-client')('http://localhost');
+// const socket = io('localhost:3000');
+
 export default () => (
 	<Switch>
       <Route exact path="/" component={Login}/>
 			<Route exact path="/register" component={Register} />
       <Route exact path="/dashboard" component={DocPortalComponent}/>
-			<Route exact name="doc" path="/doc/:doc_id" render={(doc_id) => <RichEditorExample id={doc_id}/>} />
+			<Route exact path="/doc/:doc_id" render={(doc_id) => <RichEditorExample id={doc_id} /*socket={socket}*//>} />
 	</Switch>
 );
