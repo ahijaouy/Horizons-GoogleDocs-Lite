@@ -2,9 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
-import {
-  Navbar,
-  NavItem } from 'react-materialize';
 
 class DocPortalComponent extends React.Component {
   constructor() {
@@ -64,7 +61,7 @@ class DocPortalComponent extends React.Component {
 
   handleSearch(e){
     e.preventDefault();
-    console.log(e.target.value);
+    // console.log(e.target.value)
     this.setState({search: e.target.value});
     const currDocs = this.state.currentDocs;
     const filteredDocs = currDocs.filter((item) => {
@@ -73,16 +70,12 @@ class DocPortalComponent extends React.Component {
       }
       return false;
     });
-    console.log('find me', filteredDocs);
     this.setState({searchList: filteredDocs});
   }
 
   render() {
     return (
       <div>
-        <Navbar brand='Horizons GoogleDocs Lite' right>
-           <NavItem><Link to="/">Logout</Link></NavItem>
-        </Navbar>
         <h1 style ={{textAlign: 'center'}}> Dom Docs Portal </h1>
           <input
             type="text"
@@ -99,8 +92,8 @@ class DocPortalComponent extends React.Component {
         </form>
         <div style={{height: '200px', width: '100%', border: '2px solid black'}}>
           <h3>My Documents</h3>
-            {this.state.search === '' ? this.state.currentDocs.map((doc) => (<div><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
-          :this.state.searchList.map((doc) => (<div><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
+            {this.state.search === '' ? this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc.id}`}>{doc.name}</Link></div>))
+          :this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc.id}`}>{doc.name}</Link></div>))}
         </div>
         <form onSubmit={this.handleAdd}>
           <input
