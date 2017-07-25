@@ -8,10 +8,7 @@ import RichEditorExample from './components/DocComponent';
 import Login from './components/Login';
 import Register from './components/Register';
 
-// const socket = require('socket.io-client')('http://localhost');
-// const socket = io('localhost:3000');
 const socket = io('http://localhost:3000')
-
 
 export default () => (
 	<Switch>

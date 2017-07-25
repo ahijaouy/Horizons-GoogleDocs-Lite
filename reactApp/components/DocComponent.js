@@ -14,6 +14,7 @@ import  {
 } from './DocComponentStyles';
 // const socket = require('socket.io-client')('http://localhost:3000');
 
+<<<<<<< HEAD
 function formatDate(olddate) {
   const date = new Date(olddate)
   const monthNames = [
@@ -38,6 +39,10 @@ function formatDate(olddate) {
 }
 
 class RichEditorExample extends React.Component {
+=======
+
+class DocComponent extends React.Component {
+>>>>>>> e8d703301e6bc27a940bf8134d13921fa952dd3e
   constructor (props) {
     super(props);
     this.state = {
@@ -130,6 +135,21 @@ class RichEditorExample extends React.Component {
   }
 
   componentDidMount() {
+<<<<<<< HEAD
+=======
+    ////
+    console.log('socket', socket)
+    socket.on('hi', () => {
+      console.log('RECEIVED HI2');
+
+    });
+    this.state.socket.emit('typing', ' I fucking work')
+
+    this.state.socket.on('typing', (msg) => {
+      console.log('msg', msg)
+    })
+    ////
+>>>>>>> e8d703301e6bc27a940bf8134d13921fa952dd3e
     this.setState({currentDocument: this.props.id.match.params.doc_id});
     axios.get('http://localhost:3000/document')
     .then(response => {
@@ -199,7 +219,7 @@ class RichEditorExample extends React.Component {
     }
     return (
       <div className="RichEditor-root">
-        <Link to={'/'}><button>Back to Portal</button></Link>
+        <Link to={'/dashboard'}><button>Back to Portal</button></Link>
         <h4>Name: {this.state.docName}</h4>
         <h5>ID: {this.state.currentDocument}</h5>
         <BlockStyleControls
@@ -239,7 +259,7 @@ class RichEditorExample extends React.Component {
   }
 }
 
-export default RichEditorExample;
+export default DocComponent;
 
 
 
