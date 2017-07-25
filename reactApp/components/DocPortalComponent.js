@@ -99,12 +99,14 @@ class DocPortalComponent extends React.Component {
           	<Input  s={6} label="Add a New Document" validate><Icon large>note_add</Icon></Input>
           </Button>
           <form onSubmit={this.handleCreate}>
-            <input
+            <Input
               type="text"
               value={this.state.newDoc}
               placeholder="New Document Title"
-              onChange={this.handleNewDoc}/>
-              <input type="submit" value="Create component" onClick={this.handleCreate}/>
+              onChange={this.handleNewDoc}
+              s={6} offset={'s3'}
+            />
+              <Button waves='light' type="submit" value="Create component" onClick={this.handleCreate}>Create New</Button>
           </form>
         </Row>
           <input

@@ -15,7 +15,6 @@ const AppContainer = () => {
   return (
     <div id="app_container">
       <Routes/>
-      {/* <RichEditorExample /> */}
     </div>
   );
 };
