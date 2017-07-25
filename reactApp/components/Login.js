@@ -8,6 +8,7 @@ import {
   Input,
 CardPanel, Button,
 Card } from 'react-materialize';
+import { Redirect, Link } from 'react-router-dom';
 
 
 
@@ -17,6 +18,9 @@ class Login extends React.Component {
     super();
     this.username = "";
     this.password = "";
+    this.state = {
+      authenticated : false
+    };
   }
 
   updateUsername(text) {
@@ -26,16 +30,13 @@ class Login extends React.Component {
   updatePassword(text) {
     this.password = text;
   }
+  
   handleLogin(event) {
     axios.post('http://localhost:3000/login', {
       username: this.username,
       password: this.password
     }).then((resp) => {
-      if (resp.authenitcated) {
-        alert(`Successfully Logged in as $(resp.username)`);
-      } else {
-        alert('Log In Failed.');
-      }
+      this.setState({authenticated: resp.data.authenticated});
       this.username = '';
       this.password = '';
     });
@@ -43,9 +44,13 @@ class Login extends React.Component {
 
   render() {
     return (
+      this.state.authenticated ? (
+        <Redirect to="/dashboard"/>
+      ) : (
+
       <div>
-        <Navbar brand='Horizons GoogleDocs Lite' right>
-          <NavItem href='#'>Register</NavItem>
+         <Navbar brand='Horizons GoogleDocs Lite' right>
+           <NavItem><Link to="/register">Register</Link></NavItem>
         </Navbar>
         <Row>
           <Col s={6} offset={"s3"} >
@@ -62,7 +67,7 @@ class Login extends React.Component {
           </Col>
         </Row>
       </div>
-    );
+    ));
   }
 }
 

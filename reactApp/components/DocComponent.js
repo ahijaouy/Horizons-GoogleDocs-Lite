@@ -1,9 +1,9 @@
-import axios from 'axios'
+import axios from 'axios';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Routes from '../routes';
-import { Editor, EditorState, Modifier, RichUtils } from 'draft-js';
+import { Editor, EditorState, Modifier, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
 import  {
   styleMap,
   getBlockStyle,
@@ -16,14 +16,18 @@ import  {
 class RichEditorExample extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {editorState: EditorState.createEmpty()};
+    this.state = {
+      editorState: EditorState.createEmpty(),
+      currentDocument: '',
+      docName: ''
+    };
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => this.setState({editorState});
     this.handleKeyCommand = (command) => this._handleKeyCommand(command);
     this.onTab = (e) => this._onTab(e);
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
-
+    this.handleTextUpdate = this.handleTextUpdate.bind(this);
   }
 
   _handleKeyCommand (command) {
@@ -66,9 +70,9 @@ class RichEditorExample extends React.Component {
     const nextContentState = Object.keys(styleMap)
       .reduce((contentState, color) => {
         if (!color.startsWith('FONT'))
-        { return Modifier.removeInlineStyle(contentState, selection, color) }
+        { return Modifier.removeInlineStyle(contentState, selection, color); }
         else
-        { return contentState }
+        { return contentState; }
       }, editorState.getCurrentContent());
     let nextEditorState = EditorState.push(
       editorState,
@@ -96,9 +100,47 @@ class RichEditorExample extends React.Component {
   }
 
   componentDidMount() {
-    // console.log('doc_id', this.props.match.params.doc_id);
-    // if(DBName.id === this.props.params.doc_id)
-    // this.setState({name: DBname})
+    // console.log('doc_id', this.props.id.match.params.doc_id);
+    this.setState({currentDocument: this.props.id.match.params.doc_id});
+    axios.get('http://localhost:3000/document')
+    .then(response => {
+      // console.log('resp data on start', response.data)
+      response.data.forEach((doc) => {
+        if(doc._id === this.state.currentDocument){
+          // console.log('matched up');
+          // console.log('doc', doc)
+          this.setState({docName: doc.name});
+          const parsedBody = doc.body ? JSON.parse(doc.body) : JSON.parse('{}');
+          // console.log('newBody2', parsedBody);
+          const finalBody = convertFromRaw(parsedBody);
+          this.setState({editorState: EditorState.createWithContent(finalBody)});
+        }
+      });
+    });
+  }
+
+  handleTextUpdate(){
+    axios.get('http://localhost:3000/document')
+    .then(response => {
+      return response.data;
+    })
+    .then(response2 => {
+      // console.log('res2', response2)
+      response2.forEach((doc) => {
+        if(this.state.currentDocument === this.props.id.match.params.doc_id){
+          // console.log('in here')
+          const newBody = convertToRaw(this.state.editorState.getCurrentContent());
+          // console.log('aaaaa', newBody);
+          axios.post('http://localhost:3000/document/update',{
+            id: this.props.id.match.params.doc_id,
+            body: JSON.stringify(newBody)
+          })
+          .catch((err) => {
+            console.log('error', err);
+          });
+        }
+      });
+    });
   }
 
   render() {
@@ -114,6 +156,9 @@ class RichEditorExample extends React.Component {
     }
     return (
       <div className="RichEditor-root">
+        <Link to={'/'}><button>Back to Portal</button></Link>
+        <h4>Name: {this.state.docName}</h4>
+        <h5>ID: {this.state.currentDocument}</h5>
         <BlockStyleControls
           editorState={editorState}
           onToggle={this.toggleBlockType}
@@ -137,12 +182,14 @@ class RichEditorExample extends React.Component {
             spellCheck={true}
           />
         </div>
+        <button onClick={this.handleTextUpdate}>Save</button>
       </div>
     );
   }
 }
 
 export default RichEditorExample;
+<<<<<<< HEAD
 
 
 
@@ -154,3 +201,5 @@ export default RichEditorExample;
 
 // in react component for button:
 // backgroundColor={this.state.editorState.getCurrentINlineStyle().has(style) ? colorToggled : colorUntoggled}
+=======
+>>>>>>> 7d6bf3faa759782a5ab79a800a1769f37a023429
