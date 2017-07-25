@@ -61,7 +61,7 @@ class DocPortalComponent extends React.Component {
 
   handleSearch(e){
     e.preventDefault()
-    console.log(e.target.value)
+    // console.log(e.target.value)
     this.setState({search: e.target.value})
     const currDocs = this.state.currentDocs;
     const filteredDocs = currDocs.filter((item) => {
@@ -70,7 +70,6 @@ class DocPortalComponent extends React.Component {
       }
       return false
     })
-    console.log('find me', filteredDocs)
     this.setState({searchList: filteredDocs})
   }
 
