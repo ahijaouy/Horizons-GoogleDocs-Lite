@@ -5,14 +5,14 @@ import axios from 'axios';
 
 class DocPortalComponent extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       currentDocs: [],
       newDoc: '',
       sharedDoc: '',
       search: '',
       searchList:[]
-    };
+    }
     this.handleNewDoc = this.handleNewDoc.bind(this);
     this.handleCreate = this.handleCreate.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -23,29 +23,29 @@ class DocPortalComponent extends React.Component {
   componentDidMount(){
     axios.get('http://localhost:3000/document')
       .then(response => {
-        this.setState({currentDocs: response.data});
-      });
+        this.setState({currentDocs: response.data})
+      })
   }
 
   handleNewDoc(e){
     e.preventDefault();
-    this.setState({newDoc: e.target.value});
+    this.setState({newDoc: e.target.value})
   }
 
   handleSharedDoc(e){
     e.preventDefault();
-    this.setState({sharedDoc: e.target.value});
+    this.setState({sharedDoc: e.target.value})
   }
 
   handleCreate(e){
     e.preventDefault();
     const newState = this.state.currentDocs;
-    const newDocsState = newState.concat({name: this.state.newDoc, id: this.state.currentDocs.length + 1});
-    this.setState({currentDocs: newDocsState, newDoc: ''});
+    const newDocsState = newState.concat({name: this.state.newDoc, id: this.state.currentDocs.length + 1})
+    this.setState({currentDocs: newDocsState, newDoc: ''})
     axios.post('http://localhost:3000/document',{
       name: this.state.newDoc,
       body: ''
-    });
+    })
   }
 
   handleAdd(e){
@@ -60,17 +60,17 @@ class DocPortalComponent extends React.Component {
   }
 
   handleSearch(e){
-    e.preventDefault();
+    e.preventDefault()
     // console.log(e.target.value)
-    this.setState({search: e.target.value});
+    this.setState({search: e.target.value})
     const currDocs = this.state.currentDocs;
     const filteredDocs = currDocs.filter((item) => {
       if(item.name.startsWith(e.target.value) || item._id === e.target.value){
-        return true;
+        return true
       }
-      return false;
-    });
-    this.setState({searchList: filteredDocs});
+      return false
+    })
+    this.setState({searchList: filteredDocs})
   }
 
   render() {
@@ -106,6 +106,6 @@ class DocPortalComponent extends React.Component {
       </div>
     );
   }
-}
+};
 
 export default DocPortalComponent;

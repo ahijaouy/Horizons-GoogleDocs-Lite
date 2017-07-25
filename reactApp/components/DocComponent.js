@@ -194,7 +194,7 @@ export default RichEditorExample;
 
 // RaisedButton:
 // onMouseDown={(e) => {this.toggleInlineStyle(e, style)}};
-// ...
+// ... 
 // e.preventDefault()
 
 
