@@ -18,7 +18,7 @@ class RichEditorExample extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      // socket: io('http://localhost:3000'),
+      socket: this.props.socket,
       editorState: EditorState.createEmpty(),
       currentDocument: '',
       docName: ''
@@ -103,12 +103,16 @@ class RichEditorExample extends React.Component {
 
   componentDidMount() {
     ////
-    const socket = io('http://localhost:3000')
-    console.log('socket', socket)
-    socket.on('hi', () => {
+    console.log('socket', this.state.socket)
+    this.state.socket.on('hi', () => {
       console.log('RECEIVED HI2');
-      socket.emit('typing')
+
     });
+    this.state.socket.emit('typing', ' I fucking work')
+
+    this.state.socket.on('typing', (msg) => {
+      console.log('msg', msg)
+    })
     ////
     this.setState({currentDocument: this.props.id.match.params.doc_id});
     axios.get('http://localhost:3000/document')
