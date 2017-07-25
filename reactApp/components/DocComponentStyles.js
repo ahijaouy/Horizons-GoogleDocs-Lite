@@ -1,5 +1,6 @@
 import React from 'react';
 import StyleButton from './StyleButtonComponent';
+import ColorControls from './StyleButtonColorComponent';
 
 // CUSTOM STYLE MAP
 const styleMap = {
@@ -9,6 +10,14 @@ const styleMap = {
     fontSize: 16,
     padding: 2,
   },
+  // COLOR STYLES
+  red: { color: 'rgba(255, 0, 0, 1.0)', },
+  orange: { color: 'rgba(255, 127, 0, 1.0)', },
+  yellow: { color: 'rgba(180, 180, 0, 1.0)', },
+  green: { color: 'rgba(0, 180, 0, 1.0)', },
+  blue: { color: 'rgba(0, 0, 255, 1.0)', },
+  indigo: { color: 'rgba(75, 0, 130, 1.0)', },
+  violet: { color: 'rgba(127, 0, 255, 1.0)', },
 };
 
 // METHODS AND OBJECTS FOR BLOCK STYLES:
@@ -60,22 +69,30 @@ var INLINE_STYLES = [
   {label: 'Underline', style: 'UNDERLINE'},
   {label: 'Monospace', style: 'CODE'},
 ];
+
 const InlineStyleControls = (props) => {
   var currentStyle = props.editorState.getCurrentInlineStyle();
+
   return (
     <div className="RichEditor-controls">
-    {INLINE_STYLES.map(type =>
-      <StyleButton
-        key={type.label}
-        active={currentStyle.has(type.style)}
-        label={type.label}
-        onToggle={props.onToggle}
-        style={type.style}
-      />
-    )}
+      {INLINE_STYLES.map(type =>
+        <StyleButton
+          key={type.label}
+          active={currentStyle.has(type.style)}
+          label={type.label}
+          onToggle={props.onToggle}
+          style={type.style}
+        />
+      )}
+
+      <ColorControls
+        editorState={props.editorState}
+        onToggle={props.toggleColor}
+      /> 
     </div>
   );
 };
+
 
 // EXPORT ALL
 module.exports = {
@@ -84,5 +101,5 @@ module.exports = {
   BLOCK_TYPES,
   BlockStyleControls,
   INLINE_STYLES,
-  InlineStyleControls
+  InlineStyleControls,
 }
