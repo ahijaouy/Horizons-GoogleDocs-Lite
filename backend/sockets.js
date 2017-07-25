@@ -7,7 +7,6 @@ module.exports = function(io) {
     socket.emit('hi');
 
     socket.on('typing', msg => {
-      console.log('msg', msg)
       socket.emit('typing', "I got your msg " + msg)
     });
   });

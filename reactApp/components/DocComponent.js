@@ -14,7 +14,6 @@ import  {
 } from './DocComponentStyles';
 // const socket = require('socket.io-client')('http://localhost:3000');
 
-<<<<<<< HEAD
 function formatDate(olddate) {
   const date = new Date(olddate)
   const monthNames = [
@@ -39,10 +38,6 @@ function formatDate(olddate) {
 }
 
 class RichEditorExample extends React.Component {
-=======
-
-class DocComponent extends React.Component {
->>>>>>> e8d703301e6bc27a940bf8134d13921fa952dd3e
   constructor (props) {
     super(props);
     this.state = {
