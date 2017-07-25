@@ -189,17 +189,14 @@ class RichEditorExample extends React.Component {
 }
 
 export default RichEditorExample;
-<<<<<<< HEAD
 
 
 
 // RaisedButton:
 // onMouseDown={(e) => {this.toggleInlineStyle(e, style)}};
-// ... 
+// ...
 // e.preventDefault()
 
 
 // in react component for button:
 // backgroundColor={this.state.editorState.getCurrentINlineStyle().has(style) ? colorToggled : colorUntoggled}
-=======
->>>>>>> 7d6bf3faa759782a5ab79a800a1769f37a023429
