@@ -37,7 +37,7 @@ function formatDate(olddate) {
   return day + ' ' + monthNames[monthIndex] + ' ' + year + ' : ' + hour +':'+minute;
 }
 
-class RichEditorExample extends React.Component {
+class DocComponent extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -130,26 +130,28 @@ class RichEditorExample extends React.Component {
   }
 
   componentDidMount() {
-<<<<<<< HEAD
-=======
-    ////
-    console.log('socket', socket)
-    socket.on('hi', () => {
-      console.log('RECEIVED HI2');
 
-    });
-    this.state.socket.emit('typing', ' I fucking work')
-
-    this.state.socket.on('typing', (msg) => {
-      console.log('msg', msg)
-    })
     ////
->>>>>>> e8d703301e6bc27a940bf8134d13921fa952dd3e
+    // console.log('socket', socket)
+    // socket.on('hi', () => {
+    //   console.log('RECEIVED HI2');
+    //
+    // });
+    // this.state.socket.emit('typing', ' I fucking work')
+    //
+    // this.state.socket.on('typing', (msg) => {
+    //   console.log('msg', msg)
+    // })
+    ////
+
     this.setState({currentDocument: this.props.id.match.params.doc_id});
     axios.get('http://localhost:3000/document')
     .then(response => {
+      console.log('in here 1', this.props)
       response.data.forEach((doc) => {
+        // console.log('in here 2.5doc', doc)
         if(doc._id === this.state.currentDocument){
+            console.log('in here 2', doc.name)
           this.setState({docName: doc.name});
           const parsedBody = doc.body ? JSON.parse(doc.body) : JSON.parse('{}');
           const finalBody = convertFromRaw(parsedBody);
