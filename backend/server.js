@@ -61,7 +61,7 @@ app.post('/login',
 app.use('/', router);
 
 app.get('/*', (request, response) => {
-  response.sendFile(__dirname + '/build/index.html');
+  response.sendFile(__dirname + '/build/index.dev.html');
 });
 
 app.listen(3000, function () {

@@ -1,6 +1,7 @@
 import React from 'react';
 import StyleButton from './StyleButtonComponent';
 import ColorControls from './StyleButtonColorComponent';
+import { Redirect, Link } from 'react-router-dom';
 
 // CUSTOM STYLE MAP
 const styleMap = {
@@ -49,6 +50,7 @@ const BlockStyleControls = (props) => {
   .getType();
   return (
     <div className="RichEditor-controls">
+      <button><Link to={'/'}>Back to Portal</Link></button>
     {BLOCK_TYPES.map((type) =>
       <StyleButton
         key={type.label}
