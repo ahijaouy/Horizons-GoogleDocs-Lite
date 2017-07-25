@@ -8,9 +8,15 @@ const styleMap = {
   CODE: {
     backgroundColor: 'rgba(0, 0, 0, 0.05)',
     fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
-    fontSize: 16,
+    fontSize: 26,
     padding: 2,
   },
+  // FONT SIZES
+  FONT_SMALL: { fontSize: 12 },
+  FONT_MEDIUM: { fontSize: 18 },
+  FONT_LARGE: { fontSize: 24 },
+  FONT_XLARGE: { fontSize: 36 },  
+
   // COLOR STYLES
   red: { color: 'rgba(255, 0, 0, 1.0)', },
   orange: { color: 'rgba(255, 127, 0, 1.0)', },
@@ -70,10 +76,19 @@ var INLINE_STYLES = [
   {label: 'Italic', style: 'ITALIC'},
   {label: 'Underline', style: 'UNDERLINE'},
   {label: 'Monospace', style: 'CODE'},
+  {label: 'Small', style: 'FONT_SMALL'},
+  {label: 'Medium', style: 'FONT_MEDIUM'},
+  {label: 'Large', style: 'FONT_LARGE'},
+  {label: 'XLarge', style: 'FONT_XLARGE'}        
 ];
 
 const InlineStyleControls = (props) => {
   var currentStyle = props.editorState.getCurrentInlineStyle();
+
+  const changeTextSize = (change) => {
+    const {editorState} = props.editorState;
+    const selection = editorState.getSelection();
+  }
 
   return (
     <div className="RichEditor-controls">
@@ -87,6 +102,13 @@ const InlineStyleControls = (props) => {
         />
       )}
 
+      <button value="Up"
+        onClick={() => changeTextSize(2)}
+      />
+      <button value="Down"
+        onClick={() => changeTextSize(-2)}
+      />
+
       <ColorControls
         editorState={props.editorState}
         onToggle={props.toggleColor}
@@ -94,6 +116,8 @@ const InlineStyleControls = (props) => {
     </div>
   );
 };
+
+
 
 
 // EXPORT ALL

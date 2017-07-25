@@ -61,33 +61,29 @@ class RichEditorExample extends React.Component {
   _toggleColor (toggledColor) {
     const {editorState} = this.state;
     const selection = editorState.getSelection();
-    console.log('reaches inside toggle color with', toggledColor);
-    
+
     // Let's just allow one color at a time. Turn off all active colors.
     const nextContentState = Object.keys(styleMap)
       .reduce((contentState, color) => {
-        return Modifier.removeInlineStyle(contentState, selection, color)
+        if (!color.startsWith('FONT'))
+        { return Modifier.removeInlineStyle(contentState, selection, color) }
+        else
+        { return contentState }
       }, editorState.getCurrentContent());
-    
-    // console.log('from state:', contentState);
-    console.log('next content:', nextContentState);
-
     let nextEditorState = EditorState.push(
       editorState,
       nextContentState,
       'change-inline-style'
     );
     const currentStyle = editorState.getCurrentInlineStyle();
-    console.log(currentStyle);
+
     // Unset style override for current color.
     if (selection.isCollapsed()) {
       nextEditorState = currentStyle.reduce((state, color) => {
-        console.log('reaches 1 with color', color);
         return RichUtils.toggleInlineStyle(state, color);
       }, nextEditorState);
     }
-    console.log('changed editor state: ', nextEditorState);
-    
+
     // If the color is being toggled on, apply it.
     if (!currentStyle.has(toggledColor)) {
       nextEditorState = RichUtils.toggleInlineStyle(
@@ -95,7 +91,7 @@ class RichEditorExample extends React.Component {
         toggledColor
       );
     }
-    console.log('next editor state: ', nextEditorState);
+
     this.onChange(nextEditorState);
   }
 
