@@ -104,7 +104,6 @@ class DocComponent extends React.Component {
 
   componentDidMount() {
     ////
-    const socket = io('http://localhost:3000')
     console.log('socket', socket)
     socket.on('hi', () => {
       console.log('RECEIVED HI2');
