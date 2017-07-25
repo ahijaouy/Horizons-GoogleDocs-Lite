@@ -101,14 +101,7 @@ const InlineStyleControls = (props) => {
           style={type.style}
         />
       )}
-
-      <button value="Up"
-        onClick={() => changeTextSize(2)}
-      />
-      <button value="Down"
-        onClick={() => changeTextSize(-2)}
-      />
-
+      
       <ColorControls
         editorState={props.editorState}
         onToggle={props.toggleColor}

@@ -12,6 +12,7 @@ const ColorControls = (props) => {
           label={type.label}
           onToggle={props.onToggle}
           style={type.style}
+          className="color_style_button"
         />
       )}
     </div>
