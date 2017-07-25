@@ -14,6 +14,29 @@ import  {
 } from './DocComponentStyles';
 // const socket = require('socket.io-client')('http://localhost:3000');
 
+function formatDate(olddate) {
+  const date = new Date(olddate)
+  const monthNames = [
+    "January", "February", "March",
+    "April", "May", "June", "July",
+    "August", "September", "October",
+    "November", "December"
+  ];
+  let minute = '00'
+  const day = date.getDate();
+  const monthIndex = date.getMonth();
+  const year = date.getFullYear();
+  const hour = date.getHours();
+  const minuteTemp = date.getMinutes()
+  if(String(minuteTemp).length === 1){
+    minute = '0'+String(minuteTemp)
+  }else{
+    minute = minuteTemp
+  }
+
+  return day + ' ' + monthNames[monthIndex] + ' ' + year + ' : ' + hour +':'+minute;
+}
+
 class RichEditorExample extends React.Component {
   constructor (props) {
     super(props);
@@ -21,7 +44,9 @@ class RichEditorExample extends React.Component {
       socket: this.props.socket,
       editorState: EditorState.createEmpty(),
       currentDocument: '',
-      docName: ''
+      docName: '',
+      history: [],
+      showHist: false,
     };
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => this.setState({editorState});
@@ -30,6 +55,9 @@ class RichEditorExample extends React.Component {
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
     this.handleTextUpdate = this.handleTextUpdate.bind(this);
+    this.handleShowHist = this.handleShowHist.bind(this);
+    this.handleHideHist = this.handleHideHist.bind(this);
+    this.renderPast = this.renderPast.bind(this);
   }
 
   _handleKeyCommand (command) {
@@ -102,18 +130,6 @@ class RichEditorExample extends React.Component {
   }
 
   componentDidMount() {
-    ////
-    console.log('socket', this.state.socket)
-    this.state.socket.on('hi', () => {
-      console.log('RECEIVED HI2');
-
-    });
-    this.state.socket.emit('typing', ' I fucking work')
-
-    this.state.socket.on('typing', (msg) => {
-      console.log('msg', msg)
-    })
-    ////
     this.setState({currentDocument: this.props.id.match.params.doc_id});
     axios.get('http://localhost:3000/document')
     .then(response => {
@@ -122,14 +138,11 @@ class RichEditorExample extends React.Component {
           this.setState({docName: doc.name});
           const parsedBody = doc.body ? JSON.parse(doc.body) : JSON.parse('{}');
           const finalBody = convertFromRaw(parsedBody);
-          this.setState({editorState: EditorState.createWithContent(finalBody)});
+          this.setState({editorState: EditorState.createWithContent(finalBody)})
+          this.setState({history: doc.history});
         }
       });
     });
-  }
-
-  componentWillMount(){
-    // this.state.socket.emit('typing', 'hi')
   }
 
   handleTextUpdate(){
@@ -143,7 +156,8 @@ class RichEditorExample extends React.Component {
           const newBody = convertToRaw(this.state.editorState.getCurrentContent());
           axios.post('http://localhost:3000/document/update',{
             id: this.props.id.match.params.doc_id,
-            body: JSON.stringify(newBody)
+            body: JSON.stringify(newBody),
+            history: this.state.history,
           })
           .catch((err) => {
             console.log('error', err);
@@ -152,6 +166,25 @@ class RichEditorExample extends React.Component {
       });
     });
   }
+
+  handleShowHist(){
+    // console.log('hist', this.state.history[0].date)
+    this.setState({showHist: true})
+  }
+
+  handleHideHist(){
+    // console.log('hist', this.state.history)
+    this.setState({showHist: false})
+  }
+
+  renderPast(past){
+    // console.log('past', past);
+    const parsedBody = JSON.parse(past)
+    const finalBody = convertFromRaw(parsedBody);
+    this.setState({editorState: EditorState.createWithContent(finalBody)})
+  }
+
+
 
   render() {
     const {editorState} = this.state;
@@ -192,6 +225,14 @@ class RichEditorExample extends React.Component {
             spellCheck={true}
           />
         </div>
+        {!this.state.showHist ?
+          <button onClick={this.handleShowHist}>View History</button> :
+          <div>
+            {this.state.history.map((past) => (<div><button onClick={() => this.renderPast(past.content)}>{formatDate(past.date)}</button></div>))}
+            <button onClick={this.handleHideHist}>Hide History</button>
+          </div>
+      }
+
         <button onClick={this.handleTextUpdate}>Save</button>
       </div>
     );
