@@ -9,6 +9,6 @@ import RichEditorExample from './components/DocComponent';
 export default (
 	<Switch>
 			<Route exact path="/" render={() => <DocPortalComponent />} />
-			<Route exact path="/doc/:doc_id" render={() => < RichEditorExample />} />
+			<Route exact name="doc" path="/doc/:doc_id" render={(doc_id) => <RichEditorExample id={doc_id}/>} />
 	</Switch>
 );

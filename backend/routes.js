@@ -32,6 +32,14 @@ router.get('/document', function (req, res) {
   })
 })
 
+router.post('/document/update', function (req, res) {
+  console.log('find me here', req.body.body)
+  Document.findOneAndUpdate({_id: req.body.id},{ body: req.body.body },function(err, result){
+    console.log('in here now ifnally', result)
+    res.send(result)
+  })
+})
+
 router.get('/success', function(req, res) {
   res.json({authenticated: true, user: req.user});
 });

@@ -26,6 +26,7 @@ class Login extends React.Component {
   updatePassword(text) {
     this.password = text;
   }
+  
   handleLogin(event) {
     axios.post('http://localhost:3000/login', {
       username: this.username,
