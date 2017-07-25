@@ -12,11 +12,13 @@ import  {
   INLINE_STYLES,
   InlineStyleControls
 } from './DocComponentStyles';
+// const socket = require('socket.io-client')('http://localhost:3000');
 
 class RichEditorExample extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
+      // socket: io('http://localhost:3000'),
       editorState: EditorState.createEmpty(),
       currentDocument: '',
       docName: ''
@@ -100,23 +102,30 @@ class RichEditorExample extends React.Component {
   }
 
   componentDidMount() {
-    // console.log('doc_id', this.props.id.match.params.doc_id);
+    ////
+    const socket = io('http://localhost:3000')
+    console.log('socket', socket)
+    socket.on('hi', () => {
+      console.log('RECEIVED HI2');
+      socket.emit('typing')
+    });
+    ////
     this.setState({currentDocument: this.props.id.match.params.doc_id});
     axios.get('http://localhost:3000/document')
     .then(response => {
-      // console.log('resp data on start', response.data)
       response.data.forEach((doc) => {
         if(doc._id === this.state.currentDocument){
-          // console.log('matched up');
-          // console.log('doc', doc)
           this.setState({docName: doc.name});
           const parsedBody = doc.body ? JSON.parse(doc.body) : JSON.parse('{}');
-          // console.log('newBody2', parsedBody);
           const finalBody = convertFromRaw(parsedBody);
           this.setState({editorState: EditorState.createWithContent(finalBody)});
         }
       });
     });
+  }
+
+  componentWillMount(){
+    // this.state.socket.emit('typing', 'hi')
   }
 
   handleTextUpdate(){
@@ -125,12 +134,9 @@ class RichEditorExample extends React.Component {
       return response.data;
     })
     .then(response2 => {
-      // console.log('res2', response2)
       response2.forEach((doc) => {
         if(this.state.currentDocument === this.props.id.match.params.doc_id){
-          // console.log('in here')
           const newBody = convertToRaw(this.state.editorState.getCurrentContent());
-          // console.log('aaaaa', newBody);
           axios.post('http://localhost:3000/document/update',{
             id: this.props.id.match.params.doc_id,
             body: JSON.stringify(newBody)

@@ -6,7 +6,7 @@ const Schema = mongoose.Schema
 const documentSchema = new Schema({
   name: String,
   body: String,
-  ower: String,
+  owner: String,
   collaborators: Array,
   user_id: {
     type: mongoose.Schema.Types.ObjectId,

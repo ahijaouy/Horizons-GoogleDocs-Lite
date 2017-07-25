@@ -2,6 +2,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
+//socket io
+// import io from 'socket.io-client';
+
+///
+
+// console.log('SOCKET: ', this.socket);
 
 class DocPortalComponent extends React.Component {
   constructor() {
@@ -21,10 +27,14 @@ class DocPortalComponent extends React.Component {
   }
 
   componentDidMount(){
+    // socket.on('hi', () => {
+    //   console.log('RECEIVED HI')
+    // });
+
     axios.get('http://localhost:3000/document')
       .then(response => {
         this.setState({currentDocs: response.data})
-      })
+      });
   }
 
   handleNewDoc(e){
@@ -92,8 +102,8 @@ class DocPortalComponent extends React.Component {
         </form>
         <div style={{height: '200px', width: '100%', border: '2px solid black'}}>
           <h3>My Documents</h3>
-            {this.state.search === '' ? this.state.currentDocs.map((doc) => (<div><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
-          :this.state.searchList.map((doc) => (<div><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
+            {this.state.search === '' ? this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
+          :this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
         </div>
         <form onSubmit={this.handleAdd}>
           <input
