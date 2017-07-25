@@ -14,7 +14,8 @@ import  {
 } from './DocComponentStyles';
 // const socket = require('socket.io-client')('http://localhost:3000');
 
-class RichEditorExample extends React.Component {
+
+class DocComponent extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -103,8 +104,8 @@ class RichEditorExample extends React.Component {
 
   componentDidMount() {
     ////
-    console.log('socket', this.state.socket)
-    this.state.socket.on('hi', () => {
+    console.log('socket', socket)
+    socket.on('hi', () => {
       console.log('RECEIVED HI2');
 
     });
@@ -166,7 +167,7 @@ class RichEditorExample extends React.Component {
     }
     return (
       <div className="RichEditor-root">
-        <Link to={'/'}><button>Back to Portal</button></Link>
+        <Link to={'/dashboard'}><button>Back to Portal</button></Link>
         <h4>Name: {this.state.docName}</h4>
         <h5>ID: {this.state.currentDocument}</h5>
         <BlockStyleControls
@@ -198,7 +199,7 @@ class RichEditorExample extends React.Component {
   }
 }
 
-export default RichEditorExample;
+export default DocComponent;
 
 
 

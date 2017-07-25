@@ -2,12 +2,16 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
-//socket io
-// import io from 'socket.io-client';
-
-///
-
-// console.log('SOCKET: ', this.socket);
+import {
+  Navbar,
+  NavItem,
+  Row,
+  Col,
+  Input,
+  CardPanel,
+  Button,
+  Icon,
+  Card } from 'react-materialize';
 
 class DocPortalComponent extends React.Component {
   constructor() {
@@ -85,34 +89,46 @@ class DocPortalComponent extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1 style ={{textAlign: 'center'}}> Dom Docs Portal </h1>
+      <div id="portal">
+        <Navbar id="navbar_main" brand='Dom Docs Portal' right className="orange darken-4">
+          <NavItem><Link to="/logout">Logout</Link></NavItem>
+       </Navbar>
+       <div id="portal_container">
+         <Row>
+           <Button floating large waves='light' icon='add' className="orange accent-3">
+          	<Input  s={6} label="Add a New Document" validate><Icon large>note_add</Icon></Input>
+          </Button>
+          <form onSubmit={this.handleCreate}>
+            <Input
+              type="text"
+              value={this.state.newDoc}
+              placeholder="New Document Title"
+              onChange={this.handleNewDoc}
+              s={6} offset={'s3'}
+            />
+              <Button waves='light' type="submit" value="Create component" onClick={this.handleCreate}>Create New</Button>
+          </form>
+        </Row>
           <input
             type="text"
             value={this.state.search}
             placeholder="Search for Docs"
             onChange={this.handleSearch}/>
-        <form onSubmit={this.handleCreate}>
-          <input
-            type="text"
-            value={this.state.newDoc}
-            placeholder="New Document Title"
-            onChange={this.handleNewDoc}/>
-            <input type="submit" value="Create component" onClick={this.handleCreate}/>
-        </form>
-        <div style={{height: '200px', width: '100%', border: '2px solid black'}}>
-          <h3>My Documents</h3>
-            {this.state.search === '' ? this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
-          :this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
+
+          <div style={{height: '200px', width: '100%', border: '2px solid black'}}>
+            <h3>My Documents</h3>
+              {this.state.search === '' ? this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc.id}`}>{doc.name}</Link></div>))
+            :this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc.id}`}>{doc.name}</Link></div>))}
+          </div>
+          <form onSubmit={this.handleAdd}>
+            <input
+              type="text"
+              value={this.state.sharedDoc}
+              placeholder="Paste a doc ID"
+              onChange={this.handleSharedDoc}/>
+              <input type="submit" value="Add Shared Document" onClick={this.handleAdd}/>
+          </form>
         </div>
-        <form onSubmit={this.handleAdd}>
-          <input
-            type="text"
-            value={this.state.sharedDoc}
-            placeholder="Paste a doc ID"
-            onChange={this.handleSharedDoc}/>
-            <input type="submit" value="Add Shared Document" onClick={this.handleAdd}/>
-        </form>
       </div>
     );
   }
