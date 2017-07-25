@@ -26,10 +26,15 @@ class DocPortalComponent extends React.Component {
   componentDidMount(){
     axios.get('http://localhost:3000/document')
       .then(response => {
+<<<<<<< HEAD
         console.log(response);
         this.setState({currentDocs: response.data});
         console.log('CD', this.state.currentDocs);
       });
+=======
+        this.setState({currentDocs: response.data})
+      })
+>>>>>>> feature/routes
   }
 
   handleNewDoc(e){
@@ -70,12 +75,13 @@ class DocPortalComponent extends React.Component {
     this.setState({search: e.target.value});
     const currDocs = this.state.currentDocs;
     const filteredDocs = currDocs.filter((item) => {
-      if(item.name.startsWith(e.target.value)){
-        return true;
+      if(item.name.startsWith(e.target.value) || item._id === e.target.value){
+        return true
       }
-      return false;
-    });
-    this.setState({searchList: filteredDocs});
+      return false
+    })
+    console.log('find me', filteredDocs)
+    this.setState({searchList: filteredDocs})
   }
 
   render() {
@@ -100,8 +106,8 @@ class DocPortalComponent extends React.Component {
         </form>
         <div style={{height: '200px', width: '100%', border: '2px solid black'}}>
           <h3>My Documents</h3>
-            {this.state.search === '' ? this.state.currentDocs.map((doc) => (<div><Link to={`/doc/${doc.id}`}>{doc.name}</Link></div>))
-          :this.state.searchList.map((doc) => (<div><Link to={`/doc/${doc.id}`}>{doc.name}</Link></div>))}
+            {this.state.search === '' ? this.state.currentDocs.map((doc) => (<div><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
+          :this.state.searchList.map((doc) => (<div><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
         </div>
         <form onSubmit={this.handleAdd}>
           <input
