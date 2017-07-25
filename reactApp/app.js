@@ -4,7 +4,7 @@ import DocPortalComponent from './components/DocPortalComponent';
 import DocComponent from './components/DocComponent';
 import AppContainer from './components/AppContainer'
 // import Root from './containers/Root';
-import {Route, Router as Router} from 'react-router-dom';
+import {Route, HashRouter as Router} from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
 
 export const history = createHistory();
