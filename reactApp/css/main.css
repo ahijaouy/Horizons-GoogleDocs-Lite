@@ -25,3 +25,13 @@
   color: #33333e;
   border-radius: 5px;
 }
+
+.right-align {
+  text-align: right;
+}
+.left-align {
+  text-align: left;
+}
+.center-align {
+  text-align: center;
+}

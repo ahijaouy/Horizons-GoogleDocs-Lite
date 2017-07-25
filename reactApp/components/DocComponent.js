@@ -3,16 +3,20 @@ import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Routes from '../routes';
-import { Editor, EditorState, Modifier, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
+import { Editor, EditorState, Modifier, RichUtils, convertToRaw, convertFromRaw, DefaultDraftBlockRenderMap } from 'draft-js';
 import  {
   styleMap,
   getBlockStyle,
   BLOCK_TYPES,
   BlockStyleControls,
   INLINE_STYLES,
-  InlineStyleControls
+  InlineStyleControls,
+  myBlockTypes
 } from './DocComponentStyles';
+import{ Map } from 'immutable';
 // const socket = require('socket.io-client')('http://localhost:3000');
+
+
 
 class RichEditorExample extends React.Component {
   constructor (props) {
@@ -178,6 +182,7 @@ class RichEditorExample extends React.Component {
         <div className={className} onClick={this.focus}>
           <Editor
             blockStyleFn={getBlockStyle}
+            blockRenderMap ={myBlockTypes}
             customStyleMap={styleMap}
             editorState={editorState}
             handleKeyCommand={this.handleKeyCommand}

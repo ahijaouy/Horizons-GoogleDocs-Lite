@@ -2,7 +2,8 @@ import React from 'react';
 import StyleButton from './StyleButtonComponent';
 import ColorControls from './StyleButtonColorComponent';
 import { Redirect, Link } from 'react-router-dom';
-
+import{ Map } from 'immutable';
+import { DefaultDraftBlockRenderMap } from 'draft-js';
 // CUSTOM STYLE MAP
 const styleMap = {
   CODE: {
@@ -15,7 +16,7 @@ const styleMap = {
   FONT_SMALL: { fontSize: 12 },
   FONT_MEDIUM: { fontSize: 18 },
   FONT_LARGE: { fontSize: 24 },
-  FONT_XLARGE: { fontSize: 36 },  
+  FONT_XLARGE: { fontSize: 36 },
 
   // COLOR STYLES
   red: { color: 'rgba(255, 0, 0, 1.0)', },
@@ -45,8 +46,21 @@ const BLOCK_TYPES = [
   {label: 'UL', style: 'unordered-list-item'},
   {label: 'OL', style: 'ordered-list-item'},
   {label: 'Code Block', style: 'code-block'},
-  {label: 'Left Indent', style: 'DraftEditor-alignLeft'}
+  {label: 'Left Indent', style: 'left' },
+  {label: 'Right-indent', style: 'right'},
+  {label: 'Center-indent', style:'center'}
 ];
+const myBlockTypes = DefaultDraftBlockRenderMap.merge(new Map({
+  center: {
+    wrapper: <div className="center-align" />
+  },
+  right: {
+    wrapper: <div className="right-align" />
+  },
+  left: {
+    wrapper: <div className="left-align" />
+  }
+}));
 const BlockStyleControls = (props) => {
   const {editorState} = props;
   const selection = editorState.getSelection();
@@ -78,7 +92,7 @@ var INLINE_STYLES = [
   {label: 'Small', style: 'FONT_SMALL'},
   {label: 'Medium', style: 'FONT_MEDIUM'},
   {label: 'Large', style: 'FONT_LARGE'},
-  {label: 'XLarge', style: 'FONT_XLARGE'}        
+  {label: 'XLarge', style: 'FONT_XLARGE'}
 ];
 
 const InlineStyleControls = (props) => {
@@ -100,7 +114,7 @@ const InlineStyleControls = (props) => {
           style={type.style}
         />
       )}
-      
+
       <ColorControls
         editorState={props.editorState}
         onToggle={props.toggleColor}
@@ -120,4 +134,5 @@ module.exports = {
   BlockStyleControls,
   INLINE_STYLES,
   InlineStyleControls,
-}
+  myBlockTypes
+};
