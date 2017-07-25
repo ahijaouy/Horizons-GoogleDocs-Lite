@@ -6,6 +6,7 @@ import {
   Input, Button, Card
 } from 'react-materialize';
 
+import { Redirect, Link } from 'react-router-dom';
 
 class Login extends React.Component {
   constructor() {
@@ -13,6 +14,9 @@ class Login extends React.Component {
     this.username = "";
     this.password = "";
     this.name = "";
+    this.state = {
+      registered: false
+    };
   }
 
   updateUsername(text) {
@@ -33,19 +37,20 @@ class Login extends React.Component {
       name: this.name
 
     }).then((resp) => {
-      alert(`Account Registered: ${this.username} : ${this.password} `);
       this.name = '';
       this.username = '';
       this.password = '';
+      this.setState({registered: true});
     });
 
   }
 
   render() {
     return (
+      this.state.registered ? (<Redirect to='/'/>) :(
       <div>
         <Navbar brand='Horizons GoogleDocs Lite' right>
-          <NavItem href='#'>Login</NavItem>
+          <NavItem ><Link to="/">Log In</Link></NavItem>
         </Navbar>
         <Row>
           <Col s={6} offset={"s3"} >
@@ -63,7 +68,7 @@ class Login extends React.Component {
           </Col>
         </Row>
       </div>
-    );
+    ));
   }
 }
 

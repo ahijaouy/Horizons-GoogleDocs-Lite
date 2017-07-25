@@ -22,8 +22,13 @@ module.exports = {
         test: /\.css$/,
         use: [
           { loader: "style-loader" },
-          { loader: "css-loader" }
+          { loader: "css-loader?importLoaders=1" }
         ]
+      },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loaders: ['babel-loader', 'babel-loader?presets[]=react,presets[]=es2015'],
       }
     ]
   },

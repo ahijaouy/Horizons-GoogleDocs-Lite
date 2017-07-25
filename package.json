@@ -40,6 +40,8 @@
     "draft-js": "^0.10.1",
     "express": "^4.15.3",
     "express-session": "^1.15.4",
+    "hammerjs": "^2.0.8",
+    "materialize-css": "^0.100.1",
     "mongoose": "^4.11.4",
     "morgan": "^1.8.2",
     "passport": "^0.3.2",
