@@ -26,15 +26,8 @@ class DocPortalComponent extends React.Component {
   componentDidMount(){
     axios.get('http://localhost:3000/document')
       .then(response => {
-<<<<<<< HEAD
-        console.log(response);
         this.setState({currentDocs: response.data});
-        console.log('CD', this.state.currentDocs);
       });
-=======
-        this.setState({currentDocs: response.data})
-      })
->>>>>>> feature/routes
   }
 
   handleNewDoc(e){
@@ -76,12 +69,12 @@ class DocPortalComponent extends React.Component {
     const currDocs = this.state.currentDocs;
     const filteredDocs = currDocs.filter((item) => {
       if(item.name.startsWith(e.target.value) || item._id === e.target.value){
-        return true
+        return true;
       }
-      return false
-    })
-    console.log('find me', filteredDocs)
-    this.setState({searchList: filteredDocs})
+      return false;
+    });
+    console.log('find me', filteredDocs);
+    this.setState({searchList: filteredDocs});
   }
 
   render() {
