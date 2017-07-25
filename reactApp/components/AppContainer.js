@@ -13,7 +13,7 @@ import RichEditorExample from '../components/DocComponent';
 const AppContainer = (props) => {
   return (
     <div>
-      <HeaderComponent /> 
+      <HeaderComponent />
       { Routes }
       {/* <RichEditorExample /> */}
     </div>

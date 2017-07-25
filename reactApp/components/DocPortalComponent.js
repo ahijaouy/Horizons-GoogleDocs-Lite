@@ -2,16 +2,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
-// import Document from '.../models/documents.js'
-// import mongoose from 'mongoose';
-// mongoose.connect(require('../config/database').url);
-// mongoose.Promise = global.Promise;
 
 class DocPortalComponent extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
-      currentDocs: [{name: 'doc1', id: 1}, {name: 'doc2', id: 2}, {name: 'doc3', id: 3}],
+      currentDocs: [],
       newDoc: '',
       sharedDoc: '',
       search: '',
@@ -25,11 +21,12 @@ class DocPortalComponent extends React.Component {
   }
 
   componentDidMount(){
-    // Document.find({}).exec()
-    //   .then((response) => {
-    //     console.log('response from didMount', response)
-    //     this.setState({currentDocs: response})
-    //   })
+    axios.get('http://localhost:3000/document')
+      .then(response => {
+        console.log(response)
+        this.setState({currentDocs: response.data})
+        console.log('CD', this.state.currentDocs)
+      })
   }
 
   handleNewDoc(e){
@@ -47,14 +44,10 @@ class DocPortalComponent extends React.Component {
     const newState = this.state.currentDocs;
     const newDocsState = newState.concat({name: this.state.newDoc, id: this.state.currentDocs.length + 1})
     this.setState({currentDocs: newDocsState, newDoc: ''})
-    // const newDocument = new Document({
-    //   name: this.state.newDoc,
-    //   body: '',
-    //   owner: ''
-    // })
-    // newDocument.save((err) => {
-    //   console.log('Error creating Document', err)
-    // })
+    axios.post('http://localhost:3000/document',{
+      name: this.state.newDoc,
+      body: ''
+    })
   }
 
   handleAdd(e){
@@ -70,6 +63,7 @@ class DocPortalComponent extends React.Component {
 
   handleSearch(e){
     e.preventDefault()
+    console.log(e.target.value)
     this.setState({search: e.target.value})
     const currDocs = this.state.currentDocs;
     const filteredDocs = currDocs.filter((item) => {
@@ -100,8 +94,8 @@ class DocPortalComponent extends React.Component {
         </form>
         <div style={{height: '200px', width: '100%', border: '2px solid black'}}>
           <h3>My Documents</h3>
-            {this.state.search === '' ? this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc.id}`}>{' '+doc.name}</Link></div>))
-          :this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc.id}`}>{' '+doc.name}</Link></div>))}
+            {this.state.search === '' ? this.state.currentDocs.map((doc) => (<div><Link to={`/doc/${doc.id}`}>{doc.name}</Link></div>))
+          :this.state.searchList.map((doc) => (<div><Link to={`/doc/${doc.id}`}>{doc.name}</Link></div>))}
         </div>
         <form onSubmit={this.handleAdd}>
           <input
@@ -114,6 +108,6 @@ class DocPortalComponent extends React.Component {
       </div>
     );
   }
-}
+};
 
 export default DocPortalComponent;
