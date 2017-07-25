@@ -1,8 +1,7 @@
 
 #root {
-  width: 98vw;
+  width: 100vw;
   height: 100vh;
-  padding: 10vh 10vw;
 }
 
 #headerComponent {
@@ -24,4 +23,16 @@
   background: linear-gradient(lightgrey, #b3b3b3);
   color: #33333e;
   border-radius: 5px;
+}
+
+.add_doc_btn * {
+  background-color: #F57C00;
+  float: center
+}
+
+#navbar_main {
+  padding: 0 10px;
+}
+#portal_container {
+  padding: 25px;
 }
