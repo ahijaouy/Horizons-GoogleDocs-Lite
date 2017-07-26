@@ -281,7 +281,7 @@ class DocComponent extends React.Component {
           />
         </div>
         <Row id="doc_btns">
-          {!this.state.showHist ?
+          {/* {!this.state.showHist ? */}
             <Col s={2}> <Button
               onClick={this.handleShowHist}
               fab='vertical' faicon='fa fa-plus'
@@ -292,24 +292,25 @@ class DocComponent extends React.Component {
               <Col s={1}> {this.state.history.map((past, i) => (
                 <div key={i}><Button onClick={() => this.renderPast(past.content)}
                   className='deep-purple lighten-5 history_btn'
-                  style={{color: 'black'}}
+                  style={{color: 'black', width: '250px', right: '200px'}}
                   waves='light' >
                   {formatDate(past.date)}
                 </Button></div>))} </Col>
-            </Button> </Col> :
-            <div>
-              <Col s={1}> {this.state.history.map((past) => (
-                <div><Button onClick={() => this.renderPast(past.content)}
-                  className='deep-purple lighten-5 history_btn'
-                  style={{color: 'black'}}
-                  waves='light' >
-                  {formatDate(past.date)}
-                </Button></div>))} </Col>
-              <Col s={1}> <Button onClick={this.handleHideHist} className='purple darken-4 history_btn'>
-                Hide History
-              </Button> </Col>
-            </div>
-          }
+            </Button> </Col>
+            {/* :
+            // <div>
+            //   <Col s={1}> {this.state.history.map((past) => (
+            //     <div><Button onClick={() => this.renderPast(past.content)}
+            //       className='deep-purple lighten-5 history_btn'
+            //       style={{color: 'black'}}
+            //       waves='light' >
+            //       {formatDate(past.date)}
+            //     </Button></div>))} </Col>
+            //   <Col s={1}> <Button onClick={this.handleHideHist} className='purple darken-4 history_btn'>
+            //     Hide History
+            //   </Button> </Col>
+            // </div>
+          } */}
         </Row>
 
         <Button onClick={this.handleTextUpdate} className='light-blue darken-1 doc_save_btn'>Save</Button>
