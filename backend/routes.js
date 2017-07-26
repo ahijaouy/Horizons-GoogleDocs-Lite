@@ -42,12 +42,22 @@ router.get('/document', function (req, res) {
 });
 
 router.post('/document/update', function (req, res) {
-  console.log('find me here', req.body.body);
-  Document.findOneAndUpdate({_id: req.body.id},{ body: req.body.body },function(err, result){
-    console.log('in here now ifnally', result);
-    res.send(result);
-  });
-});
+  console.log('find me here', req.body.body)
+  const history = req.body.history.concat({content: req.body.body, date: new Date()})
+  Document.findOneAndUpdate({_id: req.body.id},{ body: req.body.body, history: history },function(err, result){
+    console.log('in here now ifnally', result)
+    res.send(result)
+  })
+})
+
+// router.post('/document/history', function (req, res) {
+//   console.log('find me here', req.body.body)
+//   const
+//   Document.findOneAndUpdate({_id: req.body.id},{ body: req.body.body },function(err, result){
+//     console.log('in here now ifnally', result)
+//     res.send(result)
+//   })
+// })
 
 router.get('/success', function(req, res) {
   res.json({authenticated: true, user: req.user});
