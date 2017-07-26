@@ -24,10 +24,13 @@ router.post('/document', function (req, res) {
   const newDocument = new Document({
     name: req.body.name,
     body: req.body.body,
-    owner: req.user
+    owner: req.user,
+    collaborators: [req.user]
   });
   newDocument.save((err) => {
-    console.log('Error creating Document', err);
+    if(err){
+      console.log('Error creating Document', err);
+    }
   });
   res.send('Added new Document');
 });
