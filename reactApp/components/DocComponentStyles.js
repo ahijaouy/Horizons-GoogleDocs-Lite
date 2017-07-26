@@ -103,7 +103,7 @@ const InlineStyleControls = (props) => {
   const changeTextSize = (change) => {
     const {editorState} = props.editorState;
     const selection = editorState.getSelection();
-  }
+  };
 
   return (
     <div className="RichEditor-controls">
