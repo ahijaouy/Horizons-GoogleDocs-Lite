@@ -20,6 +20,7 @@ import {
   Icon,
   Card } from 'react-materialize';
 import {
+  _onChange,
   _handleKeyCommand,
   _onTab,
   _toggleBlockType,
@@ -63,12 +64,16 @@ class DocComponent extends React.Component {
       showHist: false,
     };
     this.focus = () => this.refs.editor.focus();
-    this.onChange = (editorState) => this.setState({editorState});
-    this.handleKeyCommand = (command) => _handleKeyCommand(command);
-    this.onTab = (e) => _onTab(e);
-    this.toggleBlockType = (type) => _toggleBlockType(type);
-    this.toggleInlineStyle = (style) => _toggleInlineStyle(style);
-    this.toggleColor = (color) => _toggleColor(color);
+    // this.onChange = (editorState) => this.setState({editorState});
+
+    this.onChange = _onChange.bind(this);
+    this.handleKeyCommand = _handleKeyCommand.bind(this);
+    this.onTab = _onTab.bind(this);
+    this.toggleBlockType = _toggleBlockType.bind(this);
+    this.toggleInlineStyle = _toggleInlineStyle.bind(this);
+    this.toggleColor = _toggleColor.bind(this);
+    // this.toggleColor = (color) => _toggleColor(color);
+
     this.handleTextUpdate = this.handleTextUpdate.bind(this);
     this.handleShowHist = this.handleShowHist.bind(this);
     this.handleHideHist = this.handleHideHist.bind(this);
@@ -78,11 +83,11 @@ class DocComponent extends React.Component {
 
   componentDidMount() {
     //
-    console.log('socket', socket)
-    socket.on('hi', () => {
-      console.log('RECEIVED HI2');
-
-    });
+    // console.log('socket', socket)
+    // socket.on('hi', () => {
+    //   console.log('RECEIVED HI2');
+    //
+    // });
     this.state.socket.emit('typing', ' I fucking work')
 
     this.state.socket.on('typing', (msg) => {
