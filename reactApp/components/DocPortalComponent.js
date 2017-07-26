@@ -3,6 +3,19 @@ import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 
+
+function filteredDocs(array, user_id){
+  const userDocs = [];
+  array.forEach((doc) => {
+    doc.collaborators.forEach((user) => {
+      if(user._id === user_id){
+        userDocs.push(doc)
+      }
+    })
+  })
+  return userDocs;
+}
+
 class DocPortalComponent extends React.Component {
   constructor() {
     super()
@@ -27,6 +40,11 @@ class DocPortalComponent extends React.Component {
         console.log('resp', response)
         this.setState({currentDocs: response.data})
       });
+    axios.get('http://localhost:3000/user')
+    .then(response => {
+      console.log('user', response)
+      this.setState({currentUser: response.data});
+    });
   }
 
   handleNewDoc(e){
@@ -59,13 +77,16 @@ class DocPortalComponent extends React.Component {
 
   handleAdd(e){
     e.preventDefault();
-    // const newState = this.state.currentDocs;
-    // Document.find({id: this.state.sharedDoc}).exec()
-    //   .then(response => {
-    //     console.log('response HA', response)
-    //     const newDocsState = newState.concat({name: this.state.sharedDoc, id: this.state.currentDocs.length + 1})
-    //     this.setState({currentDocs: newDocsState, sharedDoc: ''})
-    //   })
+    axios.post('http://localhost:3000/user',{
+      id: this.state.sharedDoc
+    })
+    .then((resp) => {
+      console.log(resp)
+    })
+    .catch((err) => {
+      console.log('err', err)
+    })
+
   }
 
   handleSearch(e){
@@ -85,7 +106,7 @@ class DocPortalComponent extends React.Component {
   render() {
     return (
       <div>
-        <h1 style ={{textAlign: 'center'}}> Dom Docs Portal </h1>
+        <h1 style ={{textAlign: 'center'}}> Welcome {this.state.currentUser.name} </h1>
           <input
             type="text"
             value={this.state.search}
@@ -101,8 +122,9 @@ class DocPortalComponent extends React.Component {
         </form>
         <div style={{height: '200px', width: '100%', border: '2px solid black'}}>
           <h3>My Documents</h3>
-            {this.state.search === '' ? this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
-          :this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
+          {filteredDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
+            {/* {this.state.search === '' ? this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
+          :this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))} */}
         </div>
         <form onSubmit={this.handleAdd}>
           <input
