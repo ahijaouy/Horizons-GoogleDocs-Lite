@@ -5,10 +5,12 @@ import axios from 'axios';
 
 
 function filterDocs(array, user_id){
-  console.log('FD', array, user_id)
+  // console.log('FD', array, user_id)
   const userDocs = [];
   array.forEach((doc) => {
+    // console.log('doc', doc)
     doc.collaborators.forEach((user) => {
+      // console.log('user', user)
       if(user._id === user_id){
         userDocs.push(doc)
       }
@@ -48,6 +50,7 @@ class DocPortalComponent extends React.Component {
 
   handleNewDoc(e){
     e.preventDefault();
+    // console.log('new doc', e.target.value)
     this.setState({newDoc: e.target.value})
   }
 
@@ -58,25 +61,23 @@ class DocPortalComponent extends React.Component {
 
   handleCreate(e){
     e.preventDefault();
-    const newState = this.state.currentDocs;
-    const newDocsState = newState.concat({name: this.state.newDoc})
-    this.setState({currentDocs: newDocsState, newDoc: ''})
-    console.log(' lets make new docs', this.state.newDoc);
+    // const newState = this.state.currentDocs;
+    // const newDocsState = newState.concat({name: this.state.newDoc})
+    // this.setState({currentDocs: newDocsState, newDoc: ''})
+    // console.log(' lets make new docs', this.state.newDoc);
     axios.post('http://localhost:3000/document',{
       name: this.state.newDoc,
       body: ''
     })
     .then((resp) => {
-      console.log(resp)
+      // console.log('curr docs', this.state.currentDocs);
+      const newState = this.state.currentDocs;
+      const newDocsState = newState.concat([resp.data]);
+      this.setState({currentDocs: newDocsState, newDoc: ''})
     })
     .catch((err) => {
       console.log('err', err)
     })
-    axios.get('http://localhost:3000/document')
-      .then(response => {
-        // console.log('resp', response)
-        this.setState({currentDocs: response.data})
-      });
   }
 
   handleAdd(e){
