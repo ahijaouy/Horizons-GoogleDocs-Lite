@@ -47,14 +47,22 @@ router.post('/document/update', function (req, res) {
   });
 });
 
-// router.post('/document/history', function (req, res) {
-//   console.log('find me here', req.body.body)
-//   const
-//   Document.findOneAndUpdate({_id: req.body.id},{ body: req.body.body },function(err, result){
-//     console.log('in here now ifnally', result)
-//     res.send(result)
-//   })
-// })
+router.get('/user', function(req,res){
+  console.log(req.user)
+  res.send(req.user);
+})
+
+router.post('/user', function(req,res){
+  const currentDocument = req.body.id
+  let collaborators = []
+  Document.find({_id: currentDocument}, function(err,result){
+    collaborators = result[0].collaborators
+    const newCollab = collaborators.concat([req.user]);
+    Document.findOneAndUpdate({_id: currentDocument},{ collaborators: newCollab },function(err, result){
+      res.send(result);
+    });
+  })
+})
 
 router.get('/success', function(req, res) {
   res.json({authenticated: true, user: req.user});

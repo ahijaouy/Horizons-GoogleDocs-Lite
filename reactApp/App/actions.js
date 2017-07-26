@@ -12,7 +12,13 @@ function dashboard() {
   };
 }
 
+function updateLinks(link) {
+  return {
+    type: types[link.toUpperCase()]
+  };
+}
 module.exports = {
   login,
-  dashboard
+  dashboard,
+  updateLinks
 };

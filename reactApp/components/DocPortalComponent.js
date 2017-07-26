@@ -2,22 +2,26 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
-import {
-  Navbar,
-  NavItem,
-  Row,
-  Col,
-  Input,
-  CardPanel,
-  Button,
-  Icon,
-  Card } from 'react-materialize';
+
+
+function filteredDocs(array, user_id){
+  const userDocs = [];
+  array.forEach((doc) => {
+    doc.collaborators.forEach((user) => {
+      if(user._id === user_id){
+        userDocs.push(doc)
+      }
+    })
+  })
+  return userDocs;
+}
 
 class DocPortalComponent extends React.Component {
   constructor() {
     super()
     this.state = {
       currentDocs: [],
+      currentUser:'',
       newDoc: '',
       sharedDoc: '',
       search: '',
@@ -31,14 +35,16 @@ class DocPortalComponent extends React.Component {
   }
 
   componentDidMount(){
-    socket.on('hi', () => {
-      console.log('RECEIVED HI')
-    });
-
     axios.get('http://localhost:3000/document')
       .then(response => {
+        // console.log('resp', response)
         this.setState({currentDocs: response.data})
       });
+    axios.get('http://localhost:3000/user')
+    .then(response => {
+      // console.log('user', response)
+      this.setState({currentUser: response.data});
+    });
   }
 
   handleNewDoc(e){
@@ -54,23 +60,33 @@ class DocPortalComponent extends React.Component {
   handleCreate(e){
     e.preventDefault();
     const newState = this.state.currentDocs;
-    const newDocsState = newState.concat({name: this.state.newDoc, id: this.state.currentDocs.length + 1})
+    const newDocsState = newState.concat({name: this.state.newDoc})
     this.setState({currentDocs: newDocsState, newDoc: ''})
+    // console.log(' lets make new docs', this.state.newDoc);
     axios.post('http://localhost:3000/document',{
       name: this.state.newDoc,
       body: ''
+    })
+    .then((resp) => {
+      // console.log(resp)
+    })
+    .catch((err) => {
+      console.log('err', err)
     })
   }
 
   handleAdd(e){
     e.preventDefault();
-    // const newState = this.state.currentDocs;
-    // Document.find({id: this.state.sharedDoc}).exec()
-    //   .then(response => {
-    //     console.log('response HA', response)
-    //     const newDocsState = newState.concat({name: this.state.sharedDoc, id: this.state.currentDocs.length + 1})
-    //     this.setState({currentDocs: newDocsState, sharedDoc: ''})
-    //   })
+    axios.post('http://localhost:3000/user',{
+      id: this.state.sharedDoc
+    })
+    .then((resp) => {
+      // console.log(resp)
+    })
+    .catch((err) => {
+      console.log('err', err)
+    })
+
   }
 
   handleSearch(e){
@@ -89,59 +105,36 @@ class DocPortalComponent extends React.Component {
 
   render() {
     return (
-     <div id="portal_container">
-      <form onSubmit={this.handleCreate}>
-        <Row id="add_new_row">
-          <Col s={4}>
-            <Input
-              type="text" id="add_new_row_input"
-              // style={{display: 'inline-block'}}
-              value={this.state.newDoc}
-              placeholder="New Document Title"
-              onChange={this.handleNewDoc}
-            />
-            </Col><Col s={1}>
-          <Button className='cyan' waves='light'
-            icon='add' type="submit"
-            value="Create component"
-            style={{display: 'inline-block'}}
-            onClick={this.handleCreate}>
-          </Button>
-          </Col>
-        </Row>
-      </form>
-      <Row id="portal_search_row">
-        <Col s={3}>
+      <div>
+        <h1 style ={{textAlign: 'center'}}> Welcome {this.state.currentUser.name} </h1>
           <input
             type="text"
             value={this.state.search}
             placeholder="Search for Docs"
-            onChange={this.handleSearch}
-          />
-        </Col>
-      </Row>
-      {/* <Row> */}
-        {/* <Col s={12}> */}
-          <div style={{width: '100%'}}>
-            <h3>My Documents</h3>
-              {this.state.search === '' ?
-              this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
-              :
-              this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
-          </div>
-        {/* </Col> */}
-        {/* <Col s={12}> */}
-          <form onSubmit={this.handleAdd}>
-            <input
-              type="text"
-              value={this.state.sharedDoc}
-              placeholder="Paste a doc ID"
-              onChange={this.handleSharedDoc}/>
-              <Button className="cyan" type="submit" onClick={this.handleAdd}>Add Shared Document</Button>
-          </form>
-        {/* </Col> */}
-      {/* </Row> */}
-    </div>
+            onChange={this.handleSearch}/>
+        <form onSubmit={this.handleCreate}>
+          <input
+            type="text"
+            value={this.state.newDoc}
+            placeholder="New Document Title"
+            onChange={this.handleNewDoc}/>
+            <input type="submit" value="Create component" onClick={this.handleCreate}/>
+        </form>
+        <div style={{height: '200px', width: '100%', border: '2px solid black'}}>
+          <h3>My Documents</h3>
+          {filteredDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
+            {/* {this.state.search === '' ? this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
+          :this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))} */}
+        </div>
+        <form onSubmit={this.handleAdd}>
+          <input
+            type="text"
+            value={this.state.sharedDoc}
+            placeholder="Paste a doc ID"
+            onChange={this.handleSharedDoc}/>
+            <input type="submit" value="Add Shared Document" onClick={this.handleAdd}/>
+        </form>
+      </div>
     );
   }
 };

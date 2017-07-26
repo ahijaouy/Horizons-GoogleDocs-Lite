@@ -1,8 +1,30 @@
+import  {
+  styleMap,
+  getBlockStyle,
+  BlockStyleControls,
+  InlineStyleControls,
+  myBlockTypes
+} from './DocComponentStyles';
+import { Editor, EditorState, Modifier, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
+
+
+function _onChange (editorState) {
+  const selection = editorState.getSelection();
+
+  console.log('editorState', JSON.stringify(selection));
+  const cursorPos = selection.anchorOffset;
+  const selectionPos = selection.focusOffset;
+
+  this.setState({editorState});
+}
+
 function _handleKeyCommand (command) {
   const {editorState} = this.state;
+  // console.log('this: ',this,'editorState',editorState);
+
   const newState = RichUtils.handleKeyCommand(editorState, command);
   if (newState) {
-    this.onChange(newState);
+    _onChange(newState);
     return true;
   }
 }
@@ -13,7 +35,9 @@ function _onTab (e) {
 }
 
 function _toggleBlockType (blockType) {
-  this.onChange(
+  // console.log('this: ',this,'editorState',this.state.editorState);
+
+  _onChange(
     RichUtils.toggleBlockType(
       this.state.editorState,
       blockType
@@ -22,7 +46,10 @@ function _toggleBlockType (blockType) {
 }
 
 function _toggleInlineStyle (inlineStyle) {
-  this.onChange(
+
+  // console.log('this: ',this,'editorState',this.state.editorState);
+
+  _onChange(
     RichUtils.toggleInlineStyle(
       this.state.editorState,
       inlineStyle
@@ -33,6 +60,8 @@ function _toggleInlineStyle (inlineStyle) {
 function _toggleColor (toggledColor) {
   const {editorState} = this.state;
   const selection = editorState.getSelection();
+  // console.log('this: ',this,'editorState',editorState);
+
 
   // Let's just allow one color at a time. Turn off all active colors.
   const nextContentState = Object.keys(styleMap)
@@ -63,11 +92,10 @@ function _toggleColor (toggledColor) {
       toggledColor
     );
   }
-
-  this.onChange(nextEditorState);
 }
 
 module.exports = {
+  _onChange,
   _handleKeyCommand,
   _onTab,
   _toggleBlockType,

@@ -14,11 +14,11 @@ export default function AppContainer() {
         <Header/>
         <Switch>
           <Route exact path='/' component={Login}/>
-          <Route exact path='/login' component={Login}/>
-          <Route exact path='/register' component={Register}/>
+          <Route path='/login' component={Login}/>
+          <Route path='/logout' component={Login}/>
+          <Route path='/register' component={Register}/>
           <Route path='/dashboard' component={DocPortalComponent}/>
           <Route exact path="/doc/:doc_id" render={(doc_id) => <DocComponent id={doc_id} socket={socket}/>} />
-
         </Switch>
     </div>
   );
