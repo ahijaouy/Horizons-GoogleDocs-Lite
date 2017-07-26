@@ -37,21 +37,34 @@
   height: 40px;
 }
 #add_new_row {
-  padding: 0 10px;
+  /*padding: 0 10px;*/
 }
-#add_new_row * {
-  display: inline-block;
-}
-#add_new_row input {
-  width: 30vw;
+#add_new_row_input {
+  /*display: inline-block;*/
+  width: 100%;
 }
 #portal_search_row {
-  
+
 }
 #portal_container {
   padding: 25px;
 }
 
+#doc_btns {
+  width: 100%;
+  padding-top: 15px;
+  border-top: 1px solid #ddd;
+  /*display: inline-block;*/
+}
+.history_btn {
+  margin: 2px 0;
+  /*padding: 0px 10px;*/
+  width: 210px;
+  right: 150px;
+}
+.doc_save_btn {
+  margin: 0 5px;
+}
 .font-color-yellow-darken-3 {
   color: #00838f
 }

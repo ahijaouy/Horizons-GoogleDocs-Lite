@@ -31,9 +31,9 @@ class DocPortalComponent extends React.Component {
   }
 
   componentDidMount(){
-    // socket.on('hi', () => {
-    //   console.log('RECEIVED HI')
-    // });
+    socket.on('hi', () => {
+      console.log('RECEIVED HI')
+    });
 
     axios.get('http://localhost:3000/document')
       .then(response => {
@@ -90,21 +90,28 @@ class DocPortalComponent extends React.Component {
   render() {
     return (
      <div id="portal_container">
-       <Row id="add_new_row">
-         <Col s={12}>
-          <form onSubmit={this.handleCreate}>
+      <form onSubmit={this.handleCreate}>
+        <Row id="add_new_row">
+          <Col s={4}>
             <Input
-              type="text"
+              type="text" id="add_new_row_input"
+              // style={{display: 'inline-block'}}
               value={this.state.newDoc}
               placeholder="New Document Title"
               onChange={this.handleNewDoc}
             />
-            <Button className='cyan' waves='light' icon='add' type="submit" value="Create component" onClick={this.handleCreate}> </Button>
-          </form>
-        </Col>
-      </Row>
+            </Col><Col s={1}>
+          <Button className='cyan' waves='light'
+            icon='add' type="submit"
+            value="Create component"
+            style={{display: 'inline-block'}}
+            onClick={this.handleCreate}>
+          </Button>
+          </Col>
+        </Row>
+      </form>
       <Row id="portal_search_row">
-        <Col s={12}>
+        <Col s={3}>
           <input
             type="text"
             value={this.state.search}
@@ -130,7 +137,7 @@ class DocPortalComponent extends React.Component {
               value={this.state.sharedDoc}
               placeholder="Paste a doc ID"
               onChange={this.handleSharedDoc}/>
-              <input type="submit" value="Add Shared Document" onClick={this.handleAdd}/>
+              <Button className="cyan" type="submit" onClick={this.handleAdd}>Add Shared Document</Button>
           </form>
         {/* </Col> */}
       {/* </Row> */}

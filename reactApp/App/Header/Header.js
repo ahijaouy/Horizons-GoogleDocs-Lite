@@ -14,7 +14,7 @@ const Header = ({links}) => {
       {/* <Navbar id="navbar_main" brand='Dom Docs Portal' right className="orange darken-4">
         <NavItem><Link to="/logout">Logout</Link></NavItem>
      </Navbar> */}
-      <Navbar  id="navbar_login" brand='Dom Docs Portal' right className="purple darken-4">
+      <Navbar  id="navbar_login" brand='DOM Docs Portal' right className="purple darken-4">
         {links.map((link, id) => <NavItem key={id}><Link to={'/' + link}>{link.toUpperCase()}</Link></NavItem>)}
       </Navbar>
     </div>
