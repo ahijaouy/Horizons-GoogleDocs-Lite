@@ -8,40 +8,46 @@ const Document = require('./models/document');
 
 router.post('/register', function (req, res) {
   console.log(req.body);
-  User.register(req.body.name, req.body.username, req.body.password, console.log);
+  User.register(req.body.name, req.body.username, req.body.password, function(error, user) {
+    if (error) {
+      res.send({error});
+    } else {
+      res.send({user});
+    }
+  });
 
-  res.send('Successfully Registered!');
+
 });
 
 router.post('/document', function (req, res) {
-  console.log('user', req.user)
+  console.log('user', req.user);
   const newDocument = new Document({
     name: req.body.name,
     body: req.body.body,
     owner: req.user,
     collaborators: [req.user]
-  })
+  });
   newDocument.save((err) => {
     if(err){
-      console.log('Error creating Document', err)
+      console.log('Error creating Document', err);
     }
-  })
-  res.send('Added new Document')
-})
+  });
+  res.send('Added new Document');
+});
 
 router.get('/document', function (req, res) {
   Document.find({},function(err, result){
-    res.send(result)
-  })
-})
+    res.send(result);
+  });
+});
 
 router.post('/document/update', function (req, res) {
-  console.log('find me here', req.body.body)
+  console.log('find me here', req.body.body);
   Document.findOneAndUpdate({_id: req.body.id},{ body: req.body.body },function(err, result){
-    console.log('in here now ifnally', result)
-    res.send(result)
-  })
-})
+    console.log('in here now ifnally', result);
+    res.send(result);
+  });
+});
 
 router.get('/success', function(req, res) {
   res.json({authenticated: true, user: req.user});

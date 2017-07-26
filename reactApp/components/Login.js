@@ -34,6 +34,7 @@ class Login extends React.Component {
       username: this.username,
       password: this.password
     }).then((resp) => {
+      //resp.data.user => Holds the user object
       this.setState({authenticated: resp.data.authenticated});
       this.username = '';
       this.password = '';
