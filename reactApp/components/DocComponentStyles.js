@@ -3,6 +3,7 @@ import StyleButton from './StyleButtonComponent';
 import ColorControls from './StyleButtonColorComponent';
 import { Redirect, Link } from 'react-router-dom';
 
+
 // CUSTOM STYLE MAP
 const styleMap = {
   CODE: {
@@ -15,7 +16,7 @@ const styleMap = {
   FONT_SMALL: { fontSize: 12 },
   FONT_MEDIUM: { fontSize: 18 },
   FONT_LARGE: { fontSize: 24 },
-  FONT_XLARGE: { fontSize: 36 },  
+  FONT_XLARGE: { fontSize: 36 },
 
   // COLOR STYLES
   red: { color: 'rgba(255, 0, 0, 1.0)', },
@@ -34,6 +35,7 @@ function getBlockStyle(block) {
   default: return null;
   }
 }
+
 const BLOCK_TYPES = [
   {label: 'H1', style: 'header-one'},
   {label: 'H2', style: 'header-two'},
@@ -47,6 +49,7 @@ const BLOCK_TYPES = [
   {label: 'Code Block', style: 'code-block'},
   {label: 'Left Indent', style: 'DraftEditor-alignLeft'}
 ];
+
 const BlockStyleControls = (props) => {
   const {editorState} = props;
   const selection = editorState.getSelection();
@@ -78,11 +81,11 @@ var INLINE_STYLES = [
   {label: 'Small', style: 'FONT_SMALL'},
   {label: 'Medium', style: 'FONT_MEDIUM'},
   {label: 'Large', style: 'FONT_LARGE'},
-  {label: 'XLarge', style: 'FONT_XLARGE'}        
+  {label: 'XLarge', style: 'FONT_XLARGE'}
 ];
 
 const InlineStyleControls = (props) => {
-  var currentStyle = props.editorState.getCurrentInlineStyle();
+  const currentStyle = props.editorState.getCurrentInlineStyle();
 
   const changeTextSize = (change) => {
     const {editorState} = props.editorState;
@@ -100,7 +103,7 @@ const InlineStyleControls = (props) => {
           style={type.style}
         />
       )}
-      
+
       <ColorControls
         editorState={props.editorState}
         onToggle={props.toggleColor}
@@ -108,8 +111,6 @@ const InlineStyleControls = (props) => {
     </div>
   );
 };
-
-
 
 
 // EXPORT ALL

@@ -11,15 +11,10 @@ import {
 SideNavItem, SideNav, Button } from 'react-materialize';
 
 
-
-
-
-
 const AppContainer = () => {
   return (
-    <div>
-      <Routes/>
-      {/* <RichEditorExample /> */}
+    <div id="app_container">
+      <Routes />
     </div>
   );
 };

@@ -22,7 +22,7 @@ socketConfig(io);
 
 // Setup Database Connection
 mongoose.connect(dbconfig);
- 
+
 // Middleware
 app.use(morgan('dev'));
 app.use(bodyParser.json());
@@ -64,7 +64,6 @@ app.post('/login',
 );
 
 app.use('/', router);
-
 
 server.listen(3000, function () {
   console.log('Backend server for Electron App running on port 3000!');

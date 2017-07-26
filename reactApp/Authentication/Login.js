@@ -25,7 +25,12 @@ export function Login({ username, password, user, changeUsername, changePassword
             <Card
               className='white darken-1'
               title='Login'
-              actions={[<Button key={"loginButton"} waves='light' onClick={() => login()}>Login</Button>]}>
+              actions={[
+                <Button key={"loginButton"}
+                  className='light-blue darken-1'
+                  waves='light'
+                  onClick={() => login()}>
+                  Login</Button>]}>
                 <span></span>
                 <Row>
                   <Input s={6} label="Username" validate onChange={(e) => changeUsername(e.target.value)}/>

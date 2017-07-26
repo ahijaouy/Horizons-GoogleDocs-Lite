@@ -2,12 +2,16 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
-//socket io
-// import io from 'socket.io-client';
-
-///
-
-// console.log('SOCKET: ', this.socket);
+import {
+  Navbar,
+  NavItem,
+  Row,
+  Col,
+  Input,
+  CardPanel,
+  Button,
+  Icon,
+  Card } from 'react-materialize';
 
 class DocPortalComponent extends React.Component {
   constructor() {
@@ -85,35 +89,52 @@ class DocPortalComponent extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1 style ={{textAlign: 'center'}}> Dom Docs Portal </h1>
+     <div id="portal_container">
+       <Row id="add_new_row">
+         <Col s={12}>
+          <form onSubmit={this.handleCreate}>
+            <Input
+              type="text"
+              value={this.state.newDoc}
+              placeholder="New Document Title"
+              onChange={this.handleNewDoc}
+            />
+            <Button className='cyan' waves='light' icon='add' type="submit" value="Create component" onClick={this.handleCreate}> </Button>
+          </form>
+        </Col>
+      </Row>
+      <Row id="portal_search_row">
+        <Col s={12}>
           <input
             type="text"
             value={this.state.search}
             placeholder="Search for Docs"
-            onChange={this.handleSearch}/>
-        <form onSubmit={this.handleCreate}>
-          <input
-            type="text"
-            value={this.state.newDoc}
-            placeholder="New Document Title"
-            onChange={this.handleNewDoc}/>
-            <input type="submit" value="Create component" onClick={this.handleCreate}/>
-        </form>
-        <div style={{height: '200px', width: '100%', border: '2px solid black'}}>
-          <h3>My Documents</h3>
-            {this.state.search === '' ? this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
-          :this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
-        </div>
-        <form onSubmit={this.handleAdd}>
-          <input
-            type="text"
-            value={this.state.sharedDoc}
-            placeholder="Paste a doc ID"
-            onChange={this.handleSharedDoc}/>
-            <input type="submit" value="Add Shared Document" onClick={this.handleAdd}/>
-        </form>
-      </div>
+            onChange={this.handleSearch}
+          />
+        </Col>
+      </Row>
+      {/* <Row> */}
+        {/* <Col s={12}> */}
+          <div style={{width: '100%'}}>
+            <h3>My Documents</h3>
+              {this.state.search === '' ?
+              this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
+              :
+              this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
+          </div>
+        {/* </Col> */}
+        {/* <Col s={12}> */}
+          <form onSubmit={this.handleAdd}>
+            <input
+              type="text"
+              value={this.state.sharedDoc}
+              placeholder="Paste a doc ID"
+              onChange={this.handleSharedDoc}/>
+              <input type="submit" value="Add Shared Document" onClick={this.handleAdd}/>
+          </form>
+        {/* </Col> */}
+      {/* </Row> */}
+    </div>
     );
   }
 };
