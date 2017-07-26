@@ -9,13 +9,18 @@ import { Editor, EditorState, Modifier, RichUtils, convertToRaw, convertFromRaw 
 
 
 function _onChange (editorState) {
-  console.log('this: ',this,'editorState',editorState);
+  const selection = editorState.getSelection();
+
+  console.log('editorState', JSON.stringify(selection));
+  const cursorPos = selection.anchorOffset;
+  const selectionPos = selection.focusOffset;
+
   this.setState({editorState});
 }
 
 function _handleKeyCommand (command) {
   const {editorState} = this.state;
-  console.log('this: ',this,'editorState',editorState);
+  // console.log('this: ',this,'editorState',editorState);
 
   const newState = RichUtils.handleKeyCommand(editorState, command);
   if (newState) {
@@ -30,7 +35,7 @@ function _onTab (e) {
 }
 
 function _toggleBlockType (blockType) {
-  console.log('this: ',this,'editorState',this.state.editorState);
+  // console.log('this: ',this,'editorState',this.state.editorState);
 
   _onChange(
     RichUtils.toggleBlockType(
@@ -42,7 +47,7 @@ function _toggleBlockType (blockType) {
 
 function _toggleInlineStyle (inlineStyle) {
 
-  console.log('this: ',this,'editorState',this.state.editorState);
+  // console.log('this: ',this,'editorState',this.state.editorState);
 
   _onChange(
     RichUtils.toggleInlineStyle(
@@ -55,7 +60,7 @@ function _toggleInlineStyle (inlineStyle) {
 function _toggleColor (toggledColor) {
   const {editorState} = this.state;
   const selection = editorState.getSelection();
-  console.log('this: ',this,'editorState',editorState);
+  // console.log('this: ',this,'editorState',editorState);
 
 
   // Let's just allow one color at a time. Turn off all active colors.

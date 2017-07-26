@@ -19,42 +19,20 @@ import {
   Button,
   Icon,
   Card } from 'react-materialize';
-import {
-  _onChange,
-  _handleKeyCommand,
-  _onTab,
-  _toggleBlockType,
-  _toggleInlineStyle,
-  _toggleColor
-} from './ToolbarMethods';
+// import {
+//   _onChange,
+//   _handleKeyCommand,
+//   _onTab,
+//   _toggleBlockType,
+//   _toggleInlineStyle,
+//   _toggleColor
+// } from './ToolbarMethods';
 // const socket = require('socket.io-client')('http://localhost:3000');
-
-function formatDate(olddate) {
-  const date = new Date(olddate);
-  const monthNames = [
-    "January", "February", "March",
-    "April", "May", "June", "July",
-    "August", "September", "October",
-    "November", "December"
-  ];
-  let minute = '00';
-  const day = date.getDate();
-  const monthIndex = date.getMonth();
-  const year = date.getFullYear();
-  const hour = date.getHours();
-  const minuteTemp =  date.getMinutes();
-  if(String(minuteTemp).length === 1){
-    minute = '0'+String(minuteTemp);
-  }else{
-    minute = minuteTemp;
-  }
-
-  return day + ' ' + monthNames[monthIndex] + ' ' + year + ' : ' + hour +':'+minute;
-}
 
 class DocComponent extends React.Component {
   constructor (props) {
     super(props);
+    console.log('props for DOC COMPONENT: ',this.props);
     this.state = {
       socket: this.props.socket,
       editorState: EditorState.createEmpty(),
@@ -66,12 +44,12 @@ class DocComponent extends React.Component {
     this.focus = () => this.refs.editor.focus();
     // this.onChange = (editorState) => this.setState({editorState});
 
-    this.onChange = _onChange.bind(this);
-    this.handleKeyCommand = _handleKeyCommand.bind(this);
-    this.onTab = _onTab.bind(this);
-    this.toggleBlockType = _toggleBlockType.bind(this);
-    this.toggleInlineStyle = _toggleInlineStyle.bind(this);
-    this.toggleColor = _toggleColor.bind(this);
+    this.onChange = this._onChange.bind(this);
+    this.handleKeyCommand = this._handleKeyCommand.bind(this);
+    this.onTab = this._onTab.bind(this);
+    this.toggleBlockType = this._toggleBlockType.bind(this);
+    this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
+    this.toggleColor = this._toggleColor.bind(this);
     // this.toggleColor = (color) => _toggleColor(color);
 
     this.handleTextUpdate = this.handleTextUpdate.bind(this);
@@ -80,30 +58,29 @@ class DocComponent extends React.Component {
     this.renderPast = this.renderPast.bind(this);
   }
 
-
   componentDidMount() {
-    console.log('socket', socket)
-    socket.on('hi', () => {
+    console.log('socket', this.state.socket)
+    this.state.socket.on('hi', () => {
       console.log('RECEIVED HI2');
 
     });
 
-    this.state.socket.emit('typing', ' I fucking work')
+    this.state.socket.emit('typing', ' I fucking work');
 
     this.state.socket.on('typing', (msg) => {
       console.log('msg', msg)
     });
 
     this.setState({currentDocument: this.props.id.match.params.doc_id});
-    console.log('reaches document! with id: ', this.props, this.state.currentDocument)
+    // console.log('reaches document! with id: ', this.props, this.state.currentDocument)
 
     axios.get('http://localhost:3000/document')
     .then(response => {
-      console.log('in here 1', this.props)
+      // console.log('in here 1', this.props)
       response.data.forEach((doc) => {
         // console.log('in here 2.5doc', doc)
         if(doc._id === this.state.currentDocument){
-            console.log('in here 2', doc.name)
+            // console.log('in here 2', doc.name)
           this.setState({docName: doc.name});
           const parsedBody = doc.body ? JSON.parse(doc.body) : JSON.parse('{}');
           const finalBody = convertFromRaw(parsedBody);
@@ -153,7 +130,91 @@ class DocComponent extends React.Component {
     this.setState({editorState: EditorState.createWithContent(finalBody)})
   }
 
+  _onChange (editorState) {
+    const selection = editorState.getSelection();
 
+    console.log('editorState', JSON.stringify(selection));
+    const cursorPos = selection.anchorOffset;
+    const selectionPos = selection.focusOffset;
+
+    this.setState({editorState});
+  }
+
+  _handleKeyCommand (command) {
+    const {editorState} = this.state;
+    // console.log('this: ',this,'editorState',editorState);
+
+    const newState = RichUtils.handleKeyCommand(editorState, command);
+    if (newState) {
+      this._onChange(newState);
+      return true;
+    }
+  }
+
+  _onTab (e) {
+    const maxDepth = 4;
+    this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
+  }
+
+  _toggleBlockType (blockType) {
+    // console.log('this: ',this,'editorState',this.state.editorState);
+
+    this._onChange(
+      RichUtils.toggleBlockType(
+        this.state.editorState,
+        blockType
+      )
+    );
+  }
+
+  _toggleInlineStyle (inlineStyle) {
+
+    // console.log('this: ',this,'editorState',this.state.editorState);
+
+    this._onChange(
+      RichUtils.toggleInlineStyle(
+        this.state.editorState,
+        inlineStyle
+      )
+    );
+  }
+
+  _toggleColor (toggledColor) {
+    const {editorState} = this.state;
+    const selection = editorState.getSelection();
+    // console.log('this: ',this,'editorState',editorState);
+
+
+    // Let's just allow one color at a time. Turn off all active colors.
+    const nextContentState = Object.keys(styleMap)
+      .reduce((contentState, color) => {
+        if (!color.startsWith('FONT'))
+        { return Modifier.removeInlineStyle(contentState, selection, color); }
+        else
+        { return contentState; }
+      }, editorState.getCurrentContent());
+    let nextEditorState = EditorState.push(
+      editorState,
+      nextContentState,
+      'change-inline-style'
+    );
+    const currentStyle = editorState.getCurrentInlineStyle();
+
+    // Unset style override for current color.
+    if (selection.isCollapsed()) {
+      nextEditorState = currentStyle.reduce((state, color) => {
+        return RichUtils.toggleInlineStyle(state, color);
+      }, nextEditorState);
+    }
+
+    // If the color is being toggled on, apply it.
+    if (!currentStyle.has(toggledColor)) {
+      nextEditorState = RichUtils.toggleInlineStyle(
+        nextEditorState,
+        toggledColor
+      );
+    }
+  }
 
   render() {
     const {editorState} = this.state;
@@ -240,6 +301,36 @@ class DocComponent extends React.Component {
 }
 
 export default DocComponent;
+
+
+
+
+/**** local helper function ***/
+function formatDate(olddate) {
+  const date = new Date(olddate);
+  const monthNames = [
+    "January", "February", "March",
+    "April", "May", "June", "July",
+    "August", "September", "October",
+    "November", "December"
+  ];
+  let minute = '00';
+  const day = date.getDate();
+  const monthIndex = date.getMonth();
+  const year = date.getFullYear();
+  const hour = date.getHours();
+  const minuteTemp =  date.getMinutes();
+  if(String(minuteTemp).length === 1){
+    minute = '0'+String(minuteTemp);
+  }else{
+    minute = minuteTemp;
+  }
+
+  return day + ' ' + monthNames[monthIndex] + ' ' + year + ' : ' + hour +':'+minute;
+}
+
+
+
 
 
 

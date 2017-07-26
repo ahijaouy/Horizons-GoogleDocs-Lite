@@ -37,12 +37,12 @@ class DocPortalComponent extends React.Component {
   componentDidMount(){
     axios.get('http://localhost:3000/document')
       .then(response => {
-        console.log('resp', response)
+        // console.log('resp', response)
         this.setState({currentDocs: response.data})
       });
     axios.get('http://localhost:3000/user')
     .then(response => {
-      console.log('user', response)
+      // console.log('user', response)
       this.setState({currentUser: response.data});
     });
   }
@@ -62,13 +62,13 @@ class DocPortalComponent extends React.Component {
     const newState = this.state.currentDocs;
     const newDocsState = newState.concat({name: this.state.newDoc})
     this.setState({currentDocs: newDocsState, newDoc: ''})
-    console.log(' lets make new docs', this.state.newDoc);
+    // console.log(' lets make new docs', this.state.newDoc);
     axios.post('http://localhost:3000/document',{
       name: this.state.newDoc,
       body: ''
     })
     .then((resp) => {
-      console.log(resp)
+      // console.log(resp)
     })
     .catch((err) => {
       console.log('err', err)
@@ -81,7 +81,7 @@ class DocPortalComponent extends React.Component {
       id: this.state.sharedDoc
     })
     .then((resp) => {
-      console.log(resp)
+      // console.log(resp)
     })
     .catch((err) => {
       console.log('err', err)
