@@ -12,7 +12,6 @@ import  {
   INLINE_STYLES,
   InlineStyleControls
 } from './DocComponentStyles';
-// const socket = require('socket.io-client')('http://localhost:3000');
 
 function formatDate(olddate) {
   const date = new Date(olddate)
@@ -130,8 +129,6 @@ class RichEditorExample extends React.Component {
   }
 
   componentDidMount() {
-<<<<<<< HEAD
-=======
     ////
     console.log('socket', socket)
     socket.on('hi', () => {
@@ -144,7 +141,6 @@ class RichEditorExample extends React.Component {
       console.log('msg', msg)
     })
     ////
->>>>>>> e8d703301e6bc27a940bf8134d13921fa952dd3e
     this.setState({currentDocument: this.props.id.match.params.doc_id});
     axios.get('http://localhost:3000/document')
     .then(response => {
