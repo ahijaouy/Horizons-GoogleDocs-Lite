@@ -2,12 +2,16 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
-//socket io
-// import io from 'socket.io-client';
-
-///
-
-// console.log('SOCKET: ', this.socket);
+import {
+  Navbar,
+  NavItem,
+  Row,
+  Col,
+  Input,
+  CardPanel,
+  Button,
+  Icon,
+  Card } from 'react-materialize';
 
 class DocPortalComponent extends React.Component {
   constructor() {
