@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-function _handleKeyCommand (command) {
-  const {editorState} = this.state;
-  const newState = RichUtils.handleKeyCommand(editorState, command);
-  if (newState) {
-    this.onChange(newState);
-=======
 import  {
   styleMap,
   getBlockStyle,
@@ -27,28 +20,19 @@ function _handleKeyCommand (command) {
   const newState = RichUtils.handleKeyCommand(editorState, command);
   if (newState) {
     _onChange(newState);
->>>>>>> dev
     return true;
   }
 }
 
 function _onTab (e) {
   const maxDepth = 4;
-<<<<<<< HEAD
   this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
-}
-
-function _toggleBlockType (blockType) {
-  this.onChange(
-=======
-  _onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
 }
 
 function _toggleBlockType (blockType) {
   console.log('this: ',this,'editorState',this.state.editorState);
 
   _onChange(
->>>>>>> dev
     RichUtils.toggleBlockType(
       this.state.editorState,
       blockType
@@ -57,13 +41,10 @@ function _toggleBlockType (blockType) {
 }
 
 function _toggleInlineStyle (inlineStyle) {
-<<<<<<< HEAD
-  this.onChange(
-=======
+
   console.log('this: ',this,'editorState',this.state.editorState);
 
   _onChange(
->>>>>>> dev
     RichUtils.toggleInlineStyle(
       this.state.editorState,
       inlineStyle
@@ -74,11 +55,8 @@ function _toggleInlineStyle (inlineStyle) {
 function _toggleColor (toggledColor) {
   const {editorState} = this.state;
   const selection = editorState.getSelection();
-<<<<<<< HEAD
-=======
   console.log('this: ',this,'editorState',editorState);
-  
->>>>>>> dev
+
 
   // Let's just allow one color at a time. Turn off all active colors.
   const nextContentState = Object.keys(styleMap)
@@ -109,19 +87,10 @@ function _toggleColor (toggledColor) {
       toggledColor
     );
   }
-
-<<<<<<< HEAD
-  this.onChange(nextEditorState);
-}
-
-module.exports = {
-=======
-  _onChange(nextEditorState);
 }
 
 module.exports = {
   _onChange,
->>>>>>> dev
   _handleKeyCommand,
   _onTab,
   _toggleBlockType,

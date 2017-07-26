@@ -82,32 +82,18 @@ class DocComponent extends React.Component {
 
 
   componentDidMount() {
-<<<<<<< HEAD
-    ////
     console.log('socket', socket)
     socket.on('hi', () => {
       console.log('RECEIVED HI2');
 
     });
-=======
-    //
-    // console.log('socket', socket)
-    // socket.on('hi', () => {
-    //   console.log('RECEIVED HI2');
-    //
-    // });
->>>>>>> dev
+
     this.state.socket.emit('typing', ' I fucking work')
 
     this.state.socket.on('typing', (msg) => {
       console.log('msg', msg)
-    })
-<<<<<<< HEAD
-    ////
-=======
-    //
+    });
 
->>>>>>> dev
     this.setState({currentDocument: this.props.id.match.params.doc_id});
     console.log('reaches document! with id: ', this.props, this.state.currentDocument)
 
