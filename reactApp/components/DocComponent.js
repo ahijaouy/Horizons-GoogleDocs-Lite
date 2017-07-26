@@ -7,36 +7,52 @@ import { Editor, EditorState, Modifier, RichUtils, convertToRaw, convertFromRaw 
 import  {
   styleMap,
   getBlockStyle,
-  BLOCK_TYPES,
   BlockStyleControls,
-  INLINE_STYLES,
-  InlineStyleControls
+  InlineStyleControls,
+  myBlockTypes
 } from './DocComponentStyles';
+import {
+  Row,
+  Col,
+  Input,
+  CardPanel,
+  Button,
+  Icon,
+  Card } from 'react-materialize';
+import {
+  _onChange,
+  _handleKeyCommand,
+  _onTab,
+  _toggleBlockType,
+  _toggleInlineStyle,
+  _toggleColor
+} from './ToolbarMethods';
+// const socket = require('socket.io-client')('http://localhost:3000');
 
 function formatDate(olddate) {
-  const date = new Date(olddate)
+  const date = new Date(olddate);
   const monthNames = [
     "January", "February", "March",
     "April", "May", "June", "July",
     "August", "September", "October",
     "November", "December"
   ];
-  let minute = '00'
+  let minute = '00';
   const day = date.getDate();
   const monthIndex = date.getMonth();
   const year = date.getFullYear();
   const hour = date.getHours();
-  const minuteTemp = date.getMinutes()
+  const minuteTemp =  date.getMinutes();
   if(String(minuteTemp).length === 1){
-    minute = '0'+String(minuteTemp)
+    minute = '0'+String(minuteTemp);
   }else{
-    minute = minuteTemp
+    minute = minuteTemp;
   }
 
   return day + ' ' + monthNames[monthIndex] + ' ' + year + ' : ' + hour +':'+minute;
 }
 
-class RichEditorExample extends React.Component {
+class DocComponent extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -48,104 +64,60 @@ class RichEditorExample extends React.Component {
       showHist: false,
     };
     this.focus = () => this.refs.editor.focus();
-    this.onChange = (editorState) => this.setState({editorState});
-    this.handleKeyCommand = (command) => this._handleKeyCommand(command);
-    this.onTab = (e) => this._onTab(e);
-    this.toggleBlockType = (type) => this._toggleBlockType(type);
-    this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
+    // this.onChange = (editorState) => this.setState({editorState});
+
+    this.onChange = _onChange.bind(this);
+    this.handleKeyCommand = _handleKeyCommand.bind(this);
+    this.onTab = _onTab.bind(this);
+    this.toggleBlockType = _toggleBlockType.bind(this);
+    this.toggleInlineStyle = _toggleInlineStyle.bind(this);
+    this.toggleColor = _toggleColor.bind(this);
+    // this.toggleColor = (color) => _toggleColor(color);
+
     this.handleTextUpdate = this.handleTextUpdate.bind(this);
     this.handleShowHist = this.handleShowHist.bind(this);
     this.handleHideHist = this.handleHideHist.bind(this);
     this.renderPast = this.renderPast.bind(this);
   }
 
-  _handleKeyCommand (command) {
-    const {editorState} = this.state;
-    const newState = RichUtils.handleKeyCommand(editorState, command);
-    if (newState) {
-      this.onChange(newState);
-      return true;
-    }
-  }
-
-  _onTab (e) {
-    const maxDepth = 4;
-    this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
-  }
-
-  _toggleBlockType (blockType) {
-    this.onChange(
-      RichUtils.toggleBlockType(
-        this.state.editorState,
-        blockType
-      )
-    );
-  }
-
-  _toggleInlineStyle (inlineStyle) {
-    this.onChange(
-      RichUtils.toggleInlineStyle(
-        this.state.editorState,
-        inlineStyle
-      )
-    );
-  }
-
-  _toggleColor (toggledColor) {
-    const {editorState} = this.state;
-    const selection = editorState.getSelection();
-
-    // Let's just allow one color at a time. Turn off all active colors.
-    const nextContentState = Object.keys(styleMap)
-      .reduce((contentState, color) => {
-        if (!color.startsWith('FONT'))
-        { return Modifier.removeInlineStyle(contentState, selection, color); }
-        else
-        { return contentState; }
-      }, editorState.getCurrentContent());
-    let nextEditorState = EditorState.push(
-      editorState,
-      nextContentState,
-      'change-inline-style'
-    );
-    const currentStyle = editorState.getCurrentInlineStyle();
-
-    // Unset style override for current color.
-    if (selection.isCollapsed()) {
-      nextEditorState = currentStyle.reduce((state, color) => {
-        return RichUtils.toggleInlineStyle(state, color);
-      }, nextEditorState);
-    }
-
-    // If the color is being toggled on, apply it.
-    if (!currentStyle.has(toggledColor)) {
-      nextEditorState = RichUtils.toggleInlineStyle(
-        nextEditorState,
-        toggledColor
-      );
-    }
-
-    this.onChange(nextEditorState);
-  }
 
   componentDidMount() {
+<<<<<<< HEAD
     ////
     console.log('socket', socket)
     socket.on('hi', () => {
       console.log('RECEIVED HI2');
 
     });
+=======
+    //
+    // console.log('socket', socket)
+    // socket.on('hi', () => {
+    //   console.log('RECEIVED HI2');
+    //
+    // });
+>>>>>>> dev
     this.state.socket.emit('typing', ' I fucking work')
 
     this.state.socket.on('typing', (msg) => {
       console.log('msg', msg)
     })
+<<<<<<< HEAD
     ////
+=======
+    //
+
+>>>>>>> dev
     this.setState({currentDocument: this.props.id.match.params.doc_id});
+    console.log('reaches document! with id: ', this.props, this.state.currentDocument)
+
     axios.get('http://localhost:3000/document')
     .then(response => {
+      console.log('in here 1', this.props)
       response.data.forEach((doc) => {
+        // console.log('in here 2.5doc', doc)
         if(doc._id === this.state.currentDocument){
+            console.log('in here 2', doc.name)
           this.setState({docName: doc.name});
           const parsedBody = doc.body ? JSON.parse(doc.body) : JSON.parse('{}');
           const finalBody = convertFromRaw(parsedBody);
@@ -208,9 +180,15 @@ class RichEditorExample extends React.Component {
         className += ' RichEditor-hidePlaceholder';
       }
     }
+
     return (
-      <div className="RichEditor-root">
-        <Link to={'/dashboard'}><button>Back to Portal</button></Link>
+      <div className="RichEditor-root doc_container">
+        <Link to={'/dashboard'}><Button
+          className='cyan'
+          style={{color: 'white'}}
+          waves='light' >
+          Back to Portal
+        </Button></Link>
         <h4>Name: {this.state.docName}</h4>
         <h5>ID: {this.state.currentDocument}</h5>
         <BlockStyleControls
@@ -221,11 +199,12 @@ class RichEditorExample extends React.Component {
           editorState={editorState}
           onToggle={this.toggleInlineStyle}
           editorState={editorState}
-          toggleColor={this._toggleColor.bind(this)}
+          toggleColor={this.toggleColor.bind(this)}
         />
         <div className={className} onClick={this.focus}>
           <Editor
             blockStyleFn={getBlockStyle}
+            blockRenderMap ={myBlockTypes}
             customStyleMap={styleMap}
             editorState={editorState}
             handleKeyCommand={this.handleKeyCommand}
@@ -236,15 +215,39 @@ class RichEditorExample extends React.Component {
             spellCheck={true}
           />
         </div>
-        {!this.state.showHist ?
-          <button onClick={this.handleShowHist}>View History</button> :
-          <div>
-            {this.state.history.map((past) => (<div><button onClick={() => this.renderPast(past.content)}>{formatDate(past.date)}</button></div>))}
-            <button onClick={this.handleHideHist}>Hide History</button>
-          </div>
-      }
+        <Row id="doc_btns">
+          {!this.state.showHist ?
+            <Col s={2}> <Button
+              onClick={this.handleShowHist}
+              fab='vertical' faicon='fa fa-plus'
+              className='purple darken-4'
+              large style={{bottom: '45px', right: '24px'}}
+              icon='change_history'
+              waves='light' floating >
+              <Col s={1}> {this.state.history.map((past) => (
+                <div><Button onClick={() => this.renderPast(past.content)}
+                  className='deep-purple lighten-5 history_btn'
+                  style={{color: 'black'}}
+                  waves='light' >
+                  {formatDate(past.date)}
+                </Button></div>))} </Col>
+            </Button> </Col> :
+            <div>
+              <Col s={1}> {this.state.history.map((past) => (
+                <div><Button onClick={() => this.renderPast(past.content)}
+                  className='deep-purple lighten-5 history_btn'
+                  style={{color: 'black'}}
+                  waves='light' >
+                  {formatDate(past.date)}
+                </Button></div>))} </Col>
+              <Col s={1}> <Button onClick={this.handleHideHist} className='purple darken-4 history_btn'>
+                Hide History
+              </Button> </Col>
+            </div>
+          }
+        </Row>
 
-        <button onClick={this.handleTextUpdate}>Save</button>
+        <Button onClick={this.handleTextUpdate} className='light-blue darken-1 doc_save_btn'>Save</Button>
       </div>
     );
   }

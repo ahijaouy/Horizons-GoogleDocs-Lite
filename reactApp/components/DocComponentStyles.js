@@ -2,8 +2,8 @@ import React from 'react';
 import StyleButton from './StyleButtonComponent';
 import ColorControls from './StyleButtonColorComponent';
 import { Redirect, Link } from 'react-router-dom';
-
-
+import{ Map } from 'immutable';
+import { DefaultDraftBlockRenderMap } from 'draft-js';
 // CUSTOM STYLE MAP
 const styleMap = {
   CODE: {
@@ -47,8 +47,21 @@ const BLOCK_TYPES = [
   {label: 'UL', style: 'unordered-list-item'},
   {label: 'OL', style: 'ordered-list-item'},
   {label: 'Code Block', style: 'code-block'},
-  {label: 'Left Indent', style: 'DraftEditor-alignLeft'}
+  {label: 'Left Indent', style: 'left' },
+  {label: 'Right-indent', style: 'right'},
+  {label: 'Center-indent', style:'center'}
 ];
+const myBlockTypes = DefaultDraftBlockRenderMap.merge(new Map({
+  center: {
+    wrapper: <div className="center-align" />
+  },
+  right: {
+    wrapper: <div className="right-align" />
+  },
+  left: {
+    wrapper: <div className="left-align" />
+  }
+}));
 
 const BlockStyleControls = (props) => {
   const {editorState} = props;
@@ -90,7 +103,7 @@ const InlineStyleControls = (props) => {
   const changeTextSize = (change) => {
     const {editorState} = props.editorState;
     const selection = editorState.getSelection();
-  }
+  };
 
   return (
     <div className="RichEditor-controls">
@@ -121,4 +134,5 @@ module.exports = {
   BlockStyleControls,
   INLINE_STYLES,
   InlineStyleControls,
-}
+  myBlockTypes
+};

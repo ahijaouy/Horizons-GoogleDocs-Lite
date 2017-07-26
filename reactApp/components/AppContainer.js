@@ -14,7 +14,7 @@ SideNavItem, SideNav, Button } from 'react-materialize';
 const AppContainer = () => {
   return (
     <div id="app_container">
-      <Routes/>
+      <Routes />
     </div>
   );
 };
