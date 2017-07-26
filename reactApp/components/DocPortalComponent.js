@@ -11,7 +11,8 @@ import {
   Icon,
   Card } from 'react-materialize';
 
-function filteredDocs(array, user_id){
+function filterDocs(array, user_id){
+  console.log('FD', array, user_id)
   const userDocs = [];
   array.forEach((doc) => {
     doc.collaborators.forEach((user) => {
@@ -44,12 +45,10 @@ class DocPortalComponent extends React.Component {
   componentDidMount(){
     axios.get('http://localhost:3000/document')
       .then(response => {
-        console.log('SETTING CURRENT DOCS TO BE:', response.data)
         this.setState({currentDocs: response.data})
       });
     axios.get('http://localhost:3000/user')
     .then(response => {
-      // console.log('user', response)
       this.setState({currentUser: response.data});
     });
   }
@@ -69,23 +68,22 @@ class DocPortalComponent extends React.Component {
     const newState = this.state.currentDocs;
     const newDocsState = newState.concat({name: this.state.newDoc})
     this.setState({currentDocs: newDocsState, newDoc: ''})
-    // console.log(' lets make new docs', this.state.newDoc);
+    console.log(' lets make new docs', this.state.newDoc);
     axios.post('http://localhost:3000/document',{
       name: this.state.newDoc,
       body: ''
     })
     .then((resp) => {
-      // console.log(resp)
+      console.log(resp)
     })
     .catch((err) => {
       console.log('err', err)
-    });
-
+    })
     axios.get('http://localhost:3000/document')
-    .then(response => {
-      console.log('SETTING CURRENT DOCS TO BE:', response.data)
-      this.setState({currentDocs: response.data})
-    });
+      .then(response => {
+        // console.log('resp', response)
+        this.setState({currentDocs: response.data})
+      });
   }
 
   handleAdd(e){
@@ -93,12 +91,13 @@ class DocPortalComponent extends React.Component {
     axios.post('http://localhost:3000/user',{
       id: this.state.sharedDoc
     })
-    .then((resp) => {
-      // console.log(resp)
-    })
-    .catch((err) => {
-      console.log('err', err)
-    })
+      .then((resp) => {
+        // console.log(resp)
+      })
+      .catch((err) => {
+        console.log('err', err)
+      })
+
 
   }
 
@@ -161,7 +160,7 @@ class DocPortalComponent extends React.Component {
         </Row>
         <div>
           <h3>My Documents</h3>
-          {filteredDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
+          {filterDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
             {/* {this.state.search === '' ? this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
           :this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))} */}
         </div>
