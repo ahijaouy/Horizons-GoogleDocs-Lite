@@ -1,29 +1,24 @@
 import axios from 'axios';
 import React from 'react';
-import { Redirect, Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import Routes from '../routes';
 import { Editor, EditorState, Modifier, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
+import { Redirect, Link } from 'react-router-dom';
 import  {
   styleMap,
   getBlockStyle,
   BlockStyleControls,
   InlineStyleControls,
-  myBlockTypes
-} from './DocComponentStyles';
+  myBlockTypes } from './DocComponentStyles';
+
 import {
   Row,
   Col,
-  Input,
-  CardPanel,
   Button,
-  Icon,
-  Card } from 'react-materialize';
+  } from 'react-materialize';
 
 class DocComponent extends React.Component {
   constructor (props) {
     super(props);
-    console.log('props for DOC COMPONENT: ',this.props);
+    // console.log('props for DOC COMPONENT: ',this.props);
     this.state = {
       socket: this.props.socket,
       editorState: EditorState.createEmpty(),
@@ -62,6 +57,7 @@ class DocComponent extends React.Component {
 
   componentDidMount() {
     // GET DOCUMENT ID FROM PROPS, AXIOS CALL TO GET STATE
+    console.log(myBlockTypes)
     this.setState({currentDocument: this.props.id.match.params.doc_id});
     axios.get('http://localhost:3000/document')
     .then(response => {
@@ -70,7 +66,7 @@ class DocComponent extends React.Component {
           this.setState({docName: doc.name});
           const parsedBody = doc.body ? JSON.parse(doc.body) : JSON.parse('{}');
           const finalBody = convertFromRaw(parsedBody);
-          this.setState({editorState: EditorState.createWithContent(finalBody)})
+          this.setState({editorState: EditorState.createWithContent(finalBody)});
           this.setState({history: doc.history});
         }
       });
@@ -78,22 +74,22 @@ class DocComponent extends React.Component {
 
 
     /* ***** START SOCKET FUNCTIONS ***** */
-    console.log('socket', this.state.socket);
+    // console.log('socket', this.state.socket);
 
     // LISTENER FOR WHEN SOCKET STARTS
     this.state.socket.on('connected', () => {
-      console.log('RECEIVED SOCKET CONNECTION', this.state.currentDocument);
+      // console.log('RECEIVED SOCKET CONNECTION', this.state.currentDocument);
 
       // GET USER, EMIT JOIN DOC WITH THIS USER
       axios.get('http://localhost:3000/user')
       .then(response => {
         return new Promise((resolve, reject) => {
-          console.log('axios response', response);
+          // console.log('axios response', response);
           resolve(this.setState({currentUser: response.data}));
         });
       })
       .then(() => {
-        console.log('current user 2: ', this.state.currentUser);
+        // console.log('current user 2: ', this.state.currentUser);
         const currentDoc = this.state.currentDocument;
         const currentUser = this.state.currentUser;
         this.state.socket.emit('join_doc', { currentDoc, currentUser});
@@ -102,18 +98,18 @@ class DocComponent extends React.Component {
 
     // LISTENER FOR NEW USER JOINED DOC
     this.state.socket.on('user_joined', newUser => {
-      console.log('USER', newUser, 'JOINED');
+      // console.log('USER', newUser, 'JOINED');
     });
 
     // LISTENER FOR CHANGE IN EDITOR STATE
     this.state.socket.on('editor_change', ({ editorState, selection }) => {
-      console.log('new editor state'/*, editorState, selection*/);
+      // console.log('new editor state'/*, editorState, selection*/);
     });
 
     // LISTENER FOR ERROR MSG FROM SOCKET
     this.state.socket.on('errorMessage', msg => {
-      console.log('ERROR FROM SOCKETS:', msg);
-    })
+      // console.log('ERROR FROM SOCKETS:', msg);
+    });
     /* ***** END SOCKET FUNCTIONS ***** */
   }
 
@@ -141,19 +137,19 @@ class DocComponent extends React.Component {
 
   handleShowHist(){
     // console.log('hist', this.state.history[0].date)
-    this.setState({showHist: true})
+    this.setState({showHist: true});
   }
 
   handleHideHist(){
     // console.log('hist', this.state.history)
-    this.setState({showHist: false})
+    this.setState({showHist: false});
   }
 
   renderPast(past){
     // console.log('past', past);
-    const parsedBody = JSON.parse(past)
+    const parsedBody = JSON.parse(past);
     const finalBody = convertFromRaw(parsedBody);
-    this.setState({editorState: EditorState.createWithContent(finalBody)})
+    this.setState({editorState: EditorState.createWithContent(finalBody)});
   }
 
 
@@ -167,6 +163,7 @@ class DocComponent extends React.Component {
       this._onChange(newState);
       return true;
     }
+    return false;
   }
 
   _onTab (e) {
@@ -248,12 +245,15 @@ class DocComponent extends React.Component {
 
     return (
       <div className="RichEditor-root doc_container">
-        <Link to={'/dashboard'}><Button
+        <Link to={'/dashboard'}>
+        {/* <Button
           className='cyan'
           style={{color: 'white'}}
           waves='light' >
           Back to Portal
-        </Button></Link>
+        </Button> */}
+        POOP
+      </Link>
         <h4>Name: {this.state.docName}</h4>
         <h5>ID: {this.state.currentDocument}</h5>
         <BlockStyleControls

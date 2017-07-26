@@ -31,7 +31,11 @@
 
 .center-align {
   text-align: center;
-  .add_doc_btn * {
+}
+.left-align {
+  text-align: left;
+}
+.add_doc_btn * {
     background-color: #00838f;
     float: center
   }
