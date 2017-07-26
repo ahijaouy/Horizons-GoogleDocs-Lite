@@ -11,8 +11,7 @@ const Header = ({links}) => {
   return (
     <div>
       <Navbar brand='Horizons GoogleDocs Lite' right>
-        {links.map((link, id) => <NavItem key={id}>{link.toUpperCase()}</NavItem>)}
-        {/* <NavItem><Link to="/register">Register</Link></NavItem> */}
+        {links.map((link, id) => <NavItem key={id}><Link to={'/' + link}>{link.toUpperCase()}</Link></NavItem>)}
       </Navbar>
     </div>
   );

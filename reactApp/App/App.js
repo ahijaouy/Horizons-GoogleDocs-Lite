@@ -1,8 +1,7 @@
-// import PropTypes from 'prop-types';
 import React from 'react';
-// import { connect } from 'react-redux';
-import Login from '../Login/Login';
-import Header from '../Header/Header';
+import Login from '../Authentication/Login';
+import Register from '../Authentication/Register';
+import Header from './Header/Header';
 import { Route, Switch } from 'react-router-dom';
 import DocPortalComponent from '../components/DocPortalComponent';
 export default function AppContainer() {
@@ -11,27 +10,10 @@ export default function AppContainer() {
         <Header/>
         <Switch>
           <Route exact path='/' component={Login}/>
+          <Route exact path='/login' component={Login}/>
+          <Route exact path='/register' component={Register}/>
           <Route path='/dashboard' component={DocPortalComponent}/>
         </Switch>
     </div>
   );
 }
-
-// AppContainer.propTypes = {
-//   name: PropTypes.string,
-// };
-
-// const mapStateToProps = (state) => {
-//   return {
-//   };
-// };
-
-// const mapDispatchToProps = (/* dispatch */) => {
-//   return {
-//   };
-// };
-
-// export default connect(
-//     mapStateToProps,
-//     mapDispatchToProps
-// )(AppContainer);

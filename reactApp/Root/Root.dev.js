@@ -11,7 +11,7 @@ export default function Root({ store, history }) {
         <Provider store={store}>
             <ConnectedRouter history={history}>
               <div>
-                 <AppContainer/>
+                <AppContainer/>
                 <DevTools />
               </div>
             </ConnectedRouter>

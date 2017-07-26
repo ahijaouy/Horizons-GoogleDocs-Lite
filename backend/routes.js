@@ -8,9 +8,15 @@ const Document = require('./models/document');
 
 router.post('/register', function (req, res) {
   console.log(req.body);
-  User.register(req.body.name, req.body.username, req.body.password, console.log);
+  User.register(req.body.name, req.body.username, req.body.password, function(error, user) {
+    if (error) {
+      res.send({error});
+    } else {
+      res.send({user});
+    }
+  });
 
-  res.send('Successfully Registered!');
+
 });
 
 router.post('/document', function (req, res) {
