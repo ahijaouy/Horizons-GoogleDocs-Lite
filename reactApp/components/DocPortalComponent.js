@@ -105,7 +105,7 @@ class DocPortalComponent extends React.Component {
 
   render() {
     return (
-      <div>
+      <div id="portal_container">
         <h1 style ={{textAlign: 'center'}}> Welcome {this.state.currentUser.name} </h1>
           <input
             type="text"
@@ -120,7 +120,7 @@ class DocPortalComponent extends React.Component {
             onChange={this.handleNewDoc}/>
             <input type="submit" value="Create component" onClick={this.handleCreate}/>
         </form>
-        <div style={{height: '200px', width: '100%', border: '2px solid black'}}>
+        <div style={{/* SHOULD HAVE NONE!!!! */}}>
           <h3>My Documents</h3>
           {filteredDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
             {/* {this.state.search === '' ? this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
