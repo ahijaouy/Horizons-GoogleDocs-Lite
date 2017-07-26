@@ -78,11 +78,11 @@ class DocComponent extends React.Component {
 
   componentDidMount() {
     //
-    console.log('socket', socket)
-    socket.on('hi', () => {
-      console.log('RECEIVED HI2');
-
-    });
+    // console.log('socket', socket)
+    // socket.on('hi', () => {
+    //   console.log('RECEIVED HI2');
+    //
+    // });
     this.state.socket.emit('typing', ' I fucking work')
 
     this.state.socket.on('typing', (msg) => {
