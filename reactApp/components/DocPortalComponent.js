@@ -79,7 +79,13 @@ class DocPortalComponent extends React.Component {
     })
     .catch((err) => {
       console.log('err', err)
-    })
+    });
+
+    axios.get('http://localhost:3000/document')
+    .then(response => {
+      console.log('SETTING CURRENT DOCS TO BE:', response.data)
+      this.setState({currentDocs: response.data})
+    });
   }
 
   handleAdd(e){
@@ -129,7 +135,7 @@ class DocPortalComponent extends React.Component {
       //   </form>
       //   <div style={{/* SHOULD HAVE NONE!!!! */}}>
 
-      <div>
+      <div id="portal_container">
         <Row>
           <Col s={12}><h1 style ={{textAlign: 'center'}}> Welcome {this.state.currentUser.name} </h1></Col>
           <Input
@@ -152,7 +158,7 @@ class DocPortalComponent extends React.Component {
                   add</Icon></Button>
             </Input>
           </form>
-      </Row>
+        </Row>
         <div>
           <h3>My Documents</h3>
           {filteredDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
@@ -160,12 +166,15 @@ class DocPortalComponent extends React.Component {
           :this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))} */}
         </div>
         <form onSubmit={this.handleAdd}>
-          <input
-            type="text"
-            value={this.state.sharedDoc}
-            placeholder="Paste a doc ID"
-            onChange={this.handleSharedDoc}/>
-            <input type="submit" value="Add Shared Document" onClick={this.handleAdd}/>
+          <Row>
+            <Input
+              type="text"
+              value={this.state.sharedDoc}
+              placeholder="Paste a doc ID"
+              onChange={this.handleSharedDoc}>
+            </Input>
+            <Button type="submit" onClick={this.handleAdd}>Add Shared Doc</Button>
+          </Row>
         </form>
       </div>
     );

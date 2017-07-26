@@ -67,13 +67,13 @@
   display: inline-block;
 }
 #add_new_row input {
-  width: 30vw;
+  /*width: 30vw;*/
 }
 #portal_search_row {
 
 }
 #portal_container {
-  padding: 25px;
+  padding: 55px;
 }
 
 .font-color-yellow-darken-3 {
