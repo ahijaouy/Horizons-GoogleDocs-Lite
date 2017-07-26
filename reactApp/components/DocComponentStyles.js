@@ -51,7 +51,6 @@ const BLOCK_TYPES = [
   {label: 'Right-indent', style: 'right'},
   {label: 'Center-indent', style:'center'}
 ];
-<<<<<<< HEAD
 const myBlockTypes = DefaultDraftBlockRenderMap.merge(new Map({
   center: {
     wrapper: <div className="center-align" />
@@ -63,9 +62,6 @@ const myBlockTypes = DefaultDraftBlockRenderMap.merge(new Map({
     wrapper: <div className="left-align" />
   }
 }));
-=======
-
->>>>>>> 035a8d272a1f716b2a5fb467c6b7d72a06c790df
 const BlockStyleControls = (props) => {
   const {editorState} = props;
   const selection = editorState.getSelection();
@@ -106,7 +102,7 @@ const InlineStyleControls = (props) => {
   const changeTextSize = (change) => {
     const {editorState} = props.editorState;
     const selection = editorState.getSelection();
-  }
+  };
 
   return (
     <div className="RichEditor-controls">
