@@ -2,14 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
-import {
-  Row,
-  Col,
-  Input,
-  CardPanel,
-  Button,
-  Icon,
-  Card } from 'react-materialize';
+import { Row, Col, Input, CardPanel, Button, Icon, Card } from 'react-materialize';
 
 function filterDocs(array, user_id){
   // console.log('FD', array, user_id)

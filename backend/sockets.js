@@ -2,6 +2,10 @@
 
 module.exports = function(io) {
 
+  const colors = [ 'BACKGROUND_RED', 'BACKGROUND_ORANGE', 'BACKGROUND_YELLOW',
+    'BACKGROUND_GREEN', 'BACKGROUND_BLUE', 'BACKGROUND_INDIGO', 'BACKGROUND_VIOLET' ]
+  let currentColor = 0;
+
   io.on('connection', socket => {
 
     socket.doc = null;
@@ -31,15 +35,17 @@ module.exports = function(io) {
         console.log('reached join doc on server');
 
         // emit to everyone in doc that new user joined
+        socket.emit('joined_doc', colors[currentColor]);
         socket.to(socket.doc).emit('user_joined', socket.user);
         console.log('emitted join to socket doc');
+        currentColor++;
       });
-      
+
     });
 
     // listener for editor change by user; emit to all in same doc
     socket.on('editor_change', (state) => {
-      io.to(socket.doc).emit('editor_change', state);
+      socket.to(socket.doc).emit('editor_change', state);
     });
   });
 }

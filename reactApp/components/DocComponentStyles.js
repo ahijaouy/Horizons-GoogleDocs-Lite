@@ -26,6 +26,15 @@ const styleMap = {
   blue: { color: 'rgba(0, 0, 255, 1.0)', },
   indigo: { color: 'rgba(75, 0, 130, 1.0)', },
   violet: { color: 'rgba(127, 0, 255, 1.0)', },
+
+  // BACKGROUND COLOR STYLES
+  BACKGROUND_RED: { backgroundColor: 'rgba(200,0,0,0.2)'},
+  BACKGROUND_ORANGE: { backgroundColor: 'rgba(200,0,0,0.2)'},
+  BACKGROUND_YELLOW: { backgroundColor: 'rgba(200,0,0,0.2)'},
+  BACKGROUND_GREEN: { backgroundColor: 'rgba(200,0,0,0.2)'},
+  BACKGROUND_BLUE: { backgroundColor: 'rgba(0,200,0,0.2)'},
+  BACKGROUND_INDIGO: { backgroundColor: 'rgba(0,0,200,0.2)'},
+  BACKGROUND_VIOLET: { backgroundColor: 'rgba(0,0,200,0.2)'},
 };
 
 // METHODS AND OBJECTS FOR BLOCK STYLES:
