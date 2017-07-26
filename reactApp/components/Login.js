@@ -47,7 +47,7 @@ class Login extends React.Component {
       ) : (
 
         <div>
-          <Navbar brand='Horizons GoogleDocs Lite' right>
+          <Navbar brand='Horizons GoogleDocs Lite' className='amber darken-4' right>
             <NavItem><Link to="/register">Register</Link></NavItem>
           </Navbar>
           <Row>
@@ -55,7 +55,12 @@ class Login extends React.Component {
               <Card
                 className='white darken-1'
                 title='Login'
-                actions={[<Button key={"loginButton"} waves='light' onClick={(e) => this.handleLogin(e)}>Login</Button>]}>
+                actions={[
+                  <Button key={"loginButton"}
+                    waves='light'
+                    className='yellow darken-3'
+                    onClick={(e) => this.handleLogin(e)}>Login</Button>
+                ]}>
                 <span></span>
                 <Row>
                   <Input s={6} label="Username" validate onChange={(e) => this.updateUsername(e.target.value)}/>

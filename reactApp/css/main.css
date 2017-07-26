@@ -36,3 +36,12 @@
 #portal_container {
   padding: 25px;
 }
+
+.font-color-yellow-darken-3 {
+  color: #f9a825
+}
+
+input[type=text].valid, input[type=text]:focus.valid, input[type=password].valid, input[type=password]:focus.valid, input[type=text].valid, input[type=text]:focus.valid, input[type=password].valid, input[type=password]:focus.valid, input:not([type]).valid {
+  color: #f9a825;
+  border-bottom: #f9a825;
+}
