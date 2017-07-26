@@ -29,25 +29,6 @@
   text-align: right;
 }
 
-#navbar_main, #navbar_login {
-  padding: 0 10px;
-}
-#navbar_card {
-  height: 40px;
-}
-#add_new_row {
-  /*padding: 0 10px;*/
-}
-#add_new_row_input {
-  /*display: inline-block;*/
-  width: 100%;
-}
-#portal_search_row {
-
-}
-#portal_container {
-  padding: 25px;
-}
 .center-align {
   text-align: center;
   .add_doc_btn * {

@@ -2,7 +2,14 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
-
+import {
+  Row,
+  Col,
+  Input,
+  CardPanel,
+  Button,
+  Icon,
+  Card } from 'react-materialize';
 
 function filteredDocs(array, user_id){
   const userDocs = [];
@@ -37,7 +44,7 @@ class DocPortalComponent extends React.Component {
   componentDidMount(){
     axios.get('http://localhost:3000/document')
       .then(response => {
-        // console.log('resp', response)
+        console.log('SETTING CURRENT DOCS TO BE:', response.data)
         this.setState({currentDocs: response.data})
       });
     axios.get('http://localhost:3000/user')
@@ -106,21 +113,30 @@ class DocPortalComponent extends React.Component {
   render() {
     return (
       <div>
-        <h1 style ={{textAlign: 'center'}}> Welcome {this.state.currentUser.name} </h1>
-          <input
+        <Row>
+          <Col s={12}><h1 style ={{textAlign: 'center'}}> Welcome {this.state.currentUser.name} </h1></Col>
+          <Input
+            s={5}
             type="text"
             value={this.state.search}
-            placeholder="Search for Docs"
-            onChange={this.handleSearch}/>
-        <form onSubmit={this.handleCreate}>
-          <input
-            type="text"
-            value={this.state.newDoc}
-            placeholder="New Document Title"
-            onChange={this.handleNewDoc}/>
-            <input type="submit" value="Create component" onClick={this.handleCreate}/>
-        </form>
-        <div style={{height: '200px', width: '100%', border: '2px solid black'}}>
+            placeholder="  Search for Docs"
+            onChange={this.handleSearch}>
+            <Button floating><Icon className='cyan' medium>find_in_page</Icon></Button>
+          </Input>
+          <form onSubmit={this.handleCreate}>
+            <Input
+              s={5} offset={'s1'}
+              type="text"
+              value={this.state.newDoc}
+              placeholder="  New Document Title"
+              onChange={this.handleNewDoc}>
+              <Button floating waves='light'>
+                <Icon className='cyan' type="submit" value="Create component" onClick={this.handleCreate}>
+                  add</Icon></Button>
+            </Input>
+          </form>
+      </Row>
+        <div>
           <h3>My Documents</h3>
           {filteredDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
             {/* {this.state.search === '' ? this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
