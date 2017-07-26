@@ -26,10 +26,15 @@ module.exports = function(io) {
 
       // set current doc to be this doc
       socket.doc = currentDoc;
+      console.log('set socket.doc', socket.doc);
+      socket.join(socket.doc, () => {
+        console.log('reached join doc on server');
 
-      // emit to everyone in doc that new user joined
-      io.to(socket.doc).emit('user_joined', socket.user);
-
+        // emit to everyone in doc that new user joined
+        socket.to(socket.doc).emit('user_joined', socket.user);
+        console.log('emitted join to socket doc');
+      });
+      
     });
 
     // listener for editor change by user; emit to all in same doc

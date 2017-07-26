@@ -167,12 +167,15 @@ class DocPortalComponent extends React.Component {
         <form onSubmit={this.handleAdd}>
           <Row>
             <Input
+              s={5}
               type="text"
               value={this.state.sharedDoc}
               placeholder="Paste a doc ID"
               onChange={this.handleSharedDoc}>
             </Input>
-            <Button type="submit" onClick={this.handleAdd}>Add Shared Doc</Button>
+            <Col s={1}>
+              <Button className='cyan' type="submit" onClick={this.handleAdd}>Add Shared Doc</Button>
+            </Col>
           </Row>
         </form>
       </div>

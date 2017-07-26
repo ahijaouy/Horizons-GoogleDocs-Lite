@@ -30,6 +30,7 @@ class DocComponent extends React.Component {
       currentDocument: '',
       docName: '',
       currentUser: '',
+      docUsers: [],
       history: [],
       showHist: false,
     };
@@ -88,12 +89,12 @@ class DocComponent extends React.Component {
       axios.get('http://localhost:3000/user')
       .then(response => {
         return new Promise((resolve, reject) => {
-          console.log('axios response', response);
+          console.log('got axios response', response,'and setting current user');
           resolve(this.setState({currentUser: response.data}));
         });
       })
       .then(() => {
-        console.log('current user 2: ', this.state.currentUser);
+        console.log('current user: ', this.state.currentUser);
         const currentDoc = this.state.currentDocument;
         const currentUser = this.state.currentUser;
         this.state.socket.emit('join_doc', { currentDoc, currentUser});
@@ -103,6 +104,10 @@ class DocComponent extends React.Component {
     // LISTENER FOR NEW USER JOINED DOC
     this.state.socket.on('user_joined', newUser => {
       console.log('USER', newUser, 'JOINED');
+      const newUsers = this.state.docUsers;
+      newUsers.push(newUser);
+      this.setState({docUsers: newUsers});
+      console.log('changed docUsers');
     });
 
     // LISTENER FOR CHANGE IN EDITOR STATE
@@ -180,7 +185,7 @@ class DocComponent extends React.Component {
     this._onChange(
       RichUtils.toggleBlockType(
         this.state.editorState,
-        blockType
+        blockType || 'unstyled'
       )
     );
   }
