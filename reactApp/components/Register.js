@@ -8,7 +8,7 @@ import {
 
 import { Redirect, Link } from 'react-router-dom';
 
-class Login extends React.Component {
+class Register extends React.Component {
   constructor() {
     super();
     this.username = "";
@@ -73,4 +73,4 @@ class Login extends React.Component {
 }
 
 
-export default Login;
+export default Register;

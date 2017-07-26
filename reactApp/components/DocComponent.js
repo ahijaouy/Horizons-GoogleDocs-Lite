@@ -3,29 +3,50 @@ import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Routes from '../routes';
-import { Editor, EditorState, Modifier, RichUtils, convertToRaw, convertFromRaw, DefaultDraftBlockRenderMap } from 'draft-js';
+import { Editor, EditorState, Modifier, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
 import  {
   styleMap,
   getBlockStyle,
-  BLOCK_TYPES,
   BlockStyleControls,
-  INLINE_STYLES,
   InlineStyleControls,
   myBlockTypes
 } from './DocComponentStyles';
-import{ Map } from 'immutable';
+
 // const socket = require('socket.io-client')('http://localhost:3000');
 
+function formatDate(olddate) {
+  const date = new Date(olddate);
+  const monthNames = [
+    "January", "February", "March",
+    "April", "May", "June", "July",
+    "August", "September", "October",
+    "November", "December"
+  ];
+  let minute = '00';
+  const day = date.getDate();
+  const monthIndex = date.getMonth();
+  const year = date.getFullYear();
+  const hour = date.getHours();
+  const minuteTemp =  date.getMinutes();
+  if(String(minuteTemp).length === 1){
+    minute = '0'+String(minuteTemp);
+  }else{
+    minute = minuteTemp;
+  }
 
+  return day + ' ' + monthNames[monthIndex] + ' ' + year + ' : ' + hour +':'+minute;
+}
 
-class RichEditorExample extends React.Component {
+class DocComponent extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      // socket: io('http://localhost:3000'),
+      socket: this.props.socket,
       editorState: EditorState.createEmpty(),
       currentDocument: '',
-      docName: ''
+      docName: '',
+      history: [],
+      showHist: false,
     };
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => this.setState({editorState});
@@ -34,6 +55,9 @@ class RichEditorExample extends React.Component {
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
     this.handleTextUpdate = this.handleTextUpdate.bind(this);
+    this.handleShowHist = this.handleShowHist.bind(this);
+    this.handleHideHist = this.handleHideHist.bind(this);
+    this.renderPast = this.renderPast.bind(this);
   }
 
   _handleKeyCommand (command) {
@@ -106,30 +130,38 @@ class RichEditorExample extends React.Component {
   }
 
   componentDidMount() {
+
     ////
-    const socket = io('http://localhost:3000')
-    console.log('socket', socket)
-    socket.on('hi', () => {
-      console.log('RECEIVED HI2');
-      socket.emit('typing')
-    });
+    // console.log('socket', socket)
+    // socket.on('hi', () => {
+    //   console.log('RECEIVED HI2');
+    //
+    // });
+    // this.state.socket.emit('typing', ' I fucking work')
+    //
+    // this.state.socket.on('typing', (msg) => {
+    //   console.log('msg', msg)
+    // })
     ////
+
     this.setState({currentDocument: this.props.id.match.params.doc_id});
+    console.log('reaches document! with id: ', this.props, this.state.currentDocument)
+
     axios.get('http://localhost:3000/document')
     .then(response => {
+      console.log('in here 1', this.props)
       response.data.forEach((doc) => {
+        // console.log('in here 2.5doc', doc)
         if(doc._id === this.state.currentDocument){
+            console.log('in here 2', doc.name)
           this.setState({docName: doc.name});
           const parsedBody = doc.body ? JSON.parse(doc.body) : JSON.parse('{}');
           const finalBody = convertFromRaw(parsedBody);
-          this.setState({editorState: EditorState.createWithContent(finalBody)});
+          this.setState({editorState: EditorState.createWithContent(finalBody)})
+          this.setState({history: doc.history});
         }
       });
     });
-  }
-
-  componentWillMount(){
-    // this.state.socket.emit('typing', 'hi')
   }
 
   handleTextUpdate(){
@@ -143,7 +175,8 @@ class RichEditorExample extends React.Component {
           const newBody = convertToRaw(this.state.editorState.getCurrentContent());
           axios.post('http://localhost:3000/document/update',{
             id: this.props.id.match.params.doc_id,
-            body: JSON.stringify(newBody)
+            body: JSON.stringify(newBody),
+            history: this.state.history,
           })
           .catch((err) => {
             console.log('error', err);
@@ -152,6 +185,25 @@ class RichEditorExample extends React.Component {
       });
     });
   }
+
+  handleShowHist(){
+    // console.log('hist', this.state.history[0].date)
+    this.setState({showHist: true})
+  }
+
+  handleHideHist(){
+    // console.log('hist', this.state.history)
+    this.setState({showHist: false})
+  }
+
+  renderPast(past){
+    // console.log('past', past);
+    const parsedBody = JSON.parse(past)
+    const finalBody = convertFromRaw(parsedBody);
+    this.setState({editorState: EditorState.createWithContent(finalBody)})
+  }
+
+
 
   render() {
     const {editorState} = this.state;
@@ -164,9 +216,10 @@ class RichEditorExample extends React.Component {
         className += ' RichEditor-hidePlaceholder';
       }
     }
+
     return (
-      <div className="RichEditor-root">
-        <Link to={'/'}><button>Back to Portal</button></Link>
+      <div className="RichEditor-root doc_container">
+        <Link to={'/dashboard'}><button>Back to Portal</button></Link>
         <h4>Name: {this.state.docName}</h4>
         <h5>ID: {this.state.currentDocument}</h5>
         <BlockStyleControls
@@ -193,13 +246,21 @@ class RichEditorExample extends React.Component {
             spellCheck={true}
           />
         </div>
+        {!this.state.showHist ?
+          <button onClick={this.handleShowHist}>View History</button> :
+          <div>
+            {this.state.history.map((past) => (<div><button onClick={() => this.renderPast(past.content)}>{formatDate(past.date)}</button></div>))}
+            <button onClick={this.handleHideHist}>Hide History</button>
+          </div>
+      }
+
         <button onClick={this.handleTextUpdate}>Save</button>
       </div>
     );
   }
 }
 
-export default RichEditorExample;
+export default DocComponent;
 
 
 
