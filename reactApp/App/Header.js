@@ -9,14 +9,14 @@ import { Link } from 'react-router-dom';
 // component part
 const Header = ({links, updateLinks}) => {
   return (
-      <Navbar id="navbar_login" brand='Dom Docs Portal' right className="purple darken-4">
-        {links.map((link, id) => (
-          <NavItem key={id}>
-            <Link to={'/' + link} onClick={() => updateLinks(link) }>
-              {link.toUpperCase()}
-            </Link>
-          </NavItem>))}
-      </Navbar>
+    <Navbar id="navbar_login" brand='Dom Docs Portal' right className="purple darken-4">
+      {links.map((link, id) => (
+        <NavItem key={id}>
+          <Link to={'/' + link} onClick={() => updateLinks(link) }>
+            {link.toUpperCase()}
+          </Link>
+        </NavItem>))}
+    </Navbar>
   );
 };
 
