@@ -1,6 +1,6 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as HeaderActions from './HeaderActions';
+import * as HeaderActions from './actions';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Navbar, NavItem} from 'react-materialize';

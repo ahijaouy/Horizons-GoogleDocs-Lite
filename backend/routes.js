@@ -7,7 +7,6 @@ const User = require('./models/user');
 const Document = require('./models/document');
 
 router.post('/register', function (req, res) {
-  console.log(req.body);
   User.register(req.body.name, req.body.username, req.body.password, function(error, user) {
     if (error) {
       res.send({error});
@@ -15,8 +14,6 @@ router.post('/register', function (req, res) {
       res.send({user});
     }
   });
-
-
 });
 
 router.post('/document', function (req, res) {
