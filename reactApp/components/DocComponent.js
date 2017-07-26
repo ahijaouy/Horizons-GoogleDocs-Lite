@@ -19,15 +19,6 @@ import {
   Button,
   Icon,
   Card } from 'react-materialize';
-// import {
-//   _onChange,
-//   _handleKeyCommand,
-//   _onTab,
-//   _toggleBlockType,
-//   _toggleInlineStyle,
-//   _toggleColor
-// } from './ToolbarMethods';
-// const socket = require('socket.io-client')('http://localhost:3000');
 
 class DocComponent extends React.Component {
   constructor (props) {
@@ -38,6 +29,7 @@ class DocComponent extends React.Component {
       editorState: EditorState.createEmpty(),
       currentDocument: '',
       docName: '',
+      currentUser: '',
       history: [],
       showHist: false,
     };
@@ -50,7 +42,6 @@ class DocComponent extends React.Component {
     this.toggleBlockType = this._toggleBlockType.bind(this);
     this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
     this.toggleColor = this._toggleColor.bind(this);
-    // this.toggleColor = (color) => _toggleColor(color);
 
     this.handleTextUpdate = this.handleTextUpdate.bind(this);
     this.handleShowHist = this.handleShowHist.bind(this);
@@ -60,40 +51,22 @@ class DocComponent extends React.Component {
 
   _onChange (editorState) {
     const selection = editorState.getSelection();
-
     // console.log('editorState', JSON.stringify(selection));
-    const cursorPos = selection.anchorOffset;
-    const selectionPos = selection.focusOffset;
+    // const cursorPos = selection.anchorOffset;
+    // const selectionPos = selection.focusOffset;
 
-    this.state.socket.emit('user_change', {editorState, selection});
+    this.state.socket.emit('editor_change', {editorState, selection});
 
     this.setState({editorState});
   }
 
   componentDidMount() {
-    /* ***** START SOCKET FUNCTIONS ***** */
-    console.log('socket', this.state.socket);
-
-    this.state.socket.on('connected', () => {
-      console.log('RECEIVED SOCKET CONNECTION');
-    });
-
-    this.state.socket.on('user_change', ({ editorState, selection }) => {
-      console.log('new editor state', editorState, selection);
-    });
-    /* ***** END SOCKET FUNCTIONS ***** */
-
-
+    // GET DOCUMENT ID FROM PROPS, AXIOS CALL TO GET STATE
     this.setState({currentDocument: this.props.id.match.params.doc_id});
-    // console.log('reaches document! with id: ', this.props, this.state.currentDocument)
-
     axios.get('http://localhost:3000/document')
     .then(response => {
-      // console.log('in here 1', this.props)
       response.data.forEach((doc) => {
-        // console.log('in here 2.5doc', doc)
         if(doc._id === this.state.currentDocument){
-            // console.log('in here 2', doc.name)
           this.setState({docName: doc.name});
           const parsedBody = doc.body ? JSON.parse(doc.body) : JSON.parse('{}');
           const finalBody = convertFromRaw(parsedBody);
@@ -102,6 +75,46 @@ class DocComponent extends React.Component {
         }
       });
     });
+
+
+    /* ***** START SOCKET FUNCTIONS ***** */
+    console.log('socket', this.state.socket);
+
+    // LISTENER FOR WHEN SOCKET STARTS
+    this.state.socket.on('connected', () => {
+      console.log('RECEIVED SOCKET CONNECTION', this.state.currentDocument);
+
+      // GET USER, EMIT JOIN DOC WITH THIS USER
+      axios.get('http://localhost:3000/user')
+      .then(response => {
+        return new Promise((resolve, reject) => {
+          console.log('axios response', response);
+          resolve(this.setState({currentUser: response.data}));
+        });
+      })
+      .then(() => {
+        console.log('current user 2: ', this.state.currentUser);
+        const currentDoc = this.state.currentDocument;
+        const currentUser = this.state.currentUser;
+        this.state.socket.emit('join_doc', { currentDoc, currentUser});
+      });
+    });
+
+    // LISTENER FOR NEW USER JOINED DOC
+    this.state.socket.on('user_joined', newUser => {
+      console.log('USER', newUser, 'JOINED');
+    });
+
+    // LISTENER FOR CHANGE IN EDITOR STATE
+    this.state.socket.on('editor_change', ({ editorState, selection }) => {
+      console.log('new editor state'/*, editorState, selection*/);
+    });
+
+    // LISTENER FOR ERROR MSG FROM SOCKET
+    this.state.socket.on('errorMessage', msg => {
+      console.log('ERROR FROM SOCKETS:', msg);
+    })
+    /* ***** END SOCKET FUNCTIONS ***** */
   }
 
   handleTextUpdate(){
@@ -276,8 +289,8 @@ class DocComponent extends React.Component {
               large style={{bottom: '45px', right: '24px'}}
               icon='change_history'
               waves='light' floating >
-              <Col s={1}> {this.state.history.map((past) => (
-                <div><Button onClick={() => this.renderPast(past.content)}
+              <Col s={1}> {this.state.history.map((past, i) => (
+                <div key={i}><Button onClick={() => this.renderPast(past.content)}
                   className='deep-purple lighten-5 history_btn'
                   style={{color: 'black'}}
                   waves='light' >
