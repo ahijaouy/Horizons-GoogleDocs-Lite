@@ -7,22 +7,22 @@ import { Navbar, NavItem} from 'react-materialize';
 import { Link } from 'react-router-dom';
 
 // component part
-const Header = ({links}) => {
+const Header = ({links, updateLinks}) => {
   return (
-    <div>
-
-      {/* <Navbar id="navbar_main" brand='Dom Docs Portal' right className="orange darken-4">
-        <NavItem><Link to="/logout">Logout</Link></NavItem>
-     </Navbar> */}
       <Navbar  id="navbar_login" brand='Dom Docs Portal' right className="purple darken-4">
-        {links.map((link, id) => <NavItem key={id}><Link to={'/' + link}>{link.toUpperCase()}</Link></NavItem>)}
+        {links.map((link, id) => (
+          <NavItem key={id}>
+            <Link to={'/' + link} onClick={() => updateLinks(link) }>
+              {link.toUpperCase()}
+            </Link>
+          </NavItem>))}
       </Navbar>
-    </div>
   );
 };
 
 Header.propTypes = {
-  links: PropTypes.array
+  links: PropTypes.array,
+  updateLinks: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
