@@ -51,6 +51,9 @@ class Login extends React.Component {
           <Navbar brand='Horizons GoogleDocs Lite' className='amber darken-4' right>
             <NavItem><Link to="/register">Register</Link></NavItem>
           </Navbar>
+          {/* <Navbar id="navbar_main" brand='Dom Docs Portal' right className="orange darken-4">
+            <NavItem><Link to="/logout">Logout</Link></NavItem>
+         </Navbar> */}
           <Row>
             <Col s={6} offset={"s3"} >
               <Card

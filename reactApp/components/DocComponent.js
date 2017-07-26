@@ -19,6 +19,7 @@ class DocComponent extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
+      socket: this.props.socket,
       // socket: io('http://localhost:3000'),
       editorState: EditorState.createEmpty(),
       currentDocument: '',
@@ -103,14 +104,17 @@ class DocComponent extends React.Component {
   }
 
   componentDidMount() {
+
     ////
-    console.log('socket', socket)
-    socket.on('hi', () => {
-      console.log('RECEIVED HI2');
-      socket.emit('typing')
-    });
+    // console.log('socket', socket)
+    // socket.on('hi', () => {
+    //   console.log('RECEIVED HI2');
+    //   socket.emit('typing')
+    // });
     ////
     this.setState({currentDocument: this.props.id.match.params.doc_id});
+    console.log('reaches document! with id: ', this.props, this.state.currentDocument)
+
     axios.get('http://localhost:3000/document')
     .then(response => {
       response.data.forEach((doc) => {
@@ -160,8 +164,9 @@ class DocComponent extends React.Component {
         className += ' RichEditor-hidePlaceholder';
       }
     }
+
     return (
-      <div className="RichEditor-root">
+      <div className="RichEditor-root doc_container">
         <Link to={'/dashboard'}><button>Back to Portal</button></Link>
         <h4>Name: {this.state.docName}</h4>
         <h5>ID: {this.state.currentDocument}</h5>

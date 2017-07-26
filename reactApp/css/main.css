@@ -26,22 +26,37 @@
 }
 
 .add_doc_btn * {
-  background-color: #F57C00;
+  background-color: #00838f;
   float: center
 }
 
-#navbar_main {
+#navbar_main, #navbar_login {
   padding: 0 10px;
+}
+#navbar_card {
+  height: 40px;
+}
+#add_new_row {
+  padding: 0 10px;
+}
+#add_new_row * {
+  display: inline-block;
+}
+#add_new_row input {
+  width: 30vw;
+}
+#portal_search_row {
+  
 }
 #portal_container {
   padding: 25px;
 }
 
 .font-color-yellow-darken-3 {
-  color: #f9a825
+  color: #00838f
 }
 
 input[type=text].valid, input[type=text]:focus.valid, input[type=password].valid, input[type=password]:focus.valid, input[type=text].valid, input[type=text]:focus.valid, input[type=password].valid, input[type=password]:focus.valid, input:not([type]).valid {
-  color: #f9a825;
-  border-bottom: #f9a825;
+  color: #1a237e;
+  border-bottom: #00838f;
 }

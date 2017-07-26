@@ -89,37 +89,41 @@ class DocPortalComponent extends React.Component {
 
   render() {
     return (
-      <div id="portal">
-        <Navbar id="navbar_main" brand='Dom Docs Portal' right className="orange darken-4">
-          <NavItem><Link to="/logout">Logout</Link></NavItem>
-       </Navbar>
-       <div id="portal_container">
-         <Row>
-           <Button floating large waves='light' icon='add' className="orange accent-3">
-          	<Input  s={6} label="Add a New Document" validate><Icon large>note_add</Icon></Input>
-          </Button>
+     <div id="portal_container">
+       <Row id="add_new_row">
+         <Col s={12}>
           <form onSubmit={this.handleCreate}>
             <Input
               type="text"
               value={this.state.newDoc}
               placeholder="New Document Title"
               onChange={this.handleNewDoc}
-              s={6} offset={'s3'}
             />
-              <Button waves='light' type="submit" value="Create component" onClick={this.handleCreate}>Create New</Button>
+            <Button className='cyan' waves='light' icon='add' type="submit" value="Create component" onClick={this.handleCreate}> </Button>
           </form>
-        </Row>
+        </Col>
+      </Row>
+      <Row id="portal_search_row">
+        <Col s={12}>
           <input
             type="text"
             value={this.state.search}
             placeholder="Search for Docs"
-            onChange={this.handleSearch}/>
-
-          <div style={{height: '200px', width: '100%', border: '2px solid black'}}>
+            onChange={this.handleSearch}
+          />
+        </Col>
+      </Row>
+      {/* <Row> */}
+        {/* <Col s={12}> */}
+          <div style={{width: '100%'}}>
             <h3>My Documents</h3>
-              {this.state.search === '' ? this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc.id}`}>{doc.name}</Link></div>))
-            :this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc.id}`}>{doc.name}</Link></div>))}
+              {this.state.search === '' ?
+              this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
+              :
+              this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
           </div>
+        {/* </Col> */}
+        {/* <Col s={12}> */}
           <form onSubmit={this.handleAdd}>
             <input
               type="text"
@@ -128,8 +132,9 @@ class DocPortalComponent extends React.Component {
               onChange={this.handleSharedDoc}/>
               <input type="submit" value="Add Shared Document" onClick={this.handleAdd}/>
           </form>
-        </div>
-      </div>
+        {/* </Col> */}
+      {/* </Row> */}
+    </div>
     );
   }
 };
