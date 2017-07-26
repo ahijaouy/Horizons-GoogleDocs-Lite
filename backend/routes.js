@@ -54,20 +54,14 @@ router.get('/user', function(req,res){
 
 router.post('/user', function(req,res){
   const currentDocument = req.body.id
-  console.log('curr docs', currentDocument)
   let collaborators = []
   Document.find({_id: currentDocument}, function(err,result){
-    console.log('collab', result)
     collaborators = result[0].collaborators
-    console.log('collab 2', collaborators, req.user)
     const newCollab = collaborators.concat([req.user]);
     Document.findOneAndUpdate({_id: currentDocument},{ collaborators: newCollab },function(err, result){
-      console.log('in here now finally', result);
       res.send(result);
     });
   })
-  console.log('outside', collaborators)
-  // res.send(collaborators);
 })
 
 router.get('/success', function(req, res) {
