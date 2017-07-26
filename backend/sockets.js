@@ -4,10 +4,10 @@ module.exports = function(io) {
   io.on('connection', socket => {
     console.log('*****************************************');
     console.log('SOCKET CONNECTED');
-    socket.emit('hi');
+    socket.emit('connected');
 
-    socket.on('typing', msg => {
-      socket.emit('typing', "I got your msg " + msg)
+    socket.on('user_change', (state) => {
+      socket.emit('user_change', state);
     });
   });
 }

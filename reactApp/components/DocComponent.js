@@ -58,18 +58,31 @@ class DocComponent extends React.Component {
     this.renderPast = this.renderPast.bind(this);
   }
 
+  _onChange (editorState) {
+    const selection = editorState.getSelection();
+
+    // console.log('editorState', JSON.stringify(selection));
+    const cursorPos = selection.anchorOffset;
+    const selectionPos = selection.focusOffset;
+
+    this.state.socket.emit('user_change', {editorState, selection});
+
+    this.setState({editorState});
+  }
+
   componentDidMount() {
-    console.log('socket', this.state.socket)
-    this.state.socket.on('hi', () => {
-      console.log('RECEIVED HI2');
+    /* ***** START SOCKET FUNCTIONS ***** */
+    console.log('socket', this.state.socket);
 
+    this.state.socket.on('connected', () => {
+      console.log('RECEIVED SOCKET CONNECTION');
     });
 
-    this.state.socket.emit('typing', ' I fucking work');
-
-    this.state.socket.on('typing', (msg) => {
-      console.log('msg', msg)
+    this.state.socket.on('user_change', ({ editorState, selection }) => {
+      console.log('new editor state', editorState, selection);
     });
+    /* ***** END SOCKET FUNCTIONS ***** */
+
 
     this.setState({currentDocument: this.props.id.match.params.doc_id});
     // console.log('reaches document! with id: ', this.props, this.state.currentDocument)
@@ -130,15 +143,7 @@ class DocComponent extends React.Component {
     this.setState({editorState: EditorState.createWithContent(finalBody)})
   }
 
-  _onChange (editorState) {
-    const selection = editorState.getSelection();
 
-    console.log('editorState', JSON.stringify(selection));
-    const cursorPos = selection.anchorOffset;
-    const selectionPos = selection.focusOffset;
-
-    this.setState({editorState});
-  }
 
   _handleKeyCommand (command) {
     const {editorState} = this.state;
