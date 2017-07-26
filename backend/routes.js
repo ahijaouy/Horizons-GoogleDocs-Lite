@@ -26,10 +26,10 @@ router.post('/document', function (req, res) {
   });
   newDocument.save((err) => {
     if(err){
-      console.log('Error creating Document', err);
+      res.send('Error creating Document', err);
     }
   });
-  res.send('Added new Document');
+  res.json(newDocument);
 });
 
 router.get('/document', function (req, res) {
