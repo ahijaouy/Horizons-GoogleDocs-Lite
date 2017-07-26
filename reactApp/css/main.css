@@ -25,9 +25,8 @@
   border-radius: 5px;
 }
 
-.add_doc_btn * {
-  background-color: #00838f;
-  float: center
+.right-align {
+  text-align: right;
 }
 
 #navbar_main, #navbar_login {
@@ -49,7 +48,14 @@
 #portal_container {
   padding: 25px;
 }
+.center-align {
+  text-align: center;
+  .add_doc_btn * {
+    background-color: #00838f;
+    float: center
+  }
 
+<<<<<<< HEAD
 #doc_btns {
   width: 100%;
   padding-top: 15px;
@@ -68,8 +74,43 @@
 .font-color-yellow-darken-3 {
   color: #00838f
 }
+=======
+  #navbar_main, #navbar_login {
+    padding: 0 10px;
+  }
+  #navbar_card {
+    height: 40px;
+  }
+  #add_new_row {
+    padding: 0 10px;
+  }
+  #add_new_row * {
+    display: inline-block;
+  }
+  #add_new_row input {
+    width: 30vw;
+  }
+  #portal_search_row {
+>>>>>>> dev
 
-input[type=text].valid, input[type=text]:focus.valid, input[type=password].valid, input[type=password]:focus.valid, input[type=text].valid, input[type=text]:focus.valid, input[type=password].valid, input[type=password]:focus.valid, input:not([type]).valid {
-  color: #1a237e;
-  border-bottom: #00838f;
-}
+  }
+  #portal_container {
+    padding: 25px;
+  }
+
+  .font-color-yellow-darken-3 {
+    color: #00838f
+  }
+
+  input[type=text].valid,
+  input[type=text]:focus.valid,
+  input[type=password].valid,
+  input[type=password]:focus.valid
+  input[type=text].valid
+  input[type=text]:focus.valid
+  input[type=password].valid
+  input[type=password]:focus.valid
+  input:not([type]).valid {
+    color: '';
+    border-bottom: #00838f;
+  }

@@ -1,4 +1,4 @@
-import * as types from './HeaderActionTypes';
+import * as types from './types';
 
 function login() {
   return {

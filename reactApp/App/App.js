@@ -1,7 +1,7 @@
 import React from 'react';
 import Login from '../Authentication/Login';
 import Register from '../Authentication/Register';
-import Header from './Header/Header';
+import Header from './Header';
 import { Route, Switch } from 'react-router-dom';
 import DocPortalComponent from '../components/DocPortalComponent';
 import DocComponent from '../components/DocComponent';

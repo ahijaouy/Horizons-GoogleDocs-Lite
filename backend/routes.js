@@ -7,7 +7,6 @@ const User = require('./models/user');
 const Document = require('./models/document');
 
 router.post('/register', function (req, res) {
-  console.log(req.body);
   User.register(req.body.name, req.body.username, req.body.password, function(error, user) {
     if (error) {
       res.send({error});
@@ -15,8 +14,6 @@ router.post('/register', function (req, res) {
       res.send({user});
     }
   });
-
-
 });
 
 router.post('/document', function (req, res) {
@@ -42,13 +39,13 @@ router.get('/document', function (req, res) {
 });
 
 router.post('/document/update', function (req, res) {
-  console.log('find me here', req.body.body)
-  const history = req.body.history.concat({content: req.body.body, date: new Date()})
+  console.log('find me here', req.body.body);
+  const history = req.body.history.concat({content: req.body.body, date: new Date()});
   Document.findOneAndUpdate({_id: req.body.id},{ body: req.body.body, history: history },function(err, result){
-    console.log('in here now ifnally', result)
-    res.send(result)
-  })
-})
+    console.log('in here now ifnally', result);
+    res.send(result);
+  });
+});
 
 // router.post('/document/history', function (req, res) {
 //   console.log('find me here', req.body.body)
