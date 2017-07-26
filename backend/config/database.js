@@ -1,0 +1,1 @@
+module.exports = 'mongodb://root:pass@ds161210.mlab.com:61210/horizons-googledocs-lite';

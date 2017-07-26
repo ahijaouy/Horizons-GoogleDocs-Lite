@@ -1,0 +1,116 @@
+
+#root {
+  width: 100vw;
+  height: 100vh;
+}
+
+#headerComponent {
+  height: 100%;
+  background: linear-gradient(grey, lightgrey);
+  width: '100%';
+  height: '15px';
+}
+
+.style_button {
+  margin: 0 15px;
+}
+
+.color_style_button {
+  cursor: pointer;
+  margin-right: 12px;
+  padding: 2px 2px;
+  border: 1px outset lightgrey;
+  background: linear-gradient(lightgrey, #b3b3b3);
+  color: #33333e;
+  border-radius: 5px;
+}
+
+.right-align {
+  text-align: right;
+}
+
+#navbar_main, #navbar_login {
+  padding: 0 10px;
+}
+#navbar_card {
+  height: 40px;
+}
+#add_new_row {
+  /*padding: 0 10px;*/
+}
+#add_new_row_input {
+  /*display: inline-block;*/
+  width: 100%;
+}
+#portal_search_row {
+
+}
+#portal_container {
+  padding: 25px;
+}
+.center-align {
+  text-align: center;
+  .add_doc_btn * {
+    background-color: #00838f;
+    float: center
+  }
+
+<<<<<<< HEAD
+#doc_btns {
+  width: 100%;
+  padding-top: 15px;
+  border-top: 1px solid #ddd;
+  /*display: inline-block;*/
+}
+.history_btn {
+  margin: 2px 0;
+  /*padding: 0px 10px;*/
+  width: 210px;
+  right: 150px;
+}
+.doc_save_btn {
+  margin: 0 5px;
+}
+.font-color-yellow-darken-3 {
+  color: #00838f
+}
+=======
+  #navbar_main, #navbar_login {
+    padding: 0 10px;
+  }
+  #navbar_card {
+    height: 40px;
+  }
+  #add_new_row {
+    padding: 0 10px;
+  }
+  #add_new_row * {
+    display: inline-block;
+  }
+  #add_new_row input {
+    width: 30vw;
+  }
+  #portal_search_row {
+>>>>>>> dev
+
+  }
+  #portal_container {
+    padding: 25px;
+  }
+
+  .font-color-yellow-darken-3 {
+    color: #00838f
+  }
+
+  input[type=text].valid,
+  input[type=text]:focus.valid,
+  input[type=password].valid,
+  input[type=password]:focus.valid
+  input[type=text].valid
+  input[type=text]:focus.valid
+  input[type=password].valid
+  input[type=password]:focus.valid
+  input:not([type]).valid {
+    color: '';
+    border-bottom: #00838f;
+  }

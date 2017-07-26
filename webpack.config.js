@@ -1,4 +1,4 @@
-const webpack = require('webpack');
+//const webpack = require('webpack');
 
 module.exports = {
   entry: './reactApp/app.js',
@@ -17,6 +17,18 @@ module.exports = {
             presets: ['react', 'es2015']
           }
         }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          { loader: "style-loader" },
+          { loader: "css-loader?importLoaders=1" }
+        ]
+      },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loaders: ['babel-loader', 'babel-loader?presets[]=react,presets[]=es2015'],
       }
     ]
   },

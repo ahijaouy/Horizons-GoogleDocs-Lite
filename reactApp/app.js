@@ -1,11 +1,16 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react';
+import { render } from 'react-dom';
+import { configureStore } from './store/configureStore';
+import Root from './Root/Root';
+import createHistory from 'history/createHashHistory';
 
-/* This can check if your electron app can communicate with your backend */
-// fetch('http://localhost:3000')
-// .then(resp => resp.text())
-// .then(text => console.log(text))
-// .catch(err => {throw err})
+const history = createHistory();
+const store = configureStore(history);
 
-ReactDOM.render(<p>React lives!</p>,
-   document.getElementById('root'));
+
+render(
+    <Root store={store} history={history} />,
+    document.getElementById('root')
+);
+
+
