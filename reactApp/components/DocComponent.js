@@ -186,7 +186,6 @@ class DocComponent extends React.Component {
     this.state.socket.on('errorMessage', msg => {
       console.log('ERROR FROM SOCKETS:', msg);
     });
-<<<<<<< HEAD
 
     // LISTENING FOR USER LEAVE DOC
     this.state.socket.on('user_left', username => {
@@ -197,8 +196,6 @@ class DocComponent extends React.Component {
       }
     });
 
-=======
->>>>>>> 7ba8cfa57fee991c4b9b31178b3f5db52d6298c2
     /* ***** END SOCKET FUNCTIONS ***** */
   }
 
