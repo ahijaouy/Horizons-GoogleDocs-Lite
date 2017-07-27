@@ -25,7 +25,7 @@ export function Login({ username, password, user, changeUsername, changePassword
             <form
               onSubmit={(e)=>{
                 e.preventDefault();
-                login()}}>
+                login();}}>
               <Card
                 className='white darken-1'
                 title='Login'
