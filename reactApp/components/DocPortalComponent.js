@@ -157,7 +157,7 @@ class DocPortalComponent extends React.Component {
         </Row>
         <div>
           <h3>My Documents</h3>
-          {!this.state.search ? filterDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link><button>abc</button></div>))
+          {!this.state.search ? filterDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
           :this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
         </div>
         <form onSubmit={this.handleAdd}>
