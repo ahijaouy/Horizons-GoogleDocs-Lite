@@ -16,6 +16,8 @@ import { Row,
          Col,
          Button } from 'react-materialize';
 
+import myKeyBindingFn from './KeyBindings';
+
 class DocComponent extends React.Component {
   constructor (props) {
     super(props);
@@ -240,7 +242,11 @@ class DocComponent extends React.Component {
       this._onChange(newState);
       return true;
     }
-    return false;
+    if(command === 'myeditor-save'){
+      this.handleTextUpdate();
+      return 'handled';
+    }
+    return 'unhandled';
   }
 
   _onTab (e) {
@@ -351,6 +357,7 @@ class DocComponent extends React.Component {
             customStyleMap={styleMap}
             editorState={editorState}
             handleKeyCommand={this.handleKeyCommand}
+            keyBindingFn={myKeyBindingFn}
             onChange={this.onChange}
             onTab={this.onTab}
             placeholder="Tell a story..."
