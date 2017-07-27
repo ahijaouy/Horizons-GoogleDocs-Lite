@@ -46,5 +46,11 @@ module.exports = function(io) {
     socket.on('editor_change', (state) => {
       socket.to(socket.doc).emit('editor_change', state);
     });
+
+    socket.on('disconnect', ()  => {
+      currentColor--;
+      console.log('disconnected');
+      socket.to(socket.doc).emit('user_left', socket.user);
+    });
   });
 }

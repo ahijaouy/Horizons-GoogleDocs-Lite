@@ -1,8 +1,7 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import { Redirect, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Row, Col, Input, CardPanel, Button, Icon, Card } from 'react-materialize';
+import { Row, Col, Input, Button, Icon } from 'react-materialize';
 
 function filterDocs(array, user_id){
   // console.log('FD', array, user_id)
@@ -12,16 +11,16 @@ function filterDocs(array, user_id){
     doc.collaborators.forEach((user) => {
       // console.log('user', user)
       if(user._id === user_id){
-        userDocs.push(doc)
+        userDocs.push(doc);
       }
-    })
-  })
+    });
+  });
   return userDocs;
 }
 
 class DocPortalComponent extends React.Component {
   constructor() {
-    super()
+    super();
     this.state = {
       currentDocs: [],
       currentUser:'',
@@ -29,7 +28,7 @@ class DocPortalComponent extends React.Component {
       sharedDoc: '',
       search: '',
       searchList:[]
-    }
+    };
     this.handleNewDoc = this.handleNewDoc.bind(this);
     this.handleCreate = this.handleCreate.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -40,7 +39,7 @@ class DocPortalComponent extends React.Component {
   componentDidMount(){
     axios.get('http://localhost:3000/document')
       .then(response => {
-        this.setState({currentDocs: response.data})
+        this.setState({currentDocs: response.data});
       });
     axios.get('http://localhost:3000/user')
     .then(response => {
@@ -51,12 +50,12 @@ class DocPortalComponent extends React.Component {
   handleNewDoc(e){
     e.preventDefault();
     // console.log('new doc', e.target.value)
-    this.setState({newDoc: e.target.value})
+    this.setState({newDoc: e.target.value});
   }
 
   handleSharedDoc(e){
     e.preventDefault();
-    this.setState({sharedDoc: e.target.value})
+    this.setState({sharedDoc: e.target.value});
   }
 
   handleCreate(e){
@@ -178,6 +177,6 @@ class DocPortalComponent extends React.Component {
       </div>
     );
   }
-};
+}
 
 export default DocPortalComponent;
