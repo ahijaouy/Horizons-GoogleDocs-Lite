@@ -439,7 +439,7 @@ class DocComponent extends React.Component {
               add</Icon></Button>
         </Input>
         <div>
-        {this.state.collabArray.map((user) => (<div>{user.name}</div>))}
+        {this.state.collabArray.map((user, i) => (<div key={i}>{user.name}</div>))}
       </div>
         </div>
         <h5>ID: {this.state.currentDocument}</h5>
