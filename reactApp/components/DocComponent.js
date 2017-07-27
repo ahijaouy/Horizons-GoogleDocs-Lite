@@ -34,7 +34,7 @@ class DocComponent extends React.Component {
       showHist: false,
       collab: '',
 
-      cursor: {}
+      cursor: {},
       collabArray: []
     };
     this.focus = () => this.refs.editor.focus();
