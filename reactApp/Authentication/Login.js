@@ -16,8 +16,9 @@ import { Redirect, Link } from 'react-router-dom';
 // import { push } from 'react-router-redux';
 
 // component part
-export function Login({ username, password, user, changeUsername, changePassword, login }) {
+export function Login({ username, password, user, changeUsername, changePassword, login, loginFailed }) {
   //console.log(changeUsername('Andre'));
+  console.log('testing', loginFailed);
   return (
     <div>
       <Row>
@@ -32,6 +33,7 @@ export function Login({ username, password, user, changeUsername, changePassword
                   onClick={() => login()}>
                   Login</Button>]}>
                 <span></span>
+                {loginFailed ? <Row><h4>Login Failed</h4></Row> : <div></div>}
                 <Row>
                   <Input s={6} label="Username" validate onChange={(e) => changeUsername(e.target.value)}/>
                   <Input s={6} label="Password" type='password' validate onChange={(e) => changePassword(e.target.value)} />
@@ -49,7 +51,8 @@ Login.propTypes = {
   user: PropTypes.object,
   changeUsername: PropTypes.func,
   changePassword: PropTypes.func,
-  login: PropTypes.func
+  login: PropTypes.func,
+  loginFailed: PropTypes.bool
 
 };
 
@@ -57,7 +60,8 @@ const mapStateToProps = (state) => {
   return {
     username: state.auth.username,
     password: state.auth.password,
-    user: state.auth.user
+    user: state.auth.user,
+    loginFailed: state.auth.loginFailed
   };
 };
 
