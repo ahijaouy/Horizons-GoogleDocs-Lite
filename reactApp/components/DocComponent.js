@@ -1,14 +1,20 @@
 import axios from 'axios';
 import React from 'react';
-import { Redirect, Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import Routes from '../routes';
-import { Editor, EditorState, Modifier, RichUtils, convertToRaw,
-  convertFromRaw } from 'draft-js';
-import  { styleMap, getBlockStyle, BlockStyleControls, InlineStyleControls,
-  myBlockTypes } from './DocComponentStyles';
-import { Row, Col, Input, CardPanel, Button, Icon,
-  Card } from 'react-materialize';
+import { Link } from 'react-router-dom';
+import { Editor,
+         EditorState,
+         Modifier,
+         RichUtils,
+         convertToRaw,
+         convertFromRaw } from 'draft-js';
+import  { styleMap,
+          getBlockStyle,
+          BlockStyleControls,
+          InlineStyleControls,
+          myBlockTypes } from './DocComponentStyles';
+import { Row,
+         Col,
+         Button } from 'react-materialize';
 
 class DocComponent extends React.Component {
   constructor (props) {
@@ -53,7 +59,7 @@ class DocComponent extends React.Component {
   }
 
   handleSendSelection (editorState) {
-    const content = editorState.getCurrentContent();
+    // const content = editorState.getCurrentContent();
     const selection = editorState.getSelection();
 
     let toggledColor = this.state.myColor;
@@ -93,7 +99,7 @@ class DocComponent extends React.Component {
   }
 
   handleSendText (editorState) {
-    const content = editorState.getCurrentContent();
+    // const content = editorState.getCurrentContent();
     const selection = editorState.getSelection();
 
     let toggledColor = this.state.myColor;
@@ -125,7 +131,7 @@ class DocComponent extends React.Component {
           this.setState({docName: doc.name});
           const parsedBody = doc.body ? JSON.parse(doc.body) : JSON.parse('{}');
           const finalBody = convertFromRaw(parsedBody);
-          this.setState({editorState: EditorState.createWithContent(finalBody)})
+          this.setState({editorState: EditorState.createWithContent(finalBody)});
           this.setState({history: doc.history});
         }
       });
@@ -152,9 +158,9 @@ class DocComponent extends React.Component {
 
     // LISTENER FOR SUCCESSFUL JOIN DOC
     this.state.socket.on('joined_doc', myColor => {
-      console.log('setting state with color', myColor)
-      this.setState({myColor})
-    })
+      console.log('setting state with color', myColor);
+      this.setState({myColor});
+    });
 
     // LISTENER FOR NEW USER JOINED DOC
     this.state.socket.on('user_joined', newUser => {
@@ -179,7 +185,7 @@ class DocComponent extends React.Component {
     // LISTENER FOR ERROR MSG FROM SOCKET
     this.state.socket.on('errorMessage', msg => {
       console.log('ERROR FROM SOCKETS:', msg);
-    })
+    });
     /* ***** END SOCKET FUNCTIONS ***** */
   }
 
@@ -208,19 +214,19 @@ class DocComponent extends React.Component {
 
   handleShowHist(){
     // console.log('hist', this.state.history[0].date)
-    this.setState({showHist: true})
+    this.setState({showHist: true});
   }
 
   handleHideHist(){
     // console.log('hist', this.state.history)
-    this.setState({showHist: false})
+    this.setState({showHist: false});
   }
 
   renderPast(past){
     // console.log('past', past);
-    const parsedBody = JSON.parse(past)
+    const parsedBody = JSON.parse(past);
     const finalBody = convertFromRaw(parsedBody);
-    this.setState({editorState: EditorState.createWithContent(finalBody)})
+    this.setState({editorState: EditorState.createWithContent(finalBody)});
   }
 
 
@@ -234,6 +240,7 @@ class DocComponent extends React.Component {
       this._onChange(newState);
       return true;
     }
+    return false;
   }
 
   _onTab (e) {

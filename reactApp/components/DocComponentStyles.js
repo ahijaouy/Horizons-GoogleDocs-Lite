@@ -1,7 +1,6 @@
 import React from 'react';
 import StyleButton from './StyleButtonComponent';
 import ColorControls from './StyleButtonColorComponent';
-import { Redirect, Link } from 'react-router-dom';
 import{ Map } from 'immutable';
 import { DefaultDraftBlockRenderMap } from 'draft-js';
 // CUSTOM STYLE MAP
@@ -109,10 +108,10 @@ var INLINE_STYLES = [
 const InlineStyleControls = (props) => {
   const currentStyle = props.editorState.getCurrentInlineStyle();
 
-  const changeTextSize = (change) => {
-    const {editorState} = props.editorState;
-    const selection = editorState.getSelection();
-  };
+  // const changeTextSize = (change) => {
+  //   const {editorState} = props.editorState;
+  //   const selection = editorState.getSelection();
+  // };
 
   return (
     <div className="RichEditor-controls">
