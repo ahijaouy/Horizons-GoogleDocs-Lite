@@ -181,9 +181,13 @@ class DocComponent extends React.Component {
       console.log('ERROR FROM SOCKETS:', msg);
     });
 
-    // LISTENERG FOR USER LEAVE DOC
+    // LISTENING FOR USER LEAVE DOC
     this.state.socket.on('user_left', username => {
-      console.log('left: ', username);
+      const i = this.state.docUsers.indexOf(username);
+      if (i >= 0) {
+        const newUsers = this.state.docUsers.slice(0, i).concat(this.state.docUsers.slice(i+1, this.state.docUsers.length));
+        this.setState({docUsers: newUsers });
+      }
     });
 
     /* ***** END SOCKET FUNCTIONS ***** */
