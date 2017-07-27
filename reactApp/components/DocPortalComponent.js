@@ -128,7 +128,6 @@ class DocPortalComponent extends React.Component {
           <form onSubmit={this.handleCreate}>
             <Input
               className='sidekick_icon'
-
               s={5} offset={'s1'}
               type="text"
               value={this.state.newDoc}
@@ -144,7 +143,8 @@ class DocPortalComponent extends React.Component {
           <Row><Col s={4} offset={'s4'}><h3>My Documents</h3></Col></Row>
           <Row id="docs_list">{filterDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) =>
             (<div key={i}>
-              <Col s={4} offset={'s1'}><Button large className='blue-grey lighten-3'>
+              <Col s={12} m={6} l={4}>
+                <Button large className='blue-grey lighten-3'>
                 <Link to={`/doc/${doc._id}`} className='doc_link'>{doc.name}</Link>
               </Button></Col>
             </div>)
