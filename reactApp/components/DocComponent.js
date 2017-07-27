@@ -14,7 +14,9 @@ import  { styleMap,
           myBlockTypes } from './DocComponentStyles';
 import { Row,
          Col,
-         Button } from 'react-materialize';
+         Button,
+         Input,
+         Icon} from 'react-materialize';
 
 class DocComponent extends React.Component {
   constructor (props) {
@@ -30,6 +32,9 @@ class DocComponent extends React.Component {
       docUsers: [],
       history: [],
       showHist: false,
+      collab: '',
+
+      cursor: {}
     };
     this.focus = () => this.refs.editor.focus();
     // this.onChange = (editorState) => this.setState({editorState});
@@ -46,9 +51,10 @@ class DocComponent extends React.Component {
     this.handleHideHist = this.handleHideHist.bind(this);
     this.renderPast = this.renderPast.bind(this);
 
-
     this.previousHighlight = null;
 
+    this.handleCollab = this.handleCollab.bind(this);
+    this.handleAdd = this.handleAdd.bind(this);
   }
 
   _onChange (editorState) {
@@ -108,13 +114,15 @@ class DocComponent extends React.Component {
     // const content = editorState.getCurrentContent();
 
      const selection = editorState.getSelection();
-     if (this.previousHighlight) {
-      editorState = EditorState.acceptSelection(editorState, this.previousHighlight);
-      editorState = RichUtils.toggleInlineStyle(editorState, this.state.myColor);
-      editorState = EditorState.acceptSelection(editorState, selection);
-    }
+    //  if (this.previousHighlight) {
+    //   editorState = EditorState.acceptSelection(editorState, this.previousHighlight);
+    //   editorState = RichUtils.toggleColorHelper(this.state.myColor, {editorState}, selection);
+    //   editorState = EditorState.acceptSelection(editorState, selection);
+    // }
 
     // const selection = editorState.getSelection();
+
+    this.state.socket.emit('cursor_move', selection);
 
     let toggledColor = this.state.myColor;
 
@@ -200,11 +208,6 @@ class DocComponent extends React.Component {
       this.setState({editorState: newES});
     });
 
-    // LISTENER FOR ERROR MSG FROM SOCKET
-    this.state.socket.on('errorMessage', msg => {
-      console.log('ERROR FROM SOCKETS:', msg);
-    });
-
     // LISTENING FOR USER LEAVE DOC
     this.state.socket.on('user_left', username => {
       const i = this.state.docUsers.indexOf(username);
@@ -212,6 +215,32 @@ class DocComponent extends React.Component {
         const newUsers = this.state.docUsers.slice(0, i).concat(this.state.docUsers.slice(i+1, this.state.docUsers.length));
         this.setState({docUsers: newUsers });
       }
+    });
+
+    // LISTENEG FOR OTHER'S CURSOR MOVE
+    this.state.socket.on('cursor_move', selection => {
+      console.log('*********other cursor at: ', selection);
+      let es = this.state.editorState;
+      const thisES = es;
+      const thisSelect = es.getSelection();
+
+      const incomingSelect = thisSelect.merge(selection);
+
+      const tempES = EditorState.forceSelection(es, incomingSelect);
+      this.setState({ editorState: tempES }, () => {
+        const winSel = window.getSelection();
+        const range = winSel.getRangeAt(0);
+        const rects = range.getClientRects(0);
+        const { top, left, bottom } = rects;
+        this.setState({ editorState: thisES, cursor: { top, left, height: bottom - top } });
+        console.log(this.state.cursor);
+      });
+
+    });
+
+    // LISTENER FOR ERROR MSG FROM SOCKET
+    this.state.socket.on('errorMessage', msg => {
+      console.log('ERROR FROM SOCKETS:', msg);
     });
 
     /* ***** END SOCKET FUNCTIONS ***** */
@@ -255,6 +284,29 @@ class DocComponent extends React.Component {
     const parsedBody = JSON.parse(past);
     const finalBody = convertFromRaw(parsedBody);
     this.setState({editorState: EditorState.createWithContent(finalBody)});
+  }
+
+  handleCollab(e){
+    e.preventDefault();
+    this.setState({collab: e.target.value});
+  }
+
+  handleAdd(){
+    if(this.state.collab === ''){
+      alert('Please specify a Collaborator Name or ID!')
+    }else{
+      console.log('broke before axios')
+    axios.post('http://localhost:3000/user',{
+      name: this.state.collab,
+      id: this.state.currentDocument
+    })
+      .then((resp) => {
+        console.log(resp)
+      })
+      .catch((err) => {
+        console.log('err', err)
+      })
+    }
   }
 
 
@@ -354,13 +406,36 @@ class DocComponent extends React.Component {
 
     return (
       <div className="RichEditor-root doc_container">
+
+        {this.state.cursor.top && (
+          <div id="cursor_div"
+            style={{
+              height: this.state.cursor.height,
+              top: this.state.cursor.top,
+              left: this.state.cursor.left
+            }}>
+          </div>
+        )}
+
         <Link to={'/dashboard'}><Button
           className='cyan'
           style={{color: 'white'}}
           waves='light' >
           Back to Portal
         </Button></Link>
-        <h4>Name: {this.state.docName}</h4>
+        <div style={{display: 'flex'}}>
+        <h4 style={{flex:4}}>Name: {this.state.docName}</h4>
+        <Input
+          s={5} offset={'s1'}
+          type="text"
+          value={this.state.collab}
+          placeholder="  Add Collaborators"
+          onChange={this.handleCollab}>
+          <Button floating waves='light' onClick={this.handleAdd}>
+            <Icon className='cyan' type="submit" value="Create component" >
+              add</Icon></Button>
+        </Input>
+        </div>
         <h5>ID: {this.state.currentDocument}</h5>
         <BlockStyleControls
           editorState={editorState}

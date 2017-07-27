@@ -86,7 +86,7 @@
 }
 #docs_container {
   padding: 25px;
-  border: 3px inset #cfd8dc;
+  /*border: 1px dashed #cfd8dc;*/
   margin-bottom: 25px;
 }
 #docs_container h3 {
@@ -102,10 +102,18 @@
   color: #263238;
 }
 
+
+#cursor_div {
+  width: 2px;
+
+  position: absolute;
+  background-color: red;
+}
+
+
 .font-color-yellow-darken-3 {
   color: #00838f
 }
-
 input[type=text].valid,
 input[type=text]:focus.valid,
 input[type=password].valid,

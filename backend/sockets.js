@@ -47,6 +47,12 @@ module.exports = function(io) {
       socket.to(socket.doc).emit('editor_change', state);
     });
 
+    // listener for curser move
+    socket.on('cursor_move', selection => {
+      console.log('cursor: ', selection.anchorOffset);
+      socket.to(socket.doc).emit('cursor_move', selection);
+    });
+
     socket.on('disconnect', ()  => {
       socket.leave(socket.doc);
       console.log('disconnected');

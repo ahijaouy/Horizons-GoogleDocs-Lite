@@ -60,27 +60,30 @@ class DocPortalComponent extends React.Component {
 
   handleCreate(e){
     e.preventDefault();
-    // const newState = this.state.currentDocs;
-    // const newDocsState = newState.concat({name: this.state.newDoc})
-    // this.setState({currentDocs: newDocsState, newDoc: ''})
-    // console.log(' lets make new docs', this.state.newDoc);
-    axios.post('http://localhost:3000/document',{
-      name: this.state.newDoc,
-      body: ''
-    })
-    .then((resp) => {
-      // console.log('curr docs', this.state.currentDocs);
-      const newState = this.state.currentDocs;
-      const newDocsState = newState.concat([resp.data]);
-      this.setState({currentDocs: newDocsState, newDoc: ''});
-    })
-    .catch((err) => {
-      console.log('err', err);
-    });
+    if(this.state.newDoc === ''){
+      alert('Please specify a Document Name!')
+    }else{
+      axios.post('http://localhost:3000/document',{
+        name: this.state.newDoc,
+        body: ''
+      })
+      .then((resp) => {
+        // console.log('curr docs', this.state.currentDocs);
+        const newState = this.state.currentDocs;
+        const newDocsState = newState.concat([resp.data]);
+        this.setState({currentDocs: newDocsState, newDoc: ''})
+      })
+      .catch((err) => {
+        console.log('err', err)
+      })
+    }
   }
 
   handleAdd(e){
     e.preventDefault();
+    if(this.state.newDoc === ''){
+      alert('Please specify a Document ID!')
+    }else{
     axios.post('http://localhost:3000/user',{
       id: this.state.sharedDoc
     })
@@ -88,24 +91,25 @@ class DocPortalComponent extends React.Component {
         // console.log(resp)
       })
       .catch((err) => {
-        console.log('err', err);
-      });
-
-
+        console.log('err', err)
+      })
+    }
   }
 
   handleSearch(e){
-    e.preventDefault();
-    // console.log(e.target.value)
-    this.setState({search: e.target.value});
-    const currDocs = this.state.currentDocs;
+    e.preventDefault()
+    console.log(e.target.value)
+    this.setState({search: e.target.value})
+    const currDocs = filterDocs(this.state.currentDocs, this.state.currentUser._id);
     const filteredDocs = currDocs.filter((item) => {
-      if(item.name.startsWith(e.target.value) || item._id === e.target.value){
-        return true;
+      console.log('item', item)
+      if(item.name.includes(e.target.value) || item._id === e.target.value){
+        return true
       }
-      return false;
-    });
-    this.setState({searchList: filteredDocs});
+      return false
+    })
+    // console.log('FD', filteredDocs)
+    this.setState({searchList: filteredDocs})
   }
 
   render() {
@@ -124,7 +128,7 @@ class DocPortalComponent extends React.Component {
           <form onSubmit={this.handleCreate}>
             <Input
               className='sidekick_icon'
-              
+
               s={5} offset={'s1'}
               type="text"
               value={this.state.newDoc}
