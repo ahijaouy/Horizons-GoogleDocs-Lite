@@ -110,7 +110,7 @@ class DocComponent extends React.Component {
      const selection = editorState.getSelection();
      if (this.previousHighlight) {
       editorState = EditorState.acceptSelection(editorState, this.previousHighlight);
-      editorState = RichUtils.toggleInlineStyle(editorState, 'color');
+      editorState = RichUtils.toggleInlineStyle(editorState, this.state.myColor);
       editorState = EditorState.acceptSelection(editorState, selection);
     }
 
