@@ -153,7 +153,7 @@ class DocComponent extends React.Component {
     // LISTENER FOR SUCCESSFUL JOIN DOC
     this.state.socket.on('joined_doc', myColor => {
       console.log('setting state with color', myColor)
-      this.setState({myColor})
+      this.setState({myColor});
     })
 
     // LISTENER FOR NEW USER JOINED DOC
