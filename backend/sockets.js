@@ -48,7 +48,7 @@ module.exports = function(io) {
     });
 
     socket.on('disconnect', ()  => {
-      currentColor--;
+      socket.leave(socket.doc);
       console.log('disconnected');
       socket.to(socket.doc).emit('user_left', socket.user);
     });

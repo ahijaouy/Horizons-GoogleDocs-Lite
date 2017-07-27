@@ -110,25 +110,8 @@ class DocPortalComponent extends React.Component {
 
   render() {
     return (
-      // <div id="portal_container">
-      //   <h1 style ={{textAlign: 'center'}}> Welcome {this.state.currentUser.name} </h1>
-      //     <input
-      //       type="text"
-      //       value={this.state.search}
-      //       placeholder="Search for Docs"
-      //       onChange={this.handleSearch}/>
-      //   <form onSubmit={this.handleCreate}>
-      //     <input
-      //       type="text"
-      //       value={this.state.newDoc}
-      //       placeholder="New Document Title"
-      //       onChange={this.handleNewDoc}/>
-      //       <input type="submit" value="Create component" onClick={this.handleCreate}/>
-      //   </form>
-      //   <div style={{/* SHOULD HAVE NONE!!!! */}}>
-
       <div id="portal_container">
-        <Row>
+        <Row id="portal_header">
           <Col s={12}><h1 style ={{textAlign: 'center'}}> Welcome {this.state.currentUser.name} </h1></Col>
           <Input
             s={5}
@@ -140,10 +123,12 @@ class DocPortalComponent extends React.Component {
           </Input>
           <form onSubmit={this.handleCreate}>
             <Input
+              className='sidekick_icon'
+              
               s={5} offset={'s1'}
               type="text"
               value={this.state.newDoc}
-              placeholder="  New Document Title"
+              placeholder="Create New Document"
               onChange={this.handleNewDoc}>
               <Button floating waves='light'>
                 <Icon className='cyan' type="submit" value="Create component" onClick={this.handleCreate}>
@@ -151,14 +136,18 @@ class DocPortalComponent extends React.Component {
             </Input>
           </form>
         </Row>
-        <div>
-          <h3>My Documents</h3>
-          {filterDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
-            {/* {this.state.search === '' ? this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
-          :this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))} */}
+        <div id="docs_container">
+          <Row><Col s={4} offset={'s4'}><h3>My Documents</h3></Col></Row>
+          <Row id="docs_list">{filterDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) =>
+            (<div key={i}>
+              <Col s={4} offset={'s1'}><Button large className='blue-grey lighten-3'>
+                <Link to={`/doc/${doc._id}`} className='doc_link'>{doc.name}</Link>
+              </Button></Col>
+            </div>)
+          )}</Row>
         </div>
-        <form onSubmit={this.handleAdd}>
-          <Row>
+        <Row>
+          <form onSubmit={this.handleAdd}>
             <Input
               s={5}
               type="text"
@@ -169,11 +158,31 @@ class DocPortalComponent extends React.Component {
             <Col s={1}>
               <Button className='cyan' type="submit" onClick={this.handleAdd}>Add Shared Doc</Button>
             </Col>
-          </Row>
-        </form>
+          </form>
+        </Row>
       </div>
     );
   }
 }
 
 export default DocPortalComponent;
+
+// old code:
+//{/* {this.state.search === '' ? this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
+//:this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))} */}
+// <div id="portal_container">
+//   <h1 style ={{textAlign: 'center'}}> Welcome {this.state.currentUser.name} </h1>
+//     <input
+//       type="text"
+//       value={this.state.search}
+//       placeholder="Search for Docs"
+//       onChange={this.handleSearch}/>
+//   <form onSubmit={this.handleCreate}>
+//     <input
+//       type="text"
+//       value={this.state.newDoc}
+//       placeholder="New Document Title"
+//       onChange={this.handleNewDoc}/>
+//       <input type="submit" value="Create component" onClick={this.handleCreate}/>
+//   </form>
+//   <div style={{/* SHOULD HAVE NONE!!!! */}}>

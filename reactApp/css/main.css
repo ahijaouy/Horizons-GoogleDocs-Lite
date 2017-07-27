@@ -78,8 +78,28 @@
 #portal_search_row {
 
 }
+.sidekick_icon Icon {
+  margin-right: 20px;
+}
 #portal_container {
-  padding: 55px;
+  padding: 25px;
+}
+#docs_container {
+  padding: 25px;
+  border: 3px inset #cfd8dc;
+  margin-bottom: 25px;
+}
+#docs_container h3 {
+  /*margin-left: 35%;*/
+}
+
+#docs_list Button {
+  margin: 20px;
+  width: 100%;
+}
+
+.doc_link {
+  color: #263238;
 }
 
 .font-color-yellow-darken-3 {

@@ -45,6 +45,10 @@ class DocComponent extends React.Component {
     this.handleShowHist = this.handleShowHist.bind(this);
     this.handleHideHist = this.handleHideHist.bind(this);
     this.renderPast = this.renderPast.bind(this);
+
+
+    this.previousHighlight = null;
+
   }
 
   _onChange (editorState) {
@@ -61,6 +65,8 @@ class DocComponent extends React.Component {
   handleSendSelection (editorState) {
     // const content = editorState.getCurrentContent();
     const selection = editorState.getSelection();
+
+    this.previousHighlight = selection;
 
     let toggledColor = this.state.myColor;
 
@@ -100,7 +106,15 @@ class DocComponent extends React.Component {
 
   handleSendText (editorState) {
     // const content = editorState.getCurrentContent();
-    const selection = editorState.getSelection();
+
+     const selection = editorState.getSelection();
+     if (this.previousHighlight) {
+      editorState = EditorState.acceptSelection(editorState, this.previousHighlight);
+      editorState = RichUtils.toggleInlineStyle(editorState, 'color');
+      editorState = EditorState.acceptSelection(editorState, selection);
+    }
+
+    // const selection = editorState.getSelection();
 
     let toggledColor = this.state.myColor;
 
@@ -117,6 +131,10 @@ class DocComponent extends React.Component {
       'change-inline-style'
     );
     console.log('NEW es with color:', nextEditorState);
+    this.setState({editorState: nextEditorState});
+
+    // editorState = RichUtils.toggleInlineStyle(editorState, 'RED');
+
     return convertToRaw(nextEditorState.getCurrentContent());
     // return convertToRaw(editorState.getCurrentContent());
   }
