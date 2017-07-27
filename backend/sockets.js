@@ -33,12 +33,11 @@ module.exports = function(io) {
       console.log('set socket.doc', socket.doc);
       socket.join(socket.doc, () => {
         console.log('reached join doc on server');
-
         // emit to everyone in doc that new user joined
         socket.emit('joined_doc', colors[currentColor]);
         socket.to(socket.doc).emit('user_joined', socket.user);
         console.log('emitted join to socket doc');
-        currentColor++;
+        currentColor = (currentColor === colors.length-1) ? 0 : currentColor+1;
       });
 
     });

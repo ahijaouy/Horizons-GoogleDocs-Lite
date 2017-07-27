@@ -6,6 +6,7 @@ import { Route, Switch } from 'react-router-dom';
 import DocPortalComponent from '../components/DocPortalComponent';
 import DocComponent from '../components/DocComponent';
 
+<Component socket={socket}>
 const socket = io('http://localhost:3000');
 
 export default function AppContainer() {

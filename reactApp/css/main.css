@@ -25,16 +25,22 @@
   border-radius: 5px;
 }
 
-.right-align {
+.right-align div {
   text-align: right;
 }
 
-.center-align {
+.center-align div {
   text-align: center;
-  .add_doc_btn * {
-    background-color: #00838f;
-    float: center
-  }
+}
+
+.left-align div {
+  text-align: left;
+}
+
+.add_doc_btn * {
+  background-color: #00838f;
+  float: center
+}
 
 #doc_btns {
   width: 100%;

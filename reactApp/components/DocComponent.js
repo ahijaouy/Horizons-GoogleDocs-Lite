@@ -72,12 +72,12 @@ class DocComponent extends React.Component {
     );
     const currentStyle = editorState.getCurrentInlineStyle();
 
-    // Unset style override for current color.
-    if (selection.isCollapsed()) {
-      nextEditorState = currentStyle.reduce((state, color) => {
-        return RichUtils.toggleInlineStyle(state, color);
-      }, nextEditorState);
-    }
+    // // Unset style override for current color.
+    // if (selection.isCollapsed()) {
+    //   nextEditorState = currentStyle.reduce((state, color) => {
+    //     return RichUtils.toggleInlineStyle(state, color);
+    //   }, nextEditorState);
+    // }
 
     // If the color is being toggled on, apply it.
     if (!currentStyle.has(toggledColor)) {
@@ -100,7 +100,7 @@ class DocComponent extends React.Component {
 
     const nextContentState = Object.keys(styleMap)
       .reduce((contentState, color) => {
-        if (color.startsWith('BACKGROUND'))
+        if (color === toggledColor)
         { return Modifier.removeInlineStyle(contentState, selection, color); }
         else
         { return contentState; }
@@ -149,7 +149,12 @@ class DocComponent extends React.Component {
       const currentUser = this.state.currentUser;
       this.state.socket.emit('join_doc', { currentDoc, currentUser});
     });
-  // });
+
+    // LISTENER FOR SUCCESSFUL JOIN DOC
+    this.state.socket.on('joined_doc', myColor => {
+      console.log('setting state with color', myColor)
+      this.setState({myColor})
+    })
 
     // LISTENER FOR NEW USER JOINED DOC
     this.state.socket.on('user_joined', newUser => {
@@ -161,17 +166,14 @@ class DocComponent extends React.Component {
     });
 
     // LISTENER FOR CHANGE IN EDITOR STATE
-    this.state.socket.on('editor_change', ({ content, selection }) => {
+    this.state.socket.on('editor_change', ({ content, selection, isSelection }) => {
       console.log('new selection state', JSON.parse(content), 'vs.');
       const parsedBody = JSON.parse(content);
       const finalBody = convertFromRaw(parsedBody);
-      const newES = EditorState.createWithContent(finalBody)
-      this.setState({editorState: newES});
+      // const newES = EditorState.createWithContent(finalBody)
+      const newES = (isSelection) ? EditorState.acceptSelection(finalBody) : EditorState.createWithContent(finalBody);
 
-      // const editorState = this.state.editorState;
-      // const otherSelection = JSON.parse(selection);
-      //
-      // this.toggleColorHelper('indigo', {editorState}, otherSelection);
+      this.setState({editorState: newES});
     });
 
     // LISTENER FOR ERROR MSG FROM SOCKET
@@ -181,6 +183,7 @@ class DocComponent extends React.Component {
     /* ***** END SOCKET FUNCTIONS ***** */
   }
 
+  //
   handleTextUpdate(){
     axios.get('http://localhost:3000/document')
     .then(response => {
@@ -264,7 +267,8 @@ class DocComponent extends React.Component {
     const {editorState} = this.state;
     const selection = editorState.getSelection();
     // console.log('this: ',this,'editorState',editorState);
-    this.toggleColorHelper(toggledColor, {editorState}, selection);
+    const newES = this.toggleColorHelper(toggledColor, {editorState}, selection);
+    this.setState({editorState: newES});
   }
 
   toggleColorHelper(toggledColor, {editorState}, selection) {
@@ -297,6 +301,8 @@ class DocComponent extends React.Component {
         toggledColor
       );
     }
+
+    return nextEditorState;
   }
 
   render() {

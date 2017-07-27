@@ -28,13 +28,13 @@ const styleMap = {
   violet: { color: 'rgba(127, 0, 255, 1.0)', },
 
   // BACKGROUND COLOR STYLES
-  BACKGROUND_RED: { backgroundColor: 'rgba(200,0,0,0.2)'},
-  BACKGROUND_ORANGE: { backgroundColor: 'rgba(200,0,0,0.2)'},
-  BACKGROUND_YELLOW: { backgroundColor: 'rgba(200,0,0,0.2)'},
-  BACKGROUND_GREEN: { backgroundColor: 'rgba(200,0,0,0.2)'},
-  BACKGROUND_BLUE: { backgroundColor: 'rgba(0,200,0,0.2)'},
-  BACKGROUND_INDIGO: { backgroundColor: 'rgba(0,0,200,0.2)'},
-  BACKGROUND_VIOLET: { backgroundColor: 'rgba(0,0,200,0.2)'},
+  BACKGROUND_RED: { backgroundColor: 'rgba(255, 0, 0, 0.4)'},
+  BACKGROUND_ORANGE: { backgroundColor: 'rgba(255, 127, 0, 0.4)'},
+  BACKGROUND_YELLOW: { backgroundColor: 'rgba(180, 180, 0, 0.4)'},
+  BACKGROUND_GREEN: { backgroundColor: 'rgba(0, 180, 0, 0.4)'},
+  BACKGROUND_BLUE: { backgroundColor: 'rgba(0, 0, 255, 0.4)'},
+  BACKGROUND_INDIGO: { backgroundColor: 'rgba(15, 0, 130, 0.4)'},
+  BACKGROUND_VIOLET: { backgroundColor: 'rgba(227, 0, 255, 0.4)'},
 };
 
 // METHODS AND OBJECTS FOR BLOCK STYLES:
