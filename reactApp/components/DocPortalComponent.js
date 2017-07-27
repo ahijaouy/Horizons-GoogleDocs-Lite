@@ -61,27 +61,30 @@ class DocPortalComponent extends React.Component {
 
   handleCreate(e){
     e.preventDefault();
-    // const newState = this.state.currentDocs;
-    // const newDocsState = newState.concat({name: this.state.newDoc})
-    // this.setState({currentDocs: newDocsState, newDoc: ''})
-    // console.log(' lets make new docs', this.state.newDoc);
-    axios.post('http://localhost:3000/document',{
-      name: this.state.newDoc,
-      body: ''
-    })
-    .then((resp) => {
-      // console.log('curr docs', this.state.currentDocs);
-      const newState = this.state.currentDocs;
-      const newDocsState = newState.concat([resp.data]);
-      this.setState({currentDocs: newDocsState, newDoc: ''})
-    })
-    .catch((err) => {
-      console.log('err', err)
-    })
+    if(this.state.newDoc === ''){
+      alert('Please specify a Document Name!')
+    }else{
+      axios.post('http://localhost:3000/document',{
+        name: this.state.newDoc,
+        body: ''
+      })
+      .then((resp) => {
+        // console.log('curr docs', this.state.currentDocs);
+        const newState = this.state.currentDocs;
+        const newDocsState = newState.concat([resp.data]);
+        this.setState({currentDocs: newDocsState, newDoc: ''})
+      })
+      .catch((err) => {
+        console.log('err', err)
+      })
+    }
   }
 
   handleAdd(e){
     e.preventDefault();
+    if(this.state.newDoc === ''){
+      alert('Please specify a Document ID!')
+    }else{
     axios.post('http://localhost:3000/user',{
       id: this.state.sharedDoc
     })
@@ -91,21 +94,22 @@ class DocPortalComponent extends React.Component {
       .catch((err) => {
         console.log('err', err)
       })
-
-
+    }
   }
 
   handleSearch(e){
     e.preventDefault()
-    // console.log(e.target.value)
+    console.log(e.target.value)
     this.setState({search: e.target.value})
-    const currDocs = this.state.currentDocs;
+    const currDocs = filterDocs(this.state.currentDocs, this.state.currentUser._id);
     const filteredDocs = currDocs.filter((item) => {
-      if(item.name.startsWith(e.target.value) || item._id === e.target.value){
+      console.log('item', item)
+      if(item.name.includes(e.target.value) || item._id === e.target.value){
         return true
       }
       return false
     })
+    // console.log('FD', filteredDocs)
     this.setState({searchList: filteredDocs})
   }
 
@@ -154,9 +158,8 @@ class DocPortalComponent extends React.Component {
         </Row>
         <div>
           <h3>My Documents</h3>
-          {filterDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
-            {/* {this.state.search === '' ? this.state.currentDocs.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))
-          :this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))} */}
+          {!this.state.search ? filterDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link><button>abc</button></div>))
+          :this.state.searchList.map((doc, i) => (<div key={i}><Link to={`/doc/${doc._id}`}>{doc.name}</Link></div>))}
         </div>
         <form onSubmit={this.handleAdd}>
           <Row>
