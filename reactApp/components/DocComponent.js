@@ -179,7 +179,13 @@ class DocComponent extends React.Component {
     // LISTENER FOR ERROR MSG FROM SOCKET
     this.state.socket.on('errorMessage', msg => {
       console.log('ERROR FROM SOCKETS:', msg);
-    })
+    });
+
+    // LISTENERG FOR USER LEAVE DOC
+    this.state.socket.on('user_left', username => {
+      console.log('left: ', username);
+    });
+
     /* ***** END SOCKET FUNCTIONS ***** */
   }
 
