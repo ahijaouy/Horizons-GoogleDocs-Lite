@@ -29,11 +29,11 @@ const styleMap = {
   // BACKGROUND COLOR STYLES
   BACKGROUND_RED: { backgroundColor: 'rgba(255, 0, 0, 0.4)'},
   BACKGROUND_ORANGE: { backgroundColor: 'rgba(255, 127, 0, 0.4)'},
-  BACKGROUND_YELLOW: { backgroundColor: 'rgba(180, 180, 0, 0.4)'},
-  BACKGROUND_GREEN: { backgroundColor: 'rgba(0, 180, 0, 0.4)'},
-  BACKGROUND_BLUE: { backgroundColor: 'rgba(0, 0, 255, 0.4)'},
-  BACKGROUND_INDIGO: { backgroundColor: 'rgba(15, 0, 130, 0.4)'},
-  BACKGROUND_VIOLET: { backgroundColor: 'rgba(227, 0, 255, 0.4)'},
+  BACKGROUND_YELLOW: { backgroundColor: 'rgba(250, 250, 0, 0.4)'},
+  BACKGROUND_GREEN: { backgroundColor: 'rgba(0, 180, 0, 0.3)'},
+  BACKGROUND_BLUE: { backgroundColor: 'rgba(0, 0, 205, 0.3)'},
+  BACKGROUND_INDIGO: { backgroundColor: 'rgba(15, 0, 130, 0.3)'},
+  BACKGROUND_VIOLET: { backgroundColor: 'rgba(227, 0, 255, 0.3)'},
 };
 
 // METHODS AND OBJECTS FOR BLOCK STYLES:
