@@ -81,7 +81,7 @@ class DocPortalComponent extends React.Component {
 
   handleAdd(e){
     e.preventDefault();
-    if(this.state.newDoc === ''){
+    if(this.state.sharedDoc === ''){
       alert('Please specify a Document ID!')
     }else{
     axios.post('http://localhost:3000/user',{
@@ -93,7 +93,9 @@ class DocPortalComponent extends React.Component {
       .catch((err) => {
         console.log('err', err)
       })
+      this.setState({sharedDoc: ''})
     }
+
   }
 
   handleSearch(e){
