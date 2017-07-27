@@ -23,7 +23,9 @@ export function Login({ username, password, user, changeUsername, changePassword
       <Row>
           <Col s={6} offset={"s3"} >
             <form
-              onSubmit={()=>login()}>
+              onSubmit={(e)=>{
+                e.preventDefault();
+                login()}}>
               <Card
                 className='white darken-1'
                 title='Login'
@@ -31,7 +33,8 @@ export function Login({ username, password, user, changeUsername, changePassword
                   <Button key={"loginButton"}
                     className='light-blue darken-1'
                     waves='light'
-                    onClick={() => login()}>
+                    // onClick={() => login()}
+                    >
                     Login</Button>]}>
                   <span></span>
                   <Row>
