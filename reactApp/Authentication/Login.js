@@ -23,22 +23,28 @@ export function Login({ username, password, user, changeUsername, changePassword
     <div>
       <Row>
           <Col s={6} offset={"s3"} >
-            <Card
-              className='white darken-1'
-              title='Login'
-              actions={[
-                <Button key={"loginButton"}
-                  className='light-blue darken-1'
-                  waves='light'
-                  onClick={() => login()}>
-                  Login</Button>]}>
-                <span></span>
-                {loginFailed ? <Row><h4>Login Failed</h4></Row> : <div></div>}
-                <Row>
-                  <Input s={6} label="Username" validate onChange={(e) => changeUsername(e.target.value)}/>
-                  <Input s={6} label="Password" type='password' validate onChange={(e) => changePassword(e.target.value)} />
-                </Row>
-            </Card>
+            <form
+              onSubmit={(e)=>{
+                e.preventDefault();
+                login();}}>
+              <Card
+                className='white darken-1'
+                title='Login'
+                actions={[
+                  <Button key={"loginButton"}
+                    className='light-blue darken-1'
+                    waves='light'
+                    // onClick={() => login()}
+                    >
+                    Login</Button>]}>
+                  <span></span>
+                  {loginFailed ? <Row><h4>Login Failed</h4></Row> : <div></div>}
+                  <Row>
+                    <Input s={6} label="Username" validate onChange={(e) => changeUsername(e.target.value)}/>
+                    <Input s={6} label="Password" type='password' validate onChange={(e) => changePassword(e.target.value)} />
+                  </Row>
+              </Card>
+            </form>
           </Col>
         </Row>
     </div>

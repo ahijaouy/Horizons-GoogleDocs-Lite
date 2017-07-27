@@ -16,7 +16,9 @@ import { Row,
          Col,
          Button,
          Input,
-         Icon} from 'react-materialize';
+         Icon } from 'react-materialize';
+
+import myKeyBindingFn from './KeyBindings';
 
 class DocComponent extends React.Component {
   constructor (props) {
@@ -135,7 +137,7 @@ class DocComponent extends React.Component {
       response.data.forEach((doc) => {
         // console.log('doc', doc);
         if(doc._id === this.state.currentDocument){
-          this.setState({docName: doc.name})
+          this.setState({docName: doc.name});
           this.setState({collabArray: doc.collaborators});
           const parsedBody = doc.body ? JSON.parse(doc.body) : JSON.parse('{}');
           const finalBody = convertFromRaw(parsedBody);
@@ -166,9 +168,9 @@ class DocComponent extends React.Component {
 
     // LISTENER FOR SUCCESSFUL JOIN DOC
     this.state.socket.on('joined_doc', myColor => {
-      console.log('setting state with color', myColor)
+      console.log('setting state with color', myColor);
       this.setState({myColor});
-    })
+    });
 
     // LISTENER FOR NEW USER JOINED DOC
     this.state.socket.on('user_joined', newUser => {
@@ -254,19 +256,19 @@ class DocComponent extends React.Component {
 
   handleAdd(){
     if(this.state.collab === ''){
-      alert('Please specify a Collaborator Name or ID!')
+      alert('Please specify a Collaborator Name or ID!');
     }else{
-      console.log('broke before axios')
-    axios.post('http://localhost:3000/user',{
-      name: this.state.collab,
-      id: this.state.currentDocument
-    })
+      console.log('broke before axios');
+      axios.post('http://localhost:3000/user',{
+        name: this.state.collab,
+        id: this.state.currentDocument
+      })
       .then((resp) => {
-        console.log(resp)
+        console.log(resp);
       })
       .catch((err) => {
-        console.log('err', err)
-      })
+        console.log('err', err);
+      });
     }
   }
 
@@ -281,7 +283,11 @@ class DocComponent extends React.Component {
       this._onChange(newState);
       return true;
     }
-    return false;
+    if(command === 'myeditor-save'){
+      this.handleTextUpdate();
+      return 'handled';
+    }
+    return 'unhandled';
   }
 
   _onTab (e) {
@@ -407,6 +413,7 @@ class DocComponent extends React.Component {
             customStyleMap={styleMap}
             editorState={editorState}
             handleKeyCommand={this.handleKeyCommand}
+            keyBindingFn={myKeyBindingFn}
             onChange={this.onChange}
             onTab={this.onTab}
             placeholder="Tell a story..."
