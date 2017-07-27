@@ -14,7 +14,9 @@ import  { styleMap,
           myBlockTypes } from './DocComponentStyles';
 import { Row,
          Col,
-         Button } from 'react-materialize';
+         Button,
+         Input,
+         Icon } from 'react-materialize';
 
 import myKeyBindingFn from './KeyBindings';
 
@@ -163,9 +165,9 @@ class DocComponent extends React.Component {
 
     // LISTENER FOR SUCCESSFUL JOIN DOC
     this.state.socket.on('joined_doc', myColor => {
-      console.log('setting state with color', myColor)
+      console.log('setting state with color', myColor);
       this.setState({myColor});
-    })
+    });
 
     // LISTENER FOR NEW USER JOINED DOC
     this.state.socket.on('user_joined', newUser => {
@@ -251,19 +253,19 @@ class DocComponent extends React.Component {
 
   handleAdd(){
     if(this.state.collab === ''){
-      alert('Please specify a Collaborator Name or ID!')
+      alert('Please specify a Collaborator Name or ID!');
     }else{
-      console.log('broke before axios')
-    axios.post('http://localhost:3000/user',{
-      name: this.state.collab,
-      id: this.state.currentDocument
-    })
+      console.log('broke before axios');
+      axios.post('http://localhost:3000/user',{
+        name: this.state.collab,
+        id: this.state.currentDocument
+      })
       .then((resp) => {
-        console.log(resp)
+        console.log(resp);
       })
       .catch((err) => {
-        console.log('err', err)
-      })
+        console.log('err', err);
+      });
     }
   }
 
@@ -401,7 +403,7 @@ class DocComponent extends React.Component {
         <div className={className} onClick={this.focus}>
           <Editor
             blockStyleFn={getBlockStyle}
-            blockRenderMap ={myBlockTypes}
+            // blockRenderMap ={myBlockTypes}
             customStyleMap={styleMap}
             editorState={editorState}
             handleKeyCommand={this.handleKeyCommand}
