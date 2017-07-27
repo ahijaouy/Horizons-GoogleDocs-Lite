@@ -68,11 +68,16 @@ router.post('/user', function(req,res){
     Document.find({_id: currentDocument}, function(err,result){
       User.find({name: addUserName}, function(error, result2){
         collaborators = result[0].collaborators
-        console.log('res 2', result2);
+        if(!result2[0]){
+          console.log('not found');
+          res.send('User not found');
+        }else{
+          console.log('user found');
         const newCollab = collaborators.concat([result2[0]]);
         Document.findOneAndUpdate({_id: currentDocument},{ collaborators: newCollab },function(err, result){
           res.send(result);
         });
+      }
       })
     })
   }

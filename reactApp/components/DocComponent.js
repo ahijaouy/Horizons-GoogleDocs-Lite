@@ -14,7 +14,9 @@ import  { styleMap,
           myBlockTypes } from './DocComponentStyles';
 import { Row,
          Col,
-         Button } from 'react-materialize';
+         Button,
+         Input,
+         Icon} from 'react-materialize';
 
 class DocComponent extends React.Component {
   constructor (props) {
