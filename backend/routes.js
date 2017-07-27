@@ -54,17 +54,8 @@ router.get('/user', function(req,res){
 
 router.post('/user', function(req,res){
   const currentDocument = req.body.id
-  const addUserName = req.body.name
+  const addUserName = req.body.name ? req.body.name : req.user.name
   let collaborators = []
-  if(!addUserName){
-    Document.find({_id: currentDocument}, function(err,result){
-      collaborators = result[0].collaborators
-      const newCollab = collaborators.concat([req.user]);
-      Document.findOneAndUpdate({_id: currentDocument},{ collaborators: newCollab },function(err, result){
-        res.send(result);
-      });
-    })
-  }else{
     Document.find({_id: currentDocument}, function(err,result){
       User.find({name: addUserName}, function(error, result2){
         collaborators = result[0].collaborators
@@ -91,8 +82,50 @@ router.post('/user', function(req,res){
         }
       })
     })
-  }
-})
+  })
+
+
+// router.post('/user', function(req,res){
+//   const currentDocument = req.body.id
+//   const addUserName = req.body.name ?
+//   let collaborators = []
+//   if(!addUserName){
+//     Document.find({_id: currentDocument}, function(err,result){
+//       collaborators = result[0].collaborators
+//       const newCollab = collaborators.concat([req.user]);
+//       Document.findOneAndUpdate({_id: currentDocument},{ collaborators: newCollab },function(err, result){
+//         res.send(result);
+//       });
+//     })
+//   }else{
+//     Document.find({_id: currentDocument}, function(err,result){
+//       User.find({name: addUserName}, function(error, result2){
+//         collaborators = result[0].collaborators
+//         if(!result2[0]){
+//           console.log('not found');
+//           res.send('User not found');
+//         }else{
+//           console.log('user found');
+//           let found = false
+//           collaborators.forEach((user) => {
+//             console.log(' here', String(user._id) ,String(result2[0]._id));
+//             console.log(' also here', String(user._id) === String(result2[0]._id));
+//             if(String(user._id) === String(result2[0]._id)){
+//               found = true
+//             }
+//           })
+//           console.log('found, ', found);
+//           if(found === false){
+//             const newCollab = collaborators.concat([result2[0]]);
+//             Document.findOneAndUpdate({_id: currentDocument},{ collaborators: newCollab },function(err, result){
+//               res.send(result);
+//             });
+//           }
+//         }
+//       })
+//     })
+//   }
+// })
 
 // router.post('/collab', function(req,res){
 //   const currentDocument = req.body.id

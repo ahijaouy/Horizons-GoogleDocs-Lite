@@ -267,6 +267,8 @@ class DocComponent extends React.Component {
       .catch((err) => {
         console.log('err', err)
       })
+      this.setState({collab: ''})
+
     }
   }
 
