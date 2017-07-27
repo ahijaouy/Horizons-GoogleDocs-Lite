@@ -73,15 +73,25 @@ router.post('/user', function(req,res){
           res.send('User not found');
         }else{
           console.log('user found');
-        const newCollab = collaborators.concat([result2[0]]);
-        Document.findOneAndUpdate({_id: currentDocument},{ collaborators: newCollab },function(err, result){
-          res.send(result);
-        });
-      }
+          let found = false
+          collaborators.forEach((user) => {
+            console.log(' here', String(user._id) ,String(result2[0]._id));
+            console.log(' also here', String(user._id) === String(result2[0]._id));
+            if(String(user._id) === String(result2[0]._id)){
+              found = true
+            }
+          })
+          console.log('found, ', found);
+          if(found === false){
+            const newCollab = collaborators.concat([result2[0]]);
+            Document.findOneAndUpdate({_id: currentDocument},{ collaborators: newCollab },function(err, result){
+              res.send(result);
+            });
+          }
+        }
       })
     })
   }
-
 })
 
 // router.post('/collab', function(req,res){

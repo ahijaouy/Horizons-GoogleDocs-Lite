@@ -32,7 +32,8 @@ class DocComponent extends React.Component {
       docUsers: [],
       history: [],
       showHist: false,
-      collab: ''
+      collab: '',
+      collabArray: []
     };
     this.focus = () => this.refs.editor.focus();
     // this.onChange = (editorState) => this.setState({editorState});
@@ -132,8 +133,10 @@ class DocComponent extends React.Component {
     axios.get('http://localhost:3000/document')
     .then(response => {
       response.data.forEach((doc) => {
+        // console.log('doc', doc);
         if(doc._id === this.state.currentDocument){
-          this.setState({docName: doc.name});
+          this.setState({docName: doc.name})
+          this.setState({collabArray: doc.collaborators});
           const parsedBody = doc.body ? JSON.parse(doc.body) : JSON.parse('{}');
           const finalBody = convertFromRaw(parsedBody);
           this.setState({editorState: EditorState.createWithContent(finalBody)});
@@ -382,6 +385,9 @@ class DocComponent extends React.Component {
             <Icon className='cyan' type="submit" value="Create component" >
               add</Icon></Button>
         </Input>
+        <div>
+        {this.state.collabArray.map((user) => (<div>{user.name}</div>))}
+      </div>
         </div>
         <h5>ID: {this.state.currentDocument}</h5>
         <BlockStyleControls
