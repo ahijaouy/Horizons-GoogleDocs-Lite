@@ -32,6 +32,7 @@ class DocComponent extends React.Component {
       docUsers: [],
       history: [],
       showHist: false,
+      collab: ''
     };
     this.focus = () => this.refs.editor.focus();
     // this.onChange = (editorState) => this.setState({editorState});
@@ -47,6 +48,8 @@ class DocComponent extends React.Component {
     this.handleShowHist = this.handleShowHist.bind(this);
     this.handleHideHist = this.handleHideHist.bind(this);
     this.renderPast = this.renderPast.bind(this);
+    this.handleCollab = this.handleCollab.bind(this);
+    this.handleAdd = this.handleAdd.bind(this);
   }
 
   _onChange (editorState) {
@@ -160,9 +163,9 @@ class DocComponent extends React.Component {
 
     // LISTENER FOR SUCCESSFUL JOIN DOC
     this.state.socket.on('joined_doc', myColor => {
-      console.log('setting state with color', myColor);
+      console.log('setting state with color', myColor)
       this.setState({myColor});
-    });
+    })
 
     // LISTENER FOR NEW USER JOINED DOC
     this.state.socket.on('user_joined', newUser => {
@@ -188,6 +191,16 @@ class DocComponent extends React.Component {
     this.state.socket.on('errorMessage', msg => {
       console.log('ERROR FROM SOCKETS:', msg);
     });
+
+    // LISTENING FOR USER LEAVE DOC
+    this.state.socket.on('user_left', username => {
+      const i = this.state.docUsers.indexOf(username);
+      if (i >= 0) {
+        const newUsers = this.state.docUsers.slice(0, i).concat(this.state.docUsers.slice(i+1, this.state.docUsers.length));
+        this.setState({docUsers: newUsers });
+      }
+    });
+
     /* ***** END SOCKET FUNCTIONS ***** */
   }
 
@@ -229,6 +242,29 @@ class DocComponent extends React.Component {
     const parsedBody = JSON.parse(past);
     const finalBody = convertFromRaw(parsedBody);
     this.setState({editorState: EditorState.createWithContent(finalBody)});
+  }
+
+  handleCollab(e){
+    e.preventDefault();
+    this.setState({collab: e.target.value});
+  }
+
+  handleAdd(){
+    if(this.state.collab === ''){
+      alert('Please specify a Collaborator Name or ID!')
+    }else{
+      console.log('broke before axios')
+    axios.post('http://localhost:3000/user',{
+      name: this.state.collab,
+      id: this.state.currentDocument
+    })
+      .then((resp) => {
+        console.log(resp)
+      })
+      .catch((err) => {
+        console.log('err', err)
+      })
+    }
   }
 
 
@@ -338,7 +374,19 @@ class DocComponent extends React.Component {
           waves='light' >
           Back to Portal
         </Button></Link>
-        <h4>Name: {this.state.docName}</h4>
+        <div style={{display: 'flex'}}>
+        <h4 style={{flex:4}}>Name: {this.state.docName}</h4>
+        <Input
+          s={5} offset={'s1'}
+          type="text"
+          value={this.state.collab}
+          placeholder="  Add Collaborators"
+          onChange={this.handleCollab}>
+          <Button floating waves='light' onClick={this.handleAdd}>
+            <Icon className='cyan' type="submit" value="Create component" >
+              add</Icon></Button>
+        </Input>
+        </div>
         <h5>ID: {this.state.currentDocument}</h5>
         <BlockStyleControls
           editorState={editorState}
