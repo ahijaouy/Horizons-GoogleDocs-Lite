@@ -20,6 +20,7 @@ router.get('/logout', function(req, res) {
   req.logout();
   res.send('logout');
 });
+
 router.post('/document', function (req, res) {
   console.log('user', req.user);
   const newDocument = new Document({
@@ -70,6 +71,7 @@ router.get('/user', function(req,res){
 router.post('/user', function(req,res){
   const currentDocument = req.body.id;
   const addUserName = req.body.name ? req.body.name : req.user.name;
+  console.log('addUserName', addUserName);
   let collaborators = [];
   Document.find({_id: currentDocument}, function(err,result){
     User.find({name: addUserName}, function(error, result2){
@@ -81,8 +83,6 @@ router.post('/user', function(req,res){
         console.log('user found');
         let found = false;
         collaborators.forEach((user) => {
-          console.log(' here', String(user._id) ,String(result2[0]._id));
-          console.log(' also here', String(user._id) === String(result2[0]._id));
           if(String(user._id) === String(result2[0]._id)){
             found = true;
           }
@@ -91,7 +91,7 @@ router.post('/user', function(req,res){
         if(found === false){
           const newCollab = collaborators.concat([result2[0]]);
           Document.findOneAndUpdate({_id: currentDocument},{ collaborators: newCollab },function(err, result){
-            res.json(result);
+            res.send(result);
           });
         }
       }

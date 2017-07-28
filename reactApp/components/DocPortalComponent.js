@@ -6,6 +6,7 @@ import { Row, Col, Input, Button, Icon } from 'react-materialize';
 function filterDocs(array, user_id){
   // console.log('FD', array, user_id)
   const userDocs = [];
+  console.log("fdarr", array);
   array.forEach((doc) => {
     // console.log('doc', doc)
     doc.collaborators.forEach((user) => {
@@ -15,6 +16,7 @@ function filterDocs(array, user_id){
       }
     });
   });
+  console.log("fd", userDocs);
   return userDocs;
 }
 
@@ -68,7 +70,6 @@ class DocPortalComponent extends React.Component {
         body: ''
       })
       .then((resp) => {
-        // console.log('curr docs', this.state.currentDocs);
         const newState = this.state.currentDocs;
         const newDocsState = newState.concat([resp.data]);
         this.setState({currentDocs: newDocsState, newDoc: ''})
@@ -81,25 +82,29 @@ class DocPortalComponent extends React.Component {
 
   handleAdd(e){
     e.preventDefault();
+    console.log('initial docs', this.state.currentDocs);
     if(this.state.sharedDoc === ''){
       alert('Please specify a Document ID!')
     }else{
-    axios.post('http://localhost:3000/user',{
-      id: this.state.sharedDoc
-    })
-      .then((resp) => {
-        console.log('AXIOS RESP:',resp)
-        // const newDocs = [...this.state.currentDocs, resp.data];
-        const newState = this.state.currentDocs;
-        const newDocsState = newState.concat([resp.data]);
-        this.setState({currentDocs: newDocsState, sharedDoc: ''})
-        // this.setState({currentDocs: newDocs, sharedDoc: ''});
+      axios.post('http://localhost:3000/user',{
+        id: this.state.sharedDoc
       })
-      .catch((err) => {
-        console.log('err', err)
-      })
-    }
+        .then((resp) => {
+          axios.get('http://localhost:3000/document')
+            .then(response => {
+              this.setState({currentDocs: response.data});
+            });
 
+          // console.log('resp data', resp.data);
+          // const newState2 = this.state.currentDocs.slice();
+          // const newDocsState2 = newState2.concat([resp.data]);
+          // console.log('newDocState', newDocsState2);
+          // this.setState({currentDocs: newDocsState2, sharedDoc: ''})
+        })
+        .catch((err) => {
+          console.log('err', err)
+        })
+    }
   }
 
   handleSearch(e){
@@ -108,7 +113,7 @@ class DocPortalComponent extends React.Component {
     this.setState({search: e.target.value})
     const currDocs = filterDocs(this.state.currentDocs, this.state.currentUser._id);
     const filteredDocs = currDocs.filter((item) => {
-      console.log('item', item.name, e.target.value)
+      // console.log('item', item.name, e.target.value)
       if(item.name.includes(e.target.value) || item._id === e.target.value){
         return true
       }
@@ -119,6 +124,7 @@ class DocPortalComponent extends React.Component {
   }
 
   render() {
+    console.log('rendering');
     return (
       <div id="portal_container">
         <Row id="portal_header">
@@ -149,7 +155,7 @@ class DocPortalComponent extends React.Component {
           <Row><Col s={4} offset={'s4'}><h3>My Documents</h3></Col></Row>
           <Row id="docs_list">
             {!this.state.search ? filterDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) =>
-            (<div key={i}>
+            (<div key={doc._id}>
               <Col s={12} m={6} l={4}>
                 <Link to={`/doc/${doc._id}/${this.state.currentUser.name}`} className='doc_link'>
                 <Button large className='blue-grey lighten-3'>
@@ -175,10 +181,10 @@ class DocPortalComponent extends React.Component {
               value={this.state.sharedDoc}
               placeholder="Paste a doc ID"
               onChange={this.handleSharedDoc}>
-            </Input>
-            <Col s={1}>
-              <Button className='cyan' type="submit" onClick={this.handleAdd}>Add Shared Doc</Button>
-            </Col>
+              <Button floating waves='light'>
+                <Icon className='cyan' type="submit" value="Create component" onClick={this.handleAdd}>
+                  add</Icon></Button>
+          </Input>
           </form>
         </Row>
       </div>
