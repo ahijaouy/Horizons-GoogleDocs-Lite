@@ -88,12 +88,16 @@ class DocPortalComponent extends React.Component {
       id: this.state.sharedDoc
     })
       .then((resp) => {
-        // console.log(resp)
+        console.log('AXIOS RESP:',resp)
+        // const newDocs = [...this.state.currentDocs, resp.data];
+        const newState = this.state.currentDocs;
+        const newDocsState = newState.concat([resp.data]);
+        this.setState({currentDocs: newDocsState, sharedDoc: ''})
+        // this.setState({currentDocs: newDocs, sharedDoc: ''});
       })
       .catch((err) => {
         console.log('err', err)
       })
-      this.setState({sharedDoc: ''})
     }
 
   }

@@ -91,7 +91,7 @@ router.post('/user', function(req,res){
         if(found === false){
           const newCollab = collaborators.concat([result2[0]]);
           Document.findOneAndUpdate({_id: currentDocument},{ collaborators: newCollab },function(err, result){
-            res.send(result);
+            res.json(result);
           });
         }
       }
