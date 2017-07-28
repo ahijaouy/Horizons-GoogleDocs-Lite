@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Editor,
          EditorState,
          Modifier,
-         RichUtils, 
+         RichUtils,
          convertToRaw,
          convertFromRaw } from 'draft-js';
 import  { styleMap,
@@ -455,13 +455,13 @@ class DocComponent extends React.Component {
               icon='arrow_back'>
             </Button></Link>
           </Col>
-          <Col s={4} m={4} /*offset={'m1'}*/ l={3}>
+          <Col s={8} m={8} /*offset={'m1'}*/ l={8}>
             <Modal large
               header='Change document name:'
               TopSheet
               style={{flex:4}}
               trigger={
-                <Button waves='light'>{this.state.docName}</Button>
+                <Button waves='light' className='cyan'>{this.state.docName}</Button>
               }
               actions={
                 <Button className='modal-close' onClick={this.handleSubmitName}>Submit</Button>
@@ -470,36 +470,39 @@ class DocComponent extends React.Component {
               <Input value={this.state.docName} onChange={this.handleNameChange}/>
             </Modal>
           </Col>
+          <Col s={2} m={2} l={2}>
+            <Modal
+              header='Add Collaborators'
+              TopSheet
+              style={{flex:4}}
+              trigger={
+                <Button waves='light' className='cyan'>
+                  <Icon className='cyan' type="submit" value="Create component" >
+                  add</Icon>
+                </Button>
+              }
+              actions={
+                <Button className='modal-close' floating waves='light' onClick={this.handleAdd}>
+                  Submit</Button>
+              }
+              dismissable={true}>
+              <div>
+                <strong>Shareable ID: {this.state.currentDocument}</strong>
+                <br /><br />
+                <strong>Current Collaborators : </strong>
+                {this.state.collabArray.map((user, i) => (<div key={i}>{user.name}</div>))}
+              </div>
+              <Input
+                s={5} offset={'s1'}
+                type="text"
+                value={this.state.collab}
+                placeholder="  Add a Collaborator"
+                onChange={this.handleCollab}>
+              </Input>
+            </Modal>
+          </Col>
         </Row>
 
-        <Modal
-          header='Add Collaborators'
-          TopSheet
-          style={{flex:4}}
-          trigger={
-            <Button waves='light'><Icon className='cyan' type="submit" value="Create component" >
-              add</Icon></Button>
-          }
-          actions={
-            <Button className='modal-close' floating waves='light' onClick={this.handleAdd}>
-              Submit</Button>
-          }
-          dismissable={true}>
-          <div><strong>Current Collaborators : </strong>  {this.state.collabArray.map((user, i) => (<div key={i}>{user.name}</div>))}</div>
-          <Input
-            s={5} offset={'s1'}
-            type="text"
-            value={this.state.collab}
-            placeholder="  Add Collaborators"
-            onChange={this.handleCollab}>
-          </Input>
-        </Modal>
-
-        {/* <div> */}
-        {/* {this.state.collabArray.map((user, i) => (<div key={i}>{user.name}</div>))} */}
-      {/* </div> */}
-        {/* </div> */}
-        <h5>ID: {this.state.currentDocument}</h5>
         <BlockStyleControls
           editorState={editorState}
           onToggle={this.toggleBlockType}
