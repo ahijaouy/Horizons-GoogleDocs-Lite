@@ -472,18 +472,31 @@ class DocComponent extends React.Component {
           </Col>
         </Row>
 
-        <Input
-          s={5} offset={'s1'}
-          type="text"
-          value={this.state.collab}
-          placeholder="  Add Collaborators"
-          onChange={this.handleCollab}>
-          <Button floating waves='light' onClick={this.handleAdd}>
-            <Icon className='cyan' type="submit" value="Create component" >
+        <Modal
+          header='Add Collaborators'
+          TopSheet
+          style={{flex:4}}
+          trigger={
+            <Button waves='light'><Icon className='cyan' type="submit" value="Create component" >
               add</Icon></Button>
-        </Input>
+          }
+          actions={
+            <Button className='modal-close' floating waves='light' onClick={this.handleAdd}>
+              Submit</Button>
+          }
+          dismissable={true}>
+          <div><strong>Current Collaborators : </strong>  {this.state.collabArray.map((user, i) => (<div key={i}>{user.name}</div>))}</div>
+          <Input
+            s={5} offset={'s1'}
+            type="text"
+            value={this.state.collab}
+            placeholder="  Add Collaborators"
+            onChange={this.handleCollab}>
+          </Input>
+        </Modal>
+
         {/* <div> */}
-        {this.state.collabArray.map((user, i) => (<div key={i}>{user.name}</div>))}
+        {/* {this.state.collabArray.map((user, i) => (<div key={i}>{user.name}</div>))} */}
       {/* </div> */}
         {/* </div> */}
         <h5>ID: {this.state.currentDocument}</h5>
