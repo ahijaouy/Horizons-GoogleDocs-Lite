@@ -25,11 +25,11 @@ Header.propTypes = {
   updateLinks: PropTypes.func
 };
 
-const mapStateToProps = (state) => {
+function mapStateToProps(state) {
   return {
     links: state.header.links
   };
-};
+}
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(HeaderActions, dispatch);

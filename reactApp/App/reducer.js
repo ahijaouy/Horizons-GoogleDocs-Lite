@@ -4,6 +4,7 @@ function headerReducer(state = {links: ['register', 'login']}, action) {
   case 'LOGIN':
     return {links: ['register', 'login']};
   case 'DASHBOARD':
+  case 'REGISTER_SUCCESS':
   case 'LOGIN_SUCCESS':
     return {links: ['logout']};
 
