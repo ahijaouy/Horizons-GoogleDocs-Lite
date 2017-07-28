@@ -48,12 +48,12 @@ module.exports = function(io) {
     });
 
     // listener for curser move
-    socket.on('cursor_move', selection => {
+    socket.on('cursor_move', ({ selection }) => {
       console.log('cursor: ', selection.anchorOffset);
-      socket.to(socket.doc).emit('cursor_move', selection);
+      socket.to(socket.doc).emit('cursor_move', { selection });
     });
 
-    socket.on('disconnect', ()  => {
+    socket.on('disconnect', ()  => {   
       socket.leave(socket.doc);
       console.log('disconnected');
       socket.to(socket.doc).emit('user_left', socket.user);

@@ -127,7 +127,7 @@ class DocComponent extends React.Component {
 
     // const selection = editorState.getSelection();
 
-    this.state.socket.emit('cursor_move', selection);
+    this.state.socket.emit('cursor_move', { selection });
 
     let toggledColor = this.state.myColor;
 
@@ -205,8 +205,10 @@ class DocComponent extends React.Component {
       // const newES = EditorState.createWithContent(finalBody)
       // const newES = (isSelection) ? EditorState.acceptSelection(finalBody) : EditorState.createWithContent(finalBody);
 
-      let newES = createWithContent(finalBody);
-      newES = removeColorBackground(this.state.myColor, {newES}, selection);
+      const thisSelection = this
+
+      let newES = EditorState.createWithContent(finalBody);
+      // newES = this.removeColorBackground(this.state.myColor, {editorState: newES}, selection);
 
       this.setState({editorState: newES});
     });
@@ -221,7 +223,7 @@ class DocComponent extends React.Component {
     });
 
     // LISTENEG FOR OTHER'S CURSOR MOVE
-    this.state.socket.on('cursor_move', selection => {
+    this.state.socket.on('cursor_move', ({ selection }) => {
       // console.log('*********other cursor at: ', selection);
       let es = this.state.editorState;
       const thisES = es;
