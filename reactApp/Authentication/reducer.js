@@ -1,4 +1,6 @@
 import * as types from './types';
+import * as helpers from './helpers';
+
 const initialState = {
   username: 'username',
   password: 'password',
@@ -9,9 +11,17 @@ const initialState = {
 
 function authReducer(state = initialState, action) {
   switch (action.type) {
+  case types.LOGOUT:
+    helpers.logout();
+    return initialState;
   case types.USERNAME_CHANGE: {
     const newState = Object.assign({}, state);
     newState.username = action.username;
+    return newState;
+  }
+  case types.NAME_CHANGE: {
+    const newState = Object.assign({}, state);
+    newState.name = action.name;
     return newState;
   }
   case types.PASSWORD_CHANGE: {

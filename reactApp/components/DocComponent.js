@@ -41,7 +41,6 @@ class DocComponent extends React.Component {
     };
 
     this.focus = () => this.refs.editor.focus();
-    // this.onChange = (editorState) => this.setState({editorState});
 
     this.onChange = this._onChange.bind(this);
     this.handleKeyCommand = this._handleKeyCommand.bind(this);
@@ -65,6 +64,12 @@ class DocComponent extends React.Component {
     const selection = editorState.getSelection();
     const hasSelection = parseInt(selection.anchorOffset) - parseInt(selection.focusOffset);
 
+    if (this.previousHighlight) {
+     editorState = EditorState.acceptSelection(editorState, this.previousHighlight);
+     editorState = this.removeColorBackground(this.state.myColor, {editorState}, this.previousHighlight);
+     editorState = EditorState.acceptSelection(editorState, selection);
+   }
+
     const newBody = hasSelection ? this.handleSendSelection(editorState) : this.handleSendText(editorState);
 
     this.setState({editorState});
@@ -73,7 +78,6 @@ class DocComponent extends React.Component {
   }
 
   handleSendSelection (editorState) {
-    // const content = editorState.getCurrentContent();
     const selection = editorState.getSelection();
 
     this.previousHighlight = selection;
@@ -110,23 +114,11 @@ class DocComponent extends React.Component {
       );
     }
 
-    // console.log('NEW es with color:', nextEditorState);
-    // this.setState({edito````````rState: nextEditorState});
-
     return convertToRaw(nextEditorState.getCurrentContent());
   }
 
   handleSendText (editorState) {
-    // const content = editorState.getCurrentContent();
-
      const selection = editorState.getSelection();
-     if (this.previousHighlight) {
-      editorState = EditorState.acceptSelection(editorState, this.previousHighlight);
-      editorState = this.removeColorBackground(this.state.myColor, {editorState}, selection);
-      editorState = EditorState.acceptSelection(editorState, selection);
-    }
-
-    // const selection = editorState.getSelection();
 
     console.log('sending cursor move with color: ', this.state.myColor);
     this.state.socket.emit('cursor_move', { selection, color: this.state.myColor });
@@ -145,7 +137,6 @@ class DocComponent extends React.Component {
       nextContentState,
       'change-inline-style'
     );
-    // console.log('NEW es with color:', nextEditorState);
     this.setState({editorState: nextEditorState});
 
     return convertToRaw(nextEditorState.getCurrentContent());
@@ -203,13 +194,9 @@ class DocComponent extends React.Component {
       // console.log('new selection state', JSON.parse(content), 'vs.');
       const parsedBody = JSON.parse(content);
       const finalBody = convertFromRaw(parsedBody);
-      // const newES = EditorState.createWithContent(finalBody)
-      // const newES = (isSelection) ? EditorState.acceptSelection(finalBody) : EditorState.createWithContent(finalBody);
-
-      const thisSelection = this
+      const thisSelection = this;
 
       let newES = EditorState.createWithContent(finalBody);
-      // newES = this.removeColorBackground(this.state.myColor, {editorState: newES}, selection);
 
       this.setState({editorState: newES});
     });
@@ -269,7 +256,6 @@ class DocComponent extends React.Component {
     /* ***** END SOCKET FUNCTIONS ***** */
   }
 
-
   handleTextUpdate(){
     axios.get('http://localhost:3000/document')
     .then(response => {
@@ -293,17 +279,14 @@ class DocComponent extends React.Component {
   }
 
   handleShowHist(){
-    // console.log('hist', this.state.history[0].date)
     this.setState({showHist: true});
   }
 
   handleHideHist(){
-    // console.log('hist', this.state.history)
     this.setState({showHist: false});
   }
 
   renderPast(past){
-    // console.log('past', past);
     const parsedBody = JSON.parse(past);
     const finalBody = convertFromRaw(parsedBody);
     this.setState({editorState: EditorState.createWithContent(finalBody)});
@@ -334,8 +317,6 @@ class DocComponent extends React.Component {
     }
   }
 
-
-
   _handleKeyCommand (command) {
     const {editorState} = this.state;
     // console.log('this: ',this,'editorState',editorState);
@@ -358,8 +339,6 @@ class DocComponent extends React.Component {
   }
 
   _toggleBlockType (blockType) {
-    // console.log('this: ',this,'editorState',this.state.editorState);
-
     this._onChange(
       RichUtils.toggleBlockType(
         this.state.editorState,
@@ -369,8 +348,6 @@ class DocComponent extends React.Component {
   }
 
   _toggleInlineStyle (inlineStyle) {
-    // console.log('this: ',this,'editorState',this.state.editorState);
-
     this._onChange(
       RichUtils.toggleInlineStyle(
         this.state.editorState,
@@ -382,7 +359,6 @@ class DocComponent extends React.Component {
   _toggleColor (toggledColor) {
     const {editorState} = this.state;
     const selection = editorState.getSelection();
-    // console.log('this: ',this,'editorState',editorState);
     const newES = this.toggleColorHelper(toggledColor, {editorState}, selection);
     this.setState({editorState: newES});
   }
@@ -516,36 +492,21 @@ class DocComponent extends React.Component {
           />
         </div>
         <Row id="doc_btns">
-          {/* {!this.state.showHist ? */}
-            <Col s={2}> <Button
-              onClick={this.handleShowHist}
-              fab='vertical' faicon='fa fa-plus'
-              className='purple darken-4'
-              large style={{bottom: '45px', right: '24px'}}
-              icon='change_history'
-              waves='light' floating >
-              <Col s={1}> {this.state.history.map((past, i) => (
-                <div key={i}><Button onClick={() => this.renderPast(past.content)}
-                  className='deep-purple lighten-5 history_btn'
-                  style={{color: 'black', width: '250px', right: '200px'}}
-                  waves='light' >
-                  {formatDate(past.date)}
-                </Button></div>))} </Col>
-            </Button> </Col>
-            {/* :
-            // <div>
-            //   <Col s={1}> {this.state.history.map((past) => (
-            //     <div><Button onClick={() => this.renderPast(past.content)}
-            //       className='deep-purple lighten-5 history_btn'
-            //       style={{color: 'black'}}
-            //       waves='light' >
-            //       {formatDate(past.date)}
-            //     </Button></div>))} </Col>
-            //   <Col s={1}> <Button onClick={this.handleHideHist} className='purple darken-4 history_btn'>
-            //     Hide History
-            //   </Button> </Col>
-            // </div>
-          } */}
+          <Col s={2}> <Button
+            onClick={this.handleShowHist}
+            fab='vertical' faicon='fa fa-plus'
+            className='purple darken-4'
+            large style={{bottom: '45px', right: '24px'}}
+            icon='change_history'
+            waves='light' floating >
+            <Col s={1}> {this.state.history.map((past, i) => (
+              <div key={i}><Button onClick={() => this.renderPast(past.content)}
+                className='deep-purple lighten-5 history_btn'
+                style={{color: 'black', width: '250px', right: '200px'}}
+                waves='light' >
+                {formatDate(past.date)}
+              </Button></div>))} </Col>
+          </Button> </Col>
         </Row>
 
         <Button onClick={this.handleTextUpdate} className='light-blue darken-1 doc_save_btn'>Save</Button>
@@ -555,8 +516,6 @@ class DocComponent extends React.Component {
 }
 
 export default DocComponent;
-
-
 
 
 /**** local helper function ***/
@@ -582,17 +541,3 @@ function formatDate(olddate) {
 
   return day + ' ' + monthNames[monthIndex] + ' ' + year + ' : ' + hour +':'+minute;
 }
-
-
-
-
-
-
-// RaisedButton:
-// onMouseDown={(e) => {this.toggleInlineStyle(e, style)}};
-// ...
-// e.preventDefault()
-
-
-// in react component for button:
-// backgroundColor={this.state.editorState.getCurrentINlineStyle().has(style) ? colorToggled : colorUntoggled}

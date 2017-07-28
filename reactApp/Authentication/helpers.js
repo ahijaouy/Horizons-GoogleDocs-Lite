@@ -15,3 +15,7 @@ export function register(username, password, name) {
     name
   });
 }
+
+export function logout() {
+  return axios.get('http://localhost:3000/logout');
+}

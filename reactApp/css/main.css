@@ -113,13 +113,8 @@
 }
 
 @keyframes cursor {
-  0% {
-    opacity: 100%;
-  }
-  50% {
-    opacity: 0%;
-    background: white;
-  }
+  0% { opacity: 100%; }
+  50% { background: white; }
 }
 
 

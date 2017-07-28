@@ -18,6 +18,10 @@ function changePassword(password) {
   return { type: types.PASSWORD_CHANGE, password: password };
 }
 
+function logout() {
+  return { type: types.LOGOUT};
+}
+
 function login() {
   return function (dispatch, getState) {
     const { username, password } = getState().auth;
@@ -53,5 +57,6 @@ module.exports = {
   changeUsername,
   changePassword,
   login,
-  register
+  register,
+  logout
 };
