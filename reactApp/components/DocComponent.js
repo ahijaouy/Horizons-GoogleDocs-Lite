@@ -16,7 +16,8 @@ import { Row,
          Col,
          Button,
          Input,
-         Icon } from 'react-materialize';
+         Icon,
+         Modal } from 'react-materialize';
 
 import myKeyBindingFn from './KeyBindings';
 
@@ -36,7 +37,7 @@ class DocComponent extends React.Component {
       showHist: false,
       collab: '',
       cursors: [],
-      collabArray: []
+      collabArray: [],
     };
 
     this.focus = () => this.refs.editor.focus();
@@ -57,6 +58,8 @@ class DocComponent extends React.Component {
 
     this.handleCollab = this.handleCollab.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSubmitName = this.handleSubmitName.bind(this);
   }
 
   _onChange (editorState) {
@@ -298,6 +301,26 @@ class DocComponent extends React.Component {
     }
   }
 
+  handleNameChange(e){
+    e.preventDefault();
+    console.log('new name', e.target.value);
+    this.setState({docName: e.target.value});
+  }
+
+  handleSubmitName(){
+    console.log('in here');
+    axios.post('http://localhost:3000/document/name',{
+      name: this.state.docName,
+      id: this.state.currentDocument
+    })
+    .then((resp) => {
+      console.log(resp);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
   _handleKeyCommand (command) {
     const {editorState} = this.state;
 
@@ -433,7 +456,19 @@ class DocComponent extends React.Component {
             </Button></Link>
           </Col>
           <Col s={11} m={4} offset={'m1'} l={3}>
-            <h4 style={{flex:4}}>{this.state.docName}</h4>
+            <Modal
+              header='Doc Name Change'
+              TopSheet
+              style={{flex:4}}
+              trigger={
+                <Button waves='light'>{this.state.docName}</Button>
+              }
+              actions={
+                <Button className='modal-close' onClick={this.handleSubmitName}>Submit</Button>
+              }
+              dismissable={true}>
+              <Input value={this.state.docName} onChange={this.handleNameChange}/>
+            </Modal>
           </Col>
         </Row>
 
