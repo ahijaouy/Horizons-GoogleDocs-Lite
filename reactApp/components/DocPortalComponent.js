@@ -100,11 +100,11 @@ class DocPortalComponent extends React.Component {
 
   handleSearch(e){
     e.preventDefault()
-    console.log(e.target.value)
+    console.log('search val', e.target.value)
     this.setState({search: e.target.value})
     const currDocs = filterDocs(this.state.currentDocs, this.state.currentUser._id);
     const filteredDocs = currDocs.filter((item) => {
-      console.log('item', item)
+      console.log('item', item.name, e.target.value)
       if(item.name.includes(e.target.value) || item._id === e.target.value){
         return true
       }
@@ -143,7 +143,8 @@ class DocPortalComponent extends React.Component {
         </Row>
         <div id="docs_container">
           <Row><Col s={4} offset={'s4'}><h3>My Documents</h3></Col></Row>
-          <Row id="docs_list">{filterDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) =>
+          <Row id="docs_list">
+            {!this.state.search ? filterDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) =>
             (<div key={i}>
               <Col s={12} m={6} l={4}>
                 <Link to={`/doc/${doc._id}/${this.state.currentUser.name}`} className='doc_link'>
@@ -152,7 +153,15 @@ class DocPortalComponent extends React.Component {
                 </Button>
               </Link></Col>
             </div>)
-          )}</Row>
+          ) : this.state.searchList.map((doc,i) => (<div key={i}>
+            <Col s={12} m={6} l={4}>
+              <Link to={`/doc/${doc._id}/${this.state.currentUser.name}`} className='doc_link'>
+              <Button large className='blue-grey lighten-3'>
+                {doc.name}
+              </Button>
+            </Link></Col>
+          </div>))}
+        </Row>
         </div>
         <Row>
           <form onSubmit={this.handleAdd}>
