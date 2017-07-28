@@ -29,7 +29,7 @@ class DocComponent extends React.Component {
       editorState: EditorState.createEmpty(),
       currentDocument: this.props.id.match.params.doc_id,
       docName: '',
-      currentUser: '',
+      currentUser: this.props.id.match.params.user_id ,
       myColor: '',
       docUsers: [],
       history: [],
@@ -81,7 +81,6 @@ class DocComponent extends React.Component {
     const selection = editorState.getSelection();
 
     this.previousHighlight = selection;
-    console.log('set previous highlight:', this.previousHighlight);
 
     let toggledColor = this.state.myColor;
 
@@ -119,11 +118,9 @@ class DocComponent extends React.Component {
 
   handleSendText (editorState) {
      const selection = editorState.getSelection();
+     let toggledColor = this.state.myColor;
 
-    console.log('sending cursor move with color: ', this.state.myColor);
     this.state.socket.emit('cursor_move', { selection, color: this.state.myColor });
-
-    let toggledColor = this.state.myColor;
 
     const nextContentState = Object.keys(styleMap)
       .reduce((contentState, color) => {
@@ -158,23 +155,11 @@ class DocComponent extends React.Component {
       });
     });
 
-
     /* ***** START SOCKET FUNCTIONS ***** */
-
-    // GET USER, EMIT JOIN DOC WITH THIS USER
-    axios.get('http://localhost:3000/user')
-    .then(response => {
-      return new Promise((resolve, reject) => {
-        console.log('got axios response');
-        resolve(this.setState({currentUser: response.data}));
-      });
-    })
-    .then(() => {
-      console.log('current user: ', this.state.currentUser.name);
-      const currentDoc = this.state.currentDocument;
-      const currentUser = this.state.currentUser;
-      this.state.socket.emit('join_doc', { currentDoc, currentUser});
-    });
+    console.log('current user: ', this.state.currentUser);
+    const currentDoc = this.state.currentDocument;
+    const currentUser = this.state.currentUser;
+    this.state.socket.emit('join_doc', { currentDoc, currentUser});
 
     // LISTENER FOR SUCCESSFUL JOIN DOC
     this.state.socket.on('joined_doc', myColor => {
@@ -191,7 +176,6 @@ class DocComponent extends React.Component {
 
     // LISTENER FOR CHANGE IN EDITOR STATE
     this.state.socket.on('editor_change', ({ content, selection, isSelection }) => {
-      // console.log('new selection state', JSON.parse(content), 'vs.');
       const parsedBody = JSON.parse(content);
       const finalBody = convertFromRaw(parsedBody);
       const thisSelection = this;
@@ -212,7 +196,6 @@ class DocComponent extends React.Component {
 
     // LISTENEG FOR OTHER'S CURSOR MOVE
     this.state.socket.on('cursor_move', ({ selection, color }) => {
-      // console.log('*********other cursor at: ', selection);
       let es = this.state.editorState;
       const thisES = es;
       const thisSelect = es.getSelection();
@@ -301,7 +284,6 @@ class DocComponent extends React.Component {
     if(this.state.collab === ''){
       alert('Please specify a Collaborator Name or ID!');
     }else{
-      console.log('broke before axios');
       axios.post('http://localhost:3000/user',{
         name: this.state.collab,
         id: this.state.currentDocument
@@ -319,7 +301,6 @@ class DocComponent extends React.Component {
 
   _handleKeyCommand (command) {
     const {editorState} = this.state;
-    // console.log('this: ',this,'editorState',editorState);
 
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {

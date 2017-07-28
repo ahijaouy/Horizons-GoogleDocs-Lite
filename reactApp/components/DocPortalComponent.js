@@ -146,7 +146,7 @@ class DocPortalComponent extends React.Component {
           <Row id="docs_list">{filterDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) =>
             (<div key={i}>
               <Col s={12} m={6} l={4}>
-                <Link to={`/doc/${doc._id}`} className='doc_link'>
+                <Link to={`/doc/${doc._id}/${this.state.currentUser.name}`} className='doc_link'>
                 <Button large className='blue-grey lighten-3'>
                   {doc.name}
                 </Button>

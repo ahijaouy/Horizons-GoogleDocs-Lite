@@ -18,7 +18,7 @@ export default function AppContainer() {
           <Route path='/logout' component={Login}/>
           <Route path='/register' component={Register}/>
           <Route path='/dashboard' component={DocPortalComponent}/>
-          <Route exact path="/doc/:doc_id" render={(doc_id) => <DocComponent id={doc_id} socket={socket}/>} />
+          <Route exact path="/doc/:doc_id/:user_id" render={(doc_id, user) => <DocComponent username={user} id={doc_id} socket={socket}/>} />
         </Switch>
     </div>
   );
