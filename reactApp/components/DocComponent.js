@@ -35,7 +35,6 @@ class DocComponent extends React.Component {
       history: [],
       showHist: false,
       collab: '',
-
       cursors: [],
       collabArray: []
     };
@@ -410,8 +409,8 @@ class DocComponent extends React.Component {
 
     return (
       <div className="RichEditor-root doc_container">
-
-        {this.state.cursors.length && (
+        {/* show others' cursors! */}
+        {this.state.cursors.length===0 && (
           this.state.cursors.map( (cursor, i) =>
             (<div id="cursor_div" key={i}
               style={{
@@ -424,14 +423,20 @@ class DocComponent extends React.Component {
           )
         )}
 
-        <Link to={'/dashboard'}><Button
-          className='cyan'
-          style={{color: 'white'}}
-          waves='light' >
-          Back to Portal
-        </Button></Link>
-        <div style={{display: 'flex'}}>
-        <h4 style={{flex:4}}>Name: {this.state.docName}</h4>
+        <Row id='doc_header'>
+          <Col s={2} m={1}>
+            <Link to={'/dashboard'}><Button
+              className='cyan'
+              style={{color: 'white'}}
+              waves='light'
+              icon='arrow_back'>
+            </Button></Link>
+          </Col>
+          <Col s={11} m={4} offset={'m1'} l={3}>
+            <h4 style={{flex:4}}>{this.state.docName}</h4>
+          </Col>
+        </Row>
+
         <Input
           s={5} offset={'s1'}
           type="text"
@@ -442,10 +447,10 @@ class DocComponent extends React.Component {
             <Icon className='cyan' type="submit" value="Create component" >
               add</Icon></Button>
         </Input>
-        <div>
+        {/* <div> */}
         {this.state.collabArray.map((user, i) => (<div key={i}>{user.name}</div>))}
-      </div>
-        </div>
+      {/* </div> */}
+        {/* </div> */}
         <h5>ID: {this.state.currentDocument}</h5>
         <BlockStyleControls
           editorState={editorState}
@@ -478,7 +483,7 @@ class DocComponent extends React.Component {
             fab='vertical' faicon='fa fa-plus'
             className='purple darken-4'
             large style={{bottom: '45px', right: '24px'}}
-            icon='change_history'
+            icon='history'
             waves='light' floating >
             <Col s={1}> {this.state.history.map((past, i) => (
               <div key={i}><Button onClick={() => this.renderPast(past.content)}
