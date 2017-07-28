@@ -2,6 +2,9 @@
 #root {
   width: 100vw;
   height: 100vh;
+  min-width: 550px;
+  width: auto !important;
+  width: 550px;
 }
 
 #headerComponent {

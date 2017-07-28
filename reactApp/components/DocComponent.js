@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Editor,
          EditorState,
          Modifier,
-         RichUtils,
+         RichUtils, 
          convertToRaw,
          convertFromRaw } from 'draft-js';
 import  { styleMap,
@@ -447,7 +447,7 @@ class DocComponent extends React.Component {
         )}
 
         <Row id='doc_header'>
-          <Col s={2} m={1}>
+          <Col s={2} m={2}>
             <Link to={'/dashboard'}><Button
               className='cyan'
               style={{color: 'white'}}
@@ -455,9 +455,9 @@ class DocComponent extends React.Component {
               icon='arrow_back'>
             </Button></Link>
           </Col>
-          <Col s={11} m={4} offset={'m1'} l={3}>
-            <Modal
-              header='Doc Name Change'
+          <Col s={4} m={4} /*offset={'m1'}*/ l={3}>
+            <Modal large
+              header='Change document name:'
               TopSheet
               style={{flex:4}}
               trigger={
