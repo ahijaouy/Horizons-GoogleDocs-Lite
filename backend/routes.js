@@ -51,6 +51,17 @@ router.post('/document/update', function (req, res) {
   });
 });
 
+router.post('/document/name', function (req, res) {
+  console.log('find me here', req.body.id);
+  const newName = req.body.name;
+  console.log('new nm', newName);
+  Document.findOneAndUpdate({_id: req.body.id},{ name: newName },function(err, result){
+    console.log('in here now ifnally', result);
+    res.send(result);
+  });
+});
+
+
 router.get('/user', function(req,res){
   console.log(req.user);
   res.send(req.user);

@@ -16,7 +16,8 @@ import { Row,
          Col,
          Button,
          Input,
-         Icon } from 'react-materialize';
+         Icon,
+         Modal } from 'react-materialize';
 
 import myKeyBindingFn from './KeyBindings';
 
@@ -35,9 +36,8 @@ class DocComponent extends React.Component {
       history: [],
       showHist: false,
       collab: '',
-
       cursors: [],
-      collabArray: []
+      collabArray: [],
     };
 
     this.focus = () => this.refs.editor.focus();
@@ -58,6 +58,8 @@ class DocComponent extends React.Component {
 
     this.handleCollab = this.handleCollab.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSubmitName = this.handleSubmitName.bind(this);
   }
 
   _onChange (editorState) {
@@ -299,6 +301,26 @@ class DocComponent extends React.Component {
     }
   }
 
+  handleNameChange(e){
+    e.preventDefault();
+    console.log('new name', e.target.value);
+    this.setState({docName: e.target.value});
+  }
+
+  handleSubmitName(){
+    console.log('in here');
+    axios.post('http://localhost:3000/document/name',{
+      name: this.state.docName,
+      id: this.state.currentDocument
+    })
+    .then((resp) => {
+      console.log(resp);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
   _handleKeyCommand (command) {
     const {editorState} = this.state;
 
@@ -411,7 +433,7 @@ class DocComponent extends React.Component {
     return (
       <div className="RichEditor-root doc_container">
 
-        {this.state.cursors.length && (
+        {this.state.cursors.length ===0 && (
           this.state.cursors.map( (cursor, i) =>
             (<div id="cursor_div" key={i}
               style={{
@@ -431,7 +453,20 @@ class DocComponent extends React.Component {
           Back to Portal
         </Button></Link>
         <div style={{display: 'flex'}}>
-        <h4 style={{flex:4}}>Name: {this.state.docName}</h4>
+        {/* <h4 style={{flex:4}}>Name: {this.state.docName}</h4> */}
+        <Modal
+          header='Doc Name Change'
+          TopSheet
+          style={{flex:4}}
+          trigger={
+            <Button waves='light'>{this.state.docName}</Button>
+          }
+          actions={
+            <Button className='modal-close' onClick={this.handleSubmitName}>Submit</Button>
+          }
+          dismissable={true}>
+          <Input value={this.state.docName} onChange={this.handleNameChange}/>
+        </Modal>
         <Input
           s={5} offset={'s1'}
           type="text"
