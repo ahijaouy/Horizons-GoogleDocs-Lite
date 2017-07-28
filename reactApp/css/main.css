@@ -105,9 +105,21 @@
 
 #cursor_div {
   width: 2px;
-
   position: absolute;
-  background-color: red;
+
+  animation-name: cursor;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes cursor {
+  0% {
+    opacity: 100%;
+  }
+  50% {
+    opacity: 0%;
+    background: white;
+  }
 }
 
 

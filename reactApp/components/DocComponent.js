@@ -27,7 +27,7 @@ class DocComponent extends React.Component {
     this.state = {
       socket: this.props.socket,
       editorState: EditorState.createEmpty(),
-      currentDocument: '',
+      currentDocument: this.props.id.match.params.doc_id,
       docName: '',
       currentUser: '',
       myColor: '',
@@ -36,9 +36,10 @@ class DocComponent extends React.Component {
       showHist: false,
       collab: '',
 
-      cursor: {},
+      cursors: [],
       collabArray: []
     };
+
     this.focus = () => this.refs.editor.focus();
     // this.onChange = (editorState) => this.setState({editorState});
 
@@ -127,7 +128,8 @@ class DocComponent extends React.Component {
 
     // const selection = editorState.getSelection();
 
-    this.state.socket.emit('cursor_move', { selection });
+    console.log('sending cursor move with color: ', this.state.myColor);
+    this.state.socket.emit('cursor_move', { selection, color: this.state.myColor });
 
     let toggledColor = this.state.myColor;
 
@@ -151,7 +153,6 @@ class DocComponent extends React.Component {
 
   componentDidMount() {
     // GET DOCUMENT ID FROM PROPS, AXIOS CALL TO GET STATE
-    this.setState({currentDocument: this.props.id.match.params.doc_id});
     axios.get('http://localhost:3000/document')
     .then(response => {
       response.data.forEach((doc) => {
@@ -223,7 +224,7 @@ class DocComponent extends React.Component {
     });
 
     // LISTENEG FOR OTHER'S CURSOR MOVE
-    this.state.socket.on('cursor_move', ({ selection }) => {
+    this.state.socket.on('cursor_move', ({ selection, color }) => {
       // console.log('*********other cursor at: ', selection);
       let es = this.state.editorState;
       const thisES = es;
@@ -235,10 +236,27 @@ class DocComponent extends React.Component {
       this.setState({ editorState: tempES }, () => {
         const winSel = window.getSelection();
         const range = winSel.getRangeAt(0);
-        const rects = range.getClientRects(0);
-        const { top, left, bottom } = rects;
-        this.setState({ editorState: thisES, cursor: { top, left, height: bottom - top } });
-        // console.log(this.state.cursor);
+        const { top, left, bottom } = range.getClientRects()[0];
+
+        const newCursor = { top, left, height: bottom - top, color };
+
+        let cursorExists = false;
+        let cursorArr;
+
+        this.state.cursors.map((cursor, i) => {
+          if (cursor.color === color) {
+            cursorExists = i+1;
+          }
+        });
+        if (cursorExists) {
+          cursorArr = this.state.cursors.slice(0, cursorExists-1)
+            .concat(this.state.cursors.slice(cursorExists, this.state.cursors.length));
+          cursorArr.push(newCursor)
+        } else {
+          cursorArr = [...this.state.cursors, newCursor];
+        }
+
+        this.setState({ editorState: thisES, cursors: cursorArr });
       });
 
     });
@@ -436,14 +454,17 @@ class DocComponent extends React.Component {
     return (
       <div className="RichEditor-root doc_container">
 
-        {this.state.cursor.top && (
-          <div id="cursor_div"
-            style={{
-              height: this.state.cursor.height,
-              top: this.state.cursor.top,
-              left: this.state.cursor.left
-            }}>
-          </div>
+        {this.state.cursors.length && (
+          this.state.cursors.map( (cursor, i) =>
+            (<div id="cursor_div" key={i}
+              style={{
+                height: cursor.height,
+                top: cursor.top,
+                left: cursor.left,
+                backgroundColor: styleMap[cursor.color].backgroundColor
+              }}>
+            </div>)
+          )
         )}
 
         <Link to={'/dashboard'}><Button
