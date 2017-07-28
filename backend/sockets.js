@@ -47,8 +47,14 @@ module.exports = function(io) {
       socket.to(socket.doc).emit('editor_change', state);
     });
 
+    // listener for curser move
+    socket.on('cursor_move', ({ selection, color }) => {
+      console.log('cursor: ', selection.anchorOffset, color);
+      socket.to(socket.doc).emit('cursor_move', { selection, color });
+    });
+
     socket.on('disconnect', ()  => {
-      currentColor--;
+      socket.leave(socket.doc);
       console.log('disconnected');
       socket.to(socket.doc).emit('user_left', socket.user);
     });

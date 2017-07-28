@@ -27,18 +27,20 @@ class DocComponent extends React.Component {
     this.state = {
       socket: this.props.socket,
       editorState: EditorState.createEmpty(),
-      currentDocument: '',
+      currentDocument: this.props.id.match.params.doc_id,
       docName: '',
-      currentUser: '',
+      currentUser: this.props.id.match.params.user_id ,
       myColor: '',
       docUsers: [],
       history: [],
       showHist: false,
       collab: '',
+
+      cursors: [],
       collabArray: []
     };
+
     this.focus = () => this.refs.editor.focus();
-    // this.onChange = (editorState) => this.setState({editorState});
 
     this.onChange = this._onChange.bind(this);
     this.handleKeyCommand = this._handleKeyCommand.bind(this);
@@ -51,6 +53,9 @@ class DocComponent extends React.Component {
     this.handleShowHist = this.handleShowHist.bind(this);
     this.handleHideHist = this.handleHideHist.bind(this);
     this.renderPast = this.renderPast.bind(this);
+
+    this.previousHighlight = null;
+
     this.handleCollab = this.handleCollab.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
   }
@@ -58,6 +63,12 @@ class DocComponent extends React.Component {
   _onChange (editorState) {
     const selection = editorState.getSelection();
     const hasSelection = parseInt(selection.anchorOffset) - parseInt(selection.focusOffset);
+
+    if (this.previousHighlight) {
+     editorState = EditorState.acceptSelection(editorState, this.previousHighlight);
+     editorState = this.removeColorBackground(this.state.myColor, {editorState}, this.previousHighlight);
+     editorState = EditorState.acceptSelection(editorState, selection);
+   }
 
     const newBody = hasSelection ? this.handleSendSelection(editorState) : this.handleSendText(editorState);
 
@@ -67,8 +78,9 @@ class DocComponent extends React.Component {
   }
 
   handleSendSelection (editorState) {
-    // const content = editorState.getCurrentContent();
     const selection = editorState.getSelection();
+
+    this.previousHighlight = selection;
 
     let toggledColor = this.state.myColor;
 
@@ -86,12 +98,12 @@ class DocComponent extends React.Component {
     );
     const currentStyle = editorState.getCurrentInlineStyle();
 
-    // // Unset style override for current color.
-    // if (selection.isCollapsed()) {
-    //   nextEditorState = currentStyle.reduce((state, color) => {
-    //     return RichUtils.toggleInlineStyle(state, color);
-    //   }, nextEditorState);
-    // }
+    // Unset style override for current color.
+    if (selection.isCollapsed()) {
+      nextEditorState = currentStyle.reduce((state, color) => {
+        return RichUtils.toggleInlineStyle(state, color);
+      }, nextEditorState);
+    }
 
     // If the color is being toggled on, apply it.
     if (!currentStyle.has(toggledColor)) {
@@ -101,16 +113,14 @@ class DocComponent extends React.Component {
       );
     }
 
-    console.log('NEW es with color:', nextEditorState);
-
     return convertToRaw(nextEditorState.getCurrentContent());
   }
 
   handleSendText (editorState) {
-    // const content = editorState.getCurrentContent();
-    const selection = editorState.getSelection();
+     const selection = editorState.getSelection();
+     let toggledColor = this.state.myColor;
 
-    let toggledColor = this.state.myColor;
+    this.state.socket.emit('cursor_move', { selection, color: this.state.myColor });
 
     const nextContentState = Object.keys(styleMap)
       .reduce((contentState, color) => {
@@ -124,18 +134,16 @@ class DocComponent extends React.Component {
       nextContentState,
       'change-inline-style'
     );
-    console.log('NEW es with color:', nextEditorState);
+    this.setState({editorState: nextEditorState});
+
     return convertToRaw(nextEditorState.getCurrentContent());
-    // return convertToRaw(editorState.getCurrentContent());
   }
 
   componentDidMount() {
     // GET DOCUMENT ID FROM PROPS, AXIOS CALL TO GET STATE
-    this.setState({currentDocument: this.props.id.match.params.doc_id});
     axios.get('http://localhost:3000/document')
     .then(response => {
       response.data.forEach((doc) => {
-        // console.log('doc', doc);
         if(doc._id === this.state.currentDocument){
           this.setState({docName: doc.name});
           this.setState({collabArray: doc.collaborators});
@@ -147,28 +155,14 @@ class DocComponent extends React.Component {
       });
     });
 
-
     /* ***** START SOCKET FUNCTIONS ***** */
-    console.log('socket', this.state.socket);
-
-    // GET USER, EMIT JOIN DOC WITH THIS USER
-    axios.get('http://localhost:3000/user')
-    .then(response => {
-      return new Promise((resolve, reject) => {
-        console.log('got axios response', response,'and setting current user');
-        resolve(this.setState({currentUser: response.data}));
-      });
-    })
-    .then(() => {
-      console.log('current user: ', this.state.currentUser);
-      const currentDoc = this.state.currentDocument;
-      const currentUser = this.state.currentUser;
-      this.state.socket.emit('join_doc', { currentDoc, currentUser});
-    });
+    console.log('current user: ', this.state.currentUser);
+    const currentDoc = this.state.currentDocument;
+    const currentUser = this.state.currentUser;
+    this.state.socket.emit('join_doc', { currentDoc, currentUser});
 
     // LISTENER FOR SUCCESSFUL JOIN DOC
     this.state.socket.on('joined_doc', myColor => {
-      console.log('setting state with color', myColor);
       this.setState({myColor});
     });
 
@@ -178,23 +172,17 @@ class DocComponent extends React.Component {
       const newUsers = this.state.docUsers;
       newUsers.push(newUser);
       this.setState({docUsers: newUsers});
-      console.log('changed docUsers');
     });
 
     // LISTENER FOR CHANGE IN EDITOR STATE
     this.state.socket.on('editor_change', ({ content, selection, isSelection }) => {
-      console.log('new selection state', JSON.parse(content), 'vs.');
       const parsedBody = JSON.parse(content);
       const finalBody = convertFromRaw(parsedBody);
-      // const newES = EditorState.createWithContent(finalBody)
-      const newES = (isSelection) ? EditorState.acceptSelection(finalBody) : EditorState.createWithContent(finalBody);
+      const thisSelection = this;
+
+      let newES = EditorState.createWithContent(finalBody);
 
       this.setState({editorState: newES});
-    });
-
-    // LISTENER FOR ERROR MSG FROM SOCKET
-    this.state.socket.on('errorMessage', msg => {
-      console.log('ERROR FROM SOCKETS:', msg);
     });
 
     // LISTENING FOR USER LEAVE DOC
@@ -206,10 +194,51 @@ class DocComponent extends React.Component {
       }
     });
 
+    // LISTENEG FOR OTHER'S CURSOR MOVE
+    this.state.socket.on('cursor_move', ({ selection, color }) => {
+      let es = this.state.editorState;
+      const thisES = es;
+      const thisSelect = es.getSelection();
+
+      const incomingSelect = thisSelect.merge(selection);
+
+      const tempES = EditorState.forceSelection(es, incomingSelect);
+      this.setState({ editorState: tempES }, () => {
+        const winSel = window.getSelection();
+        const range = winSel.getRangeAt(0);
+        const { top, left, bottom } = range.getClientRects()[0];
+
+        const newCursor = { top, left, height: bottom - top, color };
+
+        let cursorExists = false;
+        let cursorArr;
+
+        this.state.cursors.map((cursor, i) => {
+          if (cursor.color === color) {
+            cursorExists = i+1;
+          }
+        });
+        if (cursorExists) {
+          cursorArr = this.state.cursors.slice(0, cursorExists-1)
+            .concat(this.state.cursors.slice(cursorExists, this.state.cursors.length));
+          cursorArr.push(newCursor)
+        } else {
+          cursorArr = [...this.state.cursors, newCursor];
+        }
+
+        this.setState({ editorState: thisES, cursors: cursorArr });
+      });
+
+    });
+
+    // LISTENER FOR ERROR MSG FROM SOCKET
+    this.state.socket.on('errorMessage', msg => {
+      console.log('ERROR FROM SOCKETS:', msg);
+    });
+
     /* ***** END SOCKET FUNCTIONS ***** */
   }
 
-  //
   handleTextUpdate(){
     axios.get('http://localhost:3000/document')
     .then(response => {
@@ -233,17 +262,14 @@ class DocComponent extends React.Component {
   }
 
   handleShowHist(){
-    // console.log('hist', this.state.history[0].date)
     this.setState({showHist: true});
   }
 
   handleHideHist(){
-    // console.log('hist', this.state.history)
     this.setState({showHist: false});
   }
 
   renderPast(past){
-    // console.log('past', past);
     const parsedBody = JSON.parse(past);
     const finalBody = convertFromRaw(parsedBody);
     this.setState({editorState: EditorState.createWithContent(finalBody)});
@@ -258,7 +284,6 @@ class DocComponent extends React.Component {
     if(this.state.collab === ''){
       alert('Please specify a Collaborator Name or ID!');
     }else{
-      console.log('broke before axios');
       axios.post('http://localhost:3000/user',{
         name: this.state.collab,
         id: this.state.currentDocument
@@ -274,11 +299,8 @@ class DocComponent extends React.Component {
     }
   }
 
-
-
   _handleKeyCommand (command) {
     const {editorState} = this.state;
-    // console.log('this: ',this,'editorState',editorState);
 
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
@@ -298,8 +320,6 @@ class DocComponent extends React.Component {
   }
 
   _toggleBlockType (blockType) {
-    // console.log('this: ',this,'editorState',this.state.editorState);
-
     this._onChange(
       RichUtils.toggleBlockType(
         this.state.editorState,
@@ -309,8 +329,6 @@ class DocComponent extends React.Component {
   }
 
   _toggleInlineStyle (inlineStyle) {
-    // console.log('this: ',this,'editorState',this.state.editorState);
-
     this._onChange(
       RichUtils.toggleInlineStyle(
         this.state.editorState,
@@ -322,9 +340,26 @@ class DocComponent extends React.Component {
   _toggleColor (toggledColor) {
     const {editorState} = this.state;
     const selection = editorState.getSelection();
-    // console.log('this: ',this,'editorState',editorState);
     const newES = this.toggleColorHelper(toggledColor, {editorState}, selection);
     this.setState({editorState: newES});
+  }
+
+  removeColorBackground(toggledColor, {editorState}, selection) {
+    const nextContentState = Object.keys(styleMap)
+      .reduce((contentState, color) => {
+        if (color === toggledColor)
+        { return Modifier.removeInlineStyle(contentState, selection, color); }
+        else
+        { return contentState; }
+      }, editorState.getCurrentContent());
+    let nextEditorState = EditorState.push(
+      editorState,
+      nextContentState,
+      'change-inline-style'
+    );
+
+    return nextEditorState;
+
   }
 
   toggleColorHelper(toggledColor, {editorState}, selection) {
@@ -375,6 +410,20 @@ class DocComponent extends React.Component {
 
     return (
       <div className="RichEditor-root doc_container">
+
+        {this.state.cursors.length && (
+          this.state.cursors.map( (cursor, i) =>
+            (<div id="cursor_div" key={i}
+              style={{
+                height: cursor.height,
+                top: cursor.top,
+                left: cursor.left,
+                backgroundColor: styleMap[cursor.color].backgroundColor
+              }}>
+            </div>)
+          )
+        )}
+
         <Link to={'/dashboard'}><Button
           className='cyan'
           style={{color: 'white'}}
@@ -424,36 +473,21 @@ class DocComponent extends React.Component {
           />
         </div>
         <Row id="doc_btns">
-          {/* {!this.state.showHist ? */}
-            <Col s={2}> <Button
-              onClick={this.handleShowHist}
-              fab='vertical' faicon='fa fa-plus'
-              className='purple darken-4'
-              large style={{bottom: '45px', right: '24px'}}
-              icon='change_history'
-              waves='light' floating >
-              <Col s={1}> {this.state.history.map((past, i) => (
-                <div key={i}><Button onClick={() => this.renderPast(past.content)}
-                  className='deep-purple lighten-5 history_btn'
-                  style={{color: 'black', width: '250px', right: '200px'}}
-                  waves='light' >
-                  {formatDate(past.date)}
-                </Button></div>))} </Col>
-            </Button> </Col>
-            {/* :
-            // <div>
-            //   <Col s={1}> {this.state.history.map((past) => (
-            //     <div><Button onClick={() => this.renderPast(past.content)}
-            //       className='deep-purple lighten-5 history_btn'
-            //       style={{color: 'black'}}
-            //       waves='light' >
-            //       {formatDate(past.date)}
-            //     </Button></div>))} </Col>
-            //   <Col s={1}> <Button onClick={this.handleHideHist} className='purple darken-4 history_btn'>
-            //     Hide History
-            //   </Button> </Col>
-            // </div>
-          } */}
+          <Col s={2}> <Button
+            onClick={this.handleShowHist}
+            fab='vertical' faicon='fa fa-plus'
+            className='purple darken-4'
+            large style={{bottom: '45px', right: '24px'}}
+            icon='change_history'
+            waves='light' floating >
+            <Col s={1}> {this.state.history.map((past, i) => (
+              <div key={i}><Button onClick={() => this.renderPast(past.content)}
+                className='deep-purple lighten-5 history_btn'
+                style={{color: 'black', width: '250px', right: '200px'}}
+                waves='light' >
+                {formatDate(past.date)}
+              </Button></div>))} </Col>
+          </Button> </Col>
         </Row>
 
         <Button onClick={this.handleTextUpdate} className='light-blue darken-1 doc_save_btn'>Save</Button>
@@ -463,8 +497,6 @@ class DocComponent extends React.Component {
 }
 
 export default DocComponent;
-
-
 
 
 /**** local helper function ***/
@@ -490,17 +522,3 @@ function formatDate(olddate) {
 
   return day + ' ' + monthNames[monthIndex] + ' ' + year + ' : ' + hour +':'+minute;
 }
-
-
-
-
-
-
-// RaisedButton:
-// onMouseDown={(e) => {this.toggleInlineStyle(e, style)}};
-// ...
-// e.preventDefault()
-
-
-// in react component for button:
-// backgroundColor={this.state.editorState.getCurrentINlineStyle().has(style) ? colorToggled : colorUntoggled}

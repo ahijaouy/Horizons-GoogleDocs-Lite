@@ -17,8 +17,6 @@ import { Redirect, Link } from 'react-router-dom';
 
 // component part
 export function Login({ username, password, user, changeUsername, changePassword, login, loginFailed }) {
-  //console.log(changeUsername('Andre'));
-  console.log('testing', loginFailed);
   return (
     <div>
       <Row>

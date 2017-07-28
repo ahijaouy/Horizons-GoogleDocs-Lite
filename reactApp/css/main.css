@@ -78,14 +78,49 @@
 #portal_search_row {
 
 }
-#portal_container {
-  padding: 55px;
+.sidekick_icon Icon {
+  margin-right: 20px;
 }
+#portal_container {
+  padding: 25px;
+}
+#docs_container {
+  padding: 25px;
+  /*border: 1px dashed #cfd8dc;*/
+  margin-bottom: 25px;
+}
+#docs_container h3 {
+  /*margin-left: 35%;*/
+}
+
+#docs_list Button {
+  margin: 20px;
+  width: 100%;
+}
+
+.doc_link {
+  color: #263238;
+}
+
+
+#cursor_div {
+  width: 2px;
+  position: absolute;
+
+  animation-name: cursor;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes cursor {
+  0% { opacity: 100%; }
+  50% { background: white; }
+}
+
 
 .font-color-yellow-darken-3 {
   color: #00838f
 }
-
 input[type=text].valid,
 input[type=text]:focus.valid,
 input[type=password].valid,
