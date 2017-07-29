@@ -447,7 +447,7 @@ class DocComponent extends React.Component {
         )}
 
         <Row id='doc_header'>
-          <Col s={2} m={2}>
+          <Col s={2} m={2} l={2}>
             <Link to={'/dashboard'}><Button
               className='cyan'
               style={{color: 'white'}}
@@ -464,7 +464,7 @@ class DocComponent extends React.Component {
                 <Button waves='light' className='cyan'>{this.state.docName}</Button>
               }
               actions={
-                <Button className='modal-close' onClick={this.handleSubmitName}>Submit</Button>
+                <Button className='modal-close cyan' onClick={this.handleSubmitName}>Submit</Button>
               }
               dismissable={true}>
               <Input value={this.state.docName} onChange={this.handleNameChange}/>
@@ -482,7 +482,7 @@ class DocComponent extends React.Component {
                 </Button>
               }
               actions={
-                <Button className='modal-close' floating waves='light' onClick={this.handleAdd}>
+                <Button className='modal-close' waves='light' className='cyan' onClick={this.handleAdd}>
                   Submit</Button>
               }
               dismissable={true}>
