@@ -129,18 +129,20 @@ class DocPortalComponent extends React.Component {
       <div id="portal_container">
         <Row id="portal_header">
           <Col s={12}><h1 style ={{textAlign: 'center'}}> Welcome {this.state.currentUser.name} </h1></Col>
-          <Input
-            s={5}
-            type="text"
-            value={this.state.search}
-            placeholder="  Search for Docs"
-            onChange={this.handleSearch}>
-            <Button floating><Icon className='cyan' medium>find_in_page</Icon></Button>
-          </Input>
-          <form onSubmit={this.handleCreate}>
+
+          <Col s={5} >
+            <Input
+              s={12}
+              type="text"
+              value={this.state.search}
+              placeholder="  Search for Docs"
+              onChange={this.handleSearch}>
+              <Button floating><Icon className='cyan' medium>find_in_page</Icon></Button>
+            </Input>
+          </Col><Col s={5} offset={'s1'}><form onSubmit={this.handleCreate}>
             <Input
               className='sidekick_icon'
-              s={5} offset={'s1'}
+              s={12}
               type="text"
               value={this.state.newDoc}
               placeholder="   Create New Document"
@@ -149,7 +151,7 @@ class DocPortalComponent extends React.Component {
                 <Icon className='cyan' type="submit" value="Create component" onClick={this.handleCreate}>
                   description</Icon></Button>
             </Input>
-          </form>
+          </form></Col>
         </Row>
         <div id="docs_container">
           <Row><Col s={6} m={5} l={4} offset={'s3 m4 l5'}><h3>My Documents</h3></Col></Row>
