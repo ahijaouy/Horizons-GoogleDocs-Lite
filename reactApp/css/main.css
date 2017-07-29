@@ -95,6 +95,8 @@
   padding: 25px;
   /*border: 1px dashed #cfd8dc;*/
   margin-bottom: 25px;
+  box-sizing: border-box;
+
 }
 #docs_container h3 {
   /*margin-left: 35%;*/

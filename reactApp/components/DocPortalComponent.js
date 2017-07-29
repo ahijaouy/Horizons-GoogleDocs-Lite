@@ -143,16 +143,16 @@ class DocPortalComponent extends React.Component {
               s={5} offset={'s1'}
               type="text"
               value={this.state.newDoc}
-              placeholder="Create New Document"
+              placeholder="   Create New Document"
               onChange={this.handleNewDoc}>
               <Button floating waves='light'>
                 <Icon className='cyan' type="submit" value="Create component" onClick={this.handleCreate}>
-                  add</Icon></Button>
+                  description</Icon></Button>
             </Input>
           </form>
         </Row>
         <div id="docs_container">
-          <Row><Col s={4} offset={'s4'}><h3>My Documents</h3></Col></Row>
+          <Row><Col s={6} m={5} l={4} offset={'s3 m4 l5'}><h3>My Documents</h3></Col></Row>
           <Row id="docs_list">
             {!this.state.search ? filterDocs(this.state.currentDocs, this.state.currentUser._id).map((doc, i) =>
             (<div key={doc._id}>
@@ -179,11 +179,11 @@ class DocPortalComponent extends React.Component {
               s={5}
               type="text"
               value={this.state.sharedDoc}
-              placeholder="Paste a doc ID"
+              placeholder="   Paste a doc ID"
               onChange={this.handleSharedDoc}>
               <Button floating waves='light'>
                 <Icon className='cyan' type="submit" value="Create component" onClick={this.handleAdd}>
-                  add</Icon></Button>
+                  input</Icon></Button>
           </Input>
           </form>
         </Row>
